@@ -1,0 +1,16 @@
+.text-window {
+    right: 0;
+    width: 30%;
+    height: 100%;
+    overflow: auto;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-left: 1px solid #ccc;
+  }
+
+  .nodes {
+    display: flex;
+    height: 600px;
+    width: 70%;
+  }
+  

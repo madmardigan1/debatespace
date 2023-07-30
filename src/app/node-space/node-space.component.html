@@ -1,0 +1,6 @@
+<div>
+<div #visNetwork id="mynetwork"  class="nodes"> </div>
+<div *ngIf="selectedNodeIndex !== null" class="text-window">
+    {{nodes.get(selectedNodeIndex).text}}
+  </div>
+</div>
