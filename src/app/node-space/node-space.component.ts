@@ -4,6 +4,7 @@ import { RtcService } from '../rtcservice.service';
 import { Output, EventEmitter } from '@angular/core';
 import { ChatSpaceComponent } from '../chat-space/chat-space.component';
 import { SpeechService } from '../speech-service.service';
+import { SharedserviceService } from '../sharedservice.service';
 
 @Component({
   selector: 'app-node-space',
@@ -11,7 +12,7 @@ import { SpeechService } from '../speech-service.service';
   styleUrls: ['./node-space.component.css']
 })
 export class NodeSpaceComponent implements AfterViewInit {
-  constructor(private rtcService: RtcService, private speechService: SpeechService) {
+  constructor(private rtcService: RtcService, private speechService: SpeechService, private sharedService: SharedserviceService) {
     this.speechService.phrases.subscribe(transcript => {
       console.log(transcript);
       // If a node is selected, add the transcript to the node's text
@@ -29,7 +30,7 @@ export class NodeSpaceComponent implements AfterViewInit {
   
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
   @Output() nodeClicked = new EventEmitter<number>();
-  @Output() closePopup = new EventEmitter();
+  @Output() notify: EventEmitter<string> = new EventEmitter<string>();
   network!: Network;
   selectedNodeIndex: number | null = null;
   public nodes = new DataSet<any>([
@@ -78,8 +79,8 @@ export class NodeSpaceComponent implements AfterViewInit {
         keyboard: true,
       },
       edges: {
-        Color: "000000",
-        edgeWidth: 4,
+        color: "000000",
+        width: 4,
         shadow: true,
         smooth: false,
       }
@@ -101,7 +102,20 @@ export class NodeSpaceComponent implements AfterViewInit {
         if (this.selectedNodeIndex !== null) {
           this.speechService.stopListening();
         }
-        this.nodeClicked.emit(clickedNodeId);
+    
+        this.selectedNodeIndex = clickedNodeId;
+    
+        if (this.selectedNodeIndex !== null) {
+          this.nodeClicked.emit(clickedNodeId);
+    
+          // Ensure this.selectedNodeIndex is not null before using it as an argument
+          const node = this.nodes.get(this.selectedNodeIndex);
+          if (node !== null) {
+            this.notify.emit(node.text);
+            this.sharedService.changeNodeText(node.text);
+          }
+        }
+    
         this.rtcService.startStream();
         this.speechService.startListening();
         // zoom to the clicked node
@@ -110,13 +124,14 @@ export class NodeSpaceComponent implements AfterViewInit {
           animation: {
             duration: 500,
             easingFunction: 'easeInOutQuad'
-          }
-         
+          }  
         });
-        this.selectedNodeIndex = clickedNodeId;
-  
       }
     });
+    
+    
+
+    
    
   }
   onChatSubmit(message: string) {

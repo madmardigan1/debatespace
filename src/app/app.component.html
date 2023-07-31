@@ -1,17 +1,20 @@
-
-
-
-
-<div class="node-area">
-  <app-node-space #nodeSpace></app-node-space>
-
-
-  
+<div class="container">
+  <div class="outerbox">
+    <div class="box1">
+      <div class="node-area">
+       <app-node-space #nodeSpace></app-node-space>
+      </div>
+      <div class="output-area">
+        <app-gpt-summary style=></app-gpt-summary>
+      </div>
+    </div>
+    <div class="box2">
+      <div class="chat-box">
+        hello
+      </div>
+      <div class="chat-area">
+        <app-chat-submit (submit)="nodeSpace.onChatSubmit($event)"></app-chat-submit>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="chat-area">
-
-<app-chat-submit (submit)="nodeSpace.onChatSubmit($event)"></app-chat-submit>
-
-</div>
-
