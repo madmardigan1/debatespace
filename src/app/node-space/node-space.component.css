@@ -1,0 +1,5 @@
+.floating-button {
+  position: absolute;
+  display: none;
+  /* more styles like padding, background-color, color, border, etc. can be added here */
+}

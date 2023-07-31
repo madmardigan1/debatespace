@@ -12,6 +12,8 @@ import { SharedserviceService } from '../sharedservice.service';
   styleUrls: ['./node-space.component.css']
 })
 export class NodeSpaceComponent implements AfterViewInit {
+  floatingButton!: HTMLElement;
+  isRecording = false;  // <-- add this line
   constructor(private rtcService: RtcService, private speechService: SpeechService, private sharedService: SharedserviceService) {
     this.speechService.phrases.subscribe(transcript => {
       console.log(transcript);
@@ -50,9 +52,15 @@ export class NodeSpaceComponent implements AfterViewInit {
 
   positions: any;
 
-
+  showFloatingButton(x: number, y: number) {
+    // assuming you have reference to the button as this.floatingButton
+    this.floatingButton.style.left = `${x}px`;
+    this.floatingButton.style.top = `${y}px`;
+    this.floatingButton.style.display = 'block';  // make it visible
+  }
 
   ngAfterViewInit() {
+    this.floatingButton = document.getElementById('floating-button') as HTMLElement;
     const nodesDataSet = this.nodes;
     const edgesDataSet = this.edges;
 
@@ -96,12 +104,26 @@ export class NodeSpaceComponent implements AfterViewInit {
       });
     });
 
+    this.floatingButton.addEventListener('click', (event) => {
+      event.stopPropagation();  // to prevent the underlying canvas from receiving the click event
+    
+      if (this.isRecording) {
+        this.speechService.stopListening();
+      
+      } else {
+        this.speechService.startListening();
+      }
+    
+      this.isRecording = !this.isRecording;  // toggle the recording state
+    });
+
     this.network.on('click', params => {
       if (params.nodes.length > 0) {
         const clickedNodeId = params.nodes[0];
-        if (this.selectedNodeIndex !== null) {
-          this.speechService.stopListening();
-        }
+        const nodePosition = this.network.getPositions([clickedNodeId]);
+        const canvasPosition = this.network.canvasToDOM(nodePosition[clickedNodeId]);
+        this.showFloatingButton(canvasPosition.x, canvasPosition.y);
+      
     
         this.selectedNodeIndex = clickedNodeId;
     
@@ -117,7 +139,7 @@ export class NodeSpaceComponent implements AfterViewInit {
         }
     
         this.rtcService.startStream();
-        this.speechService.startListening();
+        
         // zoom to the clicked node
         this.network.focus(clickedNodeId, {
           scale: 1.0,
