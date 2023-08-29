@@ -10,10 +10,16 @@ scrollChat: string = '';
 @Input() displayText: string = '';
 
 ngAfterViewInit(): void {
-  setInterval(() => {
+  let counter = 0;
+  const intervalId = setInterval(() => {
     this.scrollChat += "chat update<br/>";
+    counter++;
+    if (counter >= 40) {
+      clearInterval(intervalId);
+    }
   }, 1000);
 }
+
 
 ngOnChanges(changes: SimpleChanges): void {
   if (changes['displayText']) {
