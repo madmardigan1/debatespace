@@ -31,7 +31,7 @@ export class NodeSpaceComponent implements AfterViewInit {
 
   //initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
-    {id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg"},
+    {id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve"},
   ]);
 
   private edges = new DataSet<any>([
@@ -81,7 +81,7 @@ export class NodeSpaceComponent implements AfterViewInit {
         hover: true,  // This ensures that hover events are enabled.
         hoverConnectedEdges: true, // Optional, if you want to highlight edges connected to the hovered node.
         dragNodes:false,
-        navigationButtons: true,
+       
         keyboard: true,
       },
       edges: {
@@ -118,19 +118,22 @@ if (nodeToUpdate) {
           // If a node is selected, add the transcript to the node's text
           if (this.selectedNodeIndex !== null) {
             let selectedImage;
+            let selectedName;
     
           if (this.selectedPicture == 0) {
               selectedImage = "assets/Jared.jpeg";
               this.selectedPicture += 1;
+              selectedName = 'Jared';
           } else {
               selectedImage = "assets/Steve.jpeg";
               this.selectedPicture -= 1;
+              selectedName= 'Steve'
           }
     
     
             const newNodeId = this.nodes.length + 1;
             this.globalnode = newNodeId;
-            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage });
+            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName });
             this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
             this.selectedNodeIndex = null;
             
@@ -212,7 +215,7 @@ this.network.stopSimulation();
 // Recursive function to traverse the graph
 function traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
   let nodeData = nodes.get(nodeId);
-  let text = `Node ${nodeData.id}: ${nodeData.text}`;
+  let text = `${nodeData.user}: ${nodeData.text}`;
 
   // Base condition: if we reach the original node, stop
   if (nodeId === originalNodeId) {
