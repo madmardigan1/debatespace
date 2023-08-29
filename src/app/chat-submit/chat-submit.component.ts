@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
+
 @Component({
   selector: 'app-chat-submit',
   templateUrl: './chat-submit.component.html',
@@ -9,10 +10,12 @@ export class ChatSubmitComponent {
   value = '';
   @Output() submit = new EventEmitter<string>();
 
+  constructor () {
+  }
   onSubmit() {
     if (this.value) {
       this.submit.emit(this.value);
-      this.value = '';
+      this.value='';
     }
   }
 }

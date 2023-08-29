@@ -12,10 +12,10 @@
     </div>
     <div class="box2">
       <div class="chat-box">
-        This is the area dedicated for a user chat room to discuss the conversation being heard.
+        <app-chat-space [displayText]="text"></app-chat-space>
       </div>
       <div class="chat-area">
-        <app-chat-submit (submit)="nodeSpace.onChatSubmit($event)"></app-chat-submit>
+        <app-chat-submit (submit)="updateText($event)"></app-chat-submit>
       </div>
     </div>
   </div>

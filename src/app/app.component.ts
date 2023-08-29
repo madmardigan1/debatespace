@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'debatespaces';
+  text: string = '';
+
+  updateText(newText: string) {
+    this.text = newText;
+  }
 }

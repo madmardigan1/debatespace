@@ -32,31 +32,6 @@
     border: 5px solid rgb(0, 0, 0);
 }
 
-.record-buttons {
-    position: absolute;  /* Absolute positioning relative to node-area */
-    right: 35%;         /* Position 10px from the right edge */
-    top: 20px;        /* Position 10px from the bottom edge */
-    display: flex;
-    gap: 10px;           /* Gap between the buttons */
-    z-index: 10000;
-}
-
-.record-btn,
-.stop-btn {
-    padding: 5px 15px;   /* Button padding */
-    border: none;        /* Remove default borders */
-    cursor: pointer;     /* Mouse cursor on hover */
-}
-
-.record-btn {
-    background-color: #FF5733; /* Sample color, you can change */
-    color: white;
-}
-
-.stop-btn {
-    background-color: #333;    /* Sample color, you can change */
-    color: white;
-}
 .output-area {
     height: 30%;
     border: 5px solid black;
@@ -65,6 +40,7 @@
 .chat-box {
     height: 90%;
     border: 5px solid black;
+    overflow-y: auto;
 }
 
 .chat-area {

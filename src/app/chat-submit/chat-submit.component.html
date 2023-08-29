@@ -1,6 +1,6 @@
-<mat-form-field class="chat-submit" style="height:95%; width:100%">
+<mat-form-field class="chat-submit" style="height: 100%; width:100%">
   <mat-label>What do you want to say?</mat-label>
-  <input matInput type="text" [(ngModel)]="value">
+  <input matInput type="text" [(ngModel)]="value" (keydown.enter)="onSubmit()">
   <button mat-button (click)="onSubmit()">Submit</button>
   <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
     <mat-icon>close</mat-icon>
