@@ -25,7 +25,7 @@ export class NodeSpaceComponent implements AfterViewInit {
 
   // Initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
-    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0 },
+    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0},
   ]);
   private edges = new DataSet<any>([]);
 
@@ -173,6 +173,37 @@ this.network.stopSimulation();
   });
 }
 
+  thumbdown(): void {
+   // Check if a node is selected
+   if (this.selectedNodeIndex !== null) {
+      
+    // Get the node data
+    const nodeData = this.nodes.get(this.selectedNodeIndex);
+    
+    if (nodeData) {
+      // Increment the likes count
+      nodeData.Moment = (nodeData.Moment) - 1;
+   
+        // Check if likes reach 50
+    if (nodeData.Moment <= 0) {
+      nodeData.color = { border: 'red', background: nodeData.color?.background || '#FFFFFF' };
+      nodeData.shadow = {
+        enabled: true,
+        color: 'red',
+        size: 20,  // adjust the size as needed
+        x: 0,     // adjust the x-offset as needed
+        y: 0      // adjust the y-offset as needed
+      };
+    }
+      // Update the node data in the DataSet
+      this.nodes.update(nodeData);
+      
+      // Optionally, emit an event or do something else
+      // ...  
+    }
+  }
+  
+  }
 
   thumbup(): void {
     // Check if a node is selected
@@ -183,17 +214,17 @@ this.network.stopSimulation();
       
       if (nodeData) {
         // Increment the likes count
-        nodeData.likes = (nodeData.likes || 0) + 1;
-        
+        nodeData.Moment = (nodeData.Moment) + 1;
+  
           // Check if likes reach 50
-      if (nodeData.likes >= 5) {
+      if (nodeData.Moment >= 5) {
         nodeData.color = { border: 'green', background: nodeData.color?.background || '#FFFFFF' };
         nodeData.shadow = {
           enabled: true,
           color: 'green',
-          size: 10,  // adjust the size as needed
-          x: 5,     // adjust the x-offset as needed
-          y: 5      // adjust the y-offset as needed
+          size: 20,  // adjust the size as needed
+          x: 0,     // adjust the x-offset as needed
+          y: 0      // adjust the y-offset as needed
         };
       }
         // Update the node data in the DataSet
@@ -248,7 +279,7 @@ this.network.stopSimulation();
     
             const newNodeId = this.nodes.length + 1;
             this.globalnode = newNodeId;
-            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName });
+            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0 });
             this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
             this.selectedNodeIndex = null;
             
