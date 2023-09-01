@@ -53,6 +53,7 @@ export class NodeSpaceComponent implements AfterViewInit {
         shape: 'circularImage',
         image: 'path/to/image',
         borderWidth: 2,  
+        labelHighlightBold: true,
         color: {
           border: '#000000',
           background: '#FFFFFF'
@@ -132,6 +133,7 @@ this.network.stopSimulation();
   this.network.on('click', params => {
     if (this.isRecording) {
       this.toggleRecording();
+      this.speechService.clearRecordingAudio();
     }
     if (params.nodes.length > 0) {
       const clickedNodeId = params.nodes[0];

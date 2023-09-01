@@ -63,6 +63,9 @@ export class SpeechService {
   }
 
 
+  clearRecordingAudio() {
+    this.audioBlob = null;
+  }
 
   startRecordingAudio() {
     // Start recording audio
