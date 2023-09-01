@@ -93,6 +93,10 @@ export class SpeechService {
     }
   }
 
+  returnAudio(): Blob | null {
+    return this.audioBlob;
+  }
+  
   playRecordedAudio() {
     if (this.audioBlob) {
       const audioUrl = URL.createObjectURL(this.audioBlob);

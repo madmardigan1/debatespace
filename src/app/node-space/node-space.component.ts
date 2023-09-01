@@ -25,7 +25,7 @@ export class NodeSpaceComponent implements AfterViewInit {
 
   // Initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
-    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0},
+    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0,soundClip: null},
   ]);
   private edges = new DataSet<any>([]);
 
@@ -85,10 +85,8 @@ private addEventListeners() {
     this.network.setOptions({ physics: false });
       const nodeId = params.node;
       const node: any = this.nodes.get(nodeId);
-      node.size = 40; // Adjust this value as necessary
-      this.network.setOptions({ physics: false });
       this.nodes.update(node);
-      this.network.setOptions({ physics: true });
+      
       
      if (node && node.shape === "circularImage") {
           // Save the original image to restore it later.
@@ -131,10 +129,9 @@ this.network.stopSimulation();
   });
 
   this.network.on('click', params => {
-    if (this.isRecording) {
+    /*if (this.isRecording) {
       this.toggleRecording();
-      this.speechService.clearRecordingAudio();
-    }
+    }*/
     if (params.nodes.length > 0) {
       const clickedNodeId = params.nodes[0];
     
@@ -143,7 +140,6 @@ this.network.stopSimulation();
     
   
       this.selectedNodeIndex = clickedNodeId;
-  
       if (this.selectedNodeIndex !== null) {
         this.nodeClicked.emit(clickedNodeId);
   
@@ -159,7 +155,7 @@ this.network.stopSimulation();
       
       }
     
-      this.rtcService.startStream();
+      //this.rtcService.startStream();
       
       // zoom to the clicked node
       this.network.focus(clickedNodeId, {
@@ -237,31 +233,33 @@ this.network.stopSimulation();
   }
   
   toggleRecording() {
+    console.log(this.selectedNodeIndex);
     if (this.selectedNodeIndex){
       if (this.isRecording) {
+       
           this.speechService.phrases.subscribe(transcript => {
-          const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string; label?: string };
+          const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string; label?: string; soundClip: Blob | null };
   
           if (nodeToUpdate) {
             nodeToUpdate.text = this.wrapText(transcript, 20);
             nodeToUpdate.label = this.wrapText(transcript, 20);
+            nodeToUpdate.soundClip = this.speechService.returnAudio();
             this.nodes.update(nodeToUpdate);
-          }
-          
-  
-          transcript = '';
-            });
-            
+            }
+          });
+
+          const nodeData = this.nodes.get(this.selectedNodeIndex);  
           this.speechService.stopListening();
           this.speechService.stopRecordingAudio();
+          
       
       } 
       
       else {
+        
         this.speechService.startListening();
         this.speechService.startRecordingAudio();
-      
-        this.speechService.phrases.subscribe(transcript => {
+       
           // If a node is selected, add the transcript to the node's text
           if (this.selectedNodeIndex !== null) {
             let selectedImage;
@@ -279,12 +277,13 @@ this.network.stopSimulation();
     
             const newNodeId = this.nodes.length + 1;
             this.globalnode = newNodeId;
-            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0 });
+            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
             this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
-            this.selectedNodeIndex = null;
+            console.log(this.selectedNodeIndex);
+            //this.selectedNodeIndex = null;
             
           }
-        });
+       
       }
     
       this.isRecording = !this.isRecording;  // toggle the recording state
@@ -309,8 +308,17 @@ this.network.stopSimulation();
 }
 
 play(): void {
-  this.speechService.playRecordedAudio();
+  if (this.selectedNodeIndex){
+    const nodeData = this.nodes.get(this.selectedNodeIndex);
+  if (nodeData.soundClip) {
+    const audioUrl = URL.createObjectURL(nodeData.soundClip);
+    const audio = new Audio(audioUrl);
+    audio.play();
+  }
 }
+ 
+}
+
  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
   let nodeData = nodes.get(nodeId);
   let text = `${nodeData.user}: ${nodeData.text}`;

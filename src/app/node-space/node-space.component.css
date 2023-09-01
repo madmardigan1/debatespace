@@ -20,8 +20,8 @@
 
 .thumb-up {
   position: absolute;
-  left: 0px;
-  bottom: 0px;
+  left: 25%;
+  bottom: 5%;
   width: 30px;
   height: 30px;
   background-color: green;
@@ -38,7 +38,7 @@
 
 .play {
   position: absolute;
-  left: 10%;
+  left: 40%;
   top: 30%;
   width: 30px;
   height: 30px;
