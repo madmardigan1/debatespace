@@ -3,7 +3,6 @@ import { DataSet, Network } from 'vis-network/standalone';
 import { RtcService } from '../rtcservice.service';
 import { SpeechService } from '../speech-service.service';
 import { SharedserviceService } from '../sharedservice.service';
-import { ChatSpaceComponent } from '../chat-space/chat-space.component';
 
 @Component({
   selector: 'app-node-space',
@@ -26,7 +25,7 @@ export class NodeSpaceComponent implements AfterViewInit {
 
   // Initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
-    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve" },
+    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0 },
   ]);
   private edges = new DataSet<any>([]);
 
@@ -38,7 +37,6 @@ export class NodeSpaceComponent implements AfterViewInit {
   }
 
   private initNetwork() {
-    this.floatingButton = document.getElementById('floating-button') as HTMLElement;
 
     const data = {
       nodes: this.nodes,
@@ -81,55 +79,6 @@ export class NodeSpaceComponent implements AfterViewInit {
 }
 
 private addEventListeners() {
-  this.floatingButton.addEventListener('click', (event) => {
-    event.stopPropagation();  // to prevent the underlying canvas from receiving the click event
-  
-    if (this.isRecording) {
-      this.speechService.phrases.subscribe(transcript => {
-        const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string };
-
-if (nodeToUpdate) {
-  nodeToUpdate.text = this.wrapText(transcript, 20);
-  this.nodes.update(nodeToUpdate);
-}
-
-
-    transcript = '';
-      });
-      
-      this.speechService.stopListening();
-    
-    } else {
-      this.speechService.startListening();
-      this.speechService.phrases.subscribe(transcript => {
-        // If a node is selected, add the transcript to the node's text
-        if (this.selectedNodeIndex !== null) {
-          let selectedImage;
-          let selectedName;
-  
-        if (this.selectedPicture == 0) {
-            selectedImage = "assets/Jared.jpeg";
-            this.selectedPicture += 1;
-            selectedName = 'Jared';
-        } else {
-            selectedImage = "assets/Steve.jpeg";
-            this.selectedPicture -= 1;
-            selectedName= 'Steve'
-        }
-  
-  
-          const newNodeId = this.nodes.length + 1;
-          this.globalnode = newNodeId;
-          this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName });
-          this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
-          this.selectedNodeIndex = null;
-          
-        }
-      });
-    }
-  
-    this.isRecording = !this.isRecording;  // toggle the recording state
-  });
 
   this.network.on('hoverNode', params => {
     this.network.setOptions({ physics: false });
@@ -145,7 +94,7 @@ if (nodeToUpdate) {
           node.originalImage = node.image;
   
           // Replace the image with the desired text.
-          node.label = node.text || 'Default Text';  // You can adjust this based on what text you want.
+          //node.label = node.text || 'Default Text';  // You can adjust this based on what text you want.
           node.shape = 'circle';  // Change the shape to text.
           node.image = undefined;  // Remove the image property.
           node.borderWidth = 2;  // Set a border.
@@ -167,25 +116,28 @@ if (nodeToUpdate) {
           // Restore the original image.
           node.image = node.originalImage;
           node.shape = 'circularImage';
-          node.label = '';  // Remove the text label.
+          //node.label = '';  // Remove the text label.
           node.originalImage = undefined;  // Cleanup the property we added.
           node.borderWidth = 2;  // Set a border.
           node.color = {
               border: '#000000', // Color of the border.
               background: '#FFFFFF' };// Color of the circle.
           // Update the node in the dataset.
-          this.network.stabilize();
+          
 this.nodes.update(node);
 this.network.stopSimulation();
       }
   });
 
   this.network.on('click', params => {
+    if (this.isRecording) {
+      this.toggleRecording();
+    }
     if (params.nodes.length > 0) {
       const clickedNodeId = params.nodes[0];
-      const nodePosition = this.network.getPositions([clickedNodeId]);
-      const canvasPosition = this.network.canvasToDOM(nodePosition[clickedNodeId]);
-      this.showFloatingButton(canvasPosition.x, canvasPosition.y);
+    
+   
+     
     
   
       this.selectedNodeIndex = clickedNodeId;
@@ -219,11 +171,92 @@ this.network.stopSimulation();
   });
 }
 
-  showFloatingButton(x: number, y: number) {
-    this.floatingButton.style.left = `${x}px`;
-    this.floatingButton.style.top = `${y}px`;
-    this.floatingButton.style.display = 'block';
+
+  thumbup(): void {
+    // Check if a node is selected
+    if (this.selectedNodeIndex !== null) {
+      
+      // Get the node data
+      const nodeData = this.nodes.get(this.selectedNodeIndex);
+      
+      if (nodeData) {
+        // Increment the likes count
+        nodeData.likes = (nodeData.likes || 0) + 1;
+        
+          // Check if likes reach 50
+      if (nodeData.likes >= 5) {
+        nodeData.color = { border: 'green', background: nodeData.color?.background || '#FFFFFF' };
+        nodeData.shadow = {
+          enabled: true,
+          color: 'green',
+          size: 10,  // adjust the size as needed
+          x: 5,     // adjust the x-offset as needed
+          y: 5      // adjust the y-offset as needed
+        };
+      }
+        // Update the node data in the DataSet
+        this.nodes.update(nodeData);
+        
+        // Optionally, emit an event or do something else
+        // ...  
+      }
+    }
   }
+  
+  toggleRecording() {
+    if (this.selectedNodeIndex){
+      if (this.isRecording) {
+          this.speechService.phrases.subscribe(transcript => {
+          const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string; label?: string };
+  
+          if (nodeToUpdate) {
+            nodeToUpdate.text = this.wrapText(transcript, 20);
+            nodeToUpdate.label = this.wrapText(transcript, 20);
+            this.nodes.update(nodeToUpdate);
+          }
+          
+  
+          transcript = '';
+            });
+            
+          this.speechService.stopListening();
+          this.speechService.stopRecordingAudio();
+      
+      } 
+      
+      else {
+        this.speechService.startListening();
+        this.speechService.startRecordingAudio();
+      
+        this.speechService.phrases.subscribe(transcript => {
+          // If a node is selected, add the transcript to the node's text
+          if (this.selectedNodeIndex !== null) {
+            let selectedImage;
+            let selectedName;
+    
+            if (this.selectedPicture == 0) {
+                selectedImage = "assets/Jared.jpeg";
+                this.selectedPicture += 1;
+                selectedName = 'Jared';
+            } else {
+                selectedImage = "assets/Steve.jpeg";
+                this.selectedPicture -= 1;
+                selectedName= 'Steve'
+            }
+    
+            const newNodeId = this.nodes.length + 1;
+            this.globalnode = newNodeId;
+            this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName });
+            this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
+            this.selectedNodeIndex = null;
+            
+          }
+        });
+      }
+    
+      this.isRecording = !this.isRecording;  // toggle the recording state
+    }
+    };
 
   wrapText(text: string, maxCharsPerLine: number): string {
     let wrappedText = '';
@@ -242,6 +275,9 @@ this.network.stopSimulation();
     return wrappedText.trim();
 }
 
+play(): void {
+  this.speechService.playRecordedAudio();
+}
  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
   let nodeData = nodes.get(nodeId);
   let text = `${nodeData.user}: ${nodeData.text}`;

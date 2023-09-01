@@ -1,3 +1,9 @@
+
+.chat-submit {
+    height:100%;
+    width: 100%;
+}
+
 .container {
     border: 2px solid black;
     padding: 5px;
@@ -28,9 +34,13 @@
 }
 
 .node-area {
+    position: relative;
     height: 70%;
     border: 5px solid rgb(0, 0, 0);
+    
 }
+
+
 
 .output-area {
     height: 30%;
@@ -44,7 +54,10 @@
 }
 
 .chat-area {
+    overflow: hidden;
     height:10%;
     border: 5px solid black;
     
 }
+
+

@@ -9,7 +9,9 @@ declare var webkitSpeechRecognition: any;
 export class SpeechService {
   transcript = '';
   private finalTranscript = '';
-
+  mediaRecorder: any;
+  audioChunks: any[] = [];
+  audioBlob: Blob | null = null;
   private recognition: any;
   private speechRecognition: any;
   public phrases = new Subject<string>();
@@ -49,12 +51,6 @@ export class SpeechService {
     if (this.recognition) {
       this.recognition.start();
     }
-    /*this.currentTranscript = '';
-    this.speechRecognition = new webkitSpeechRecognition();
-    this.speechRecognition.continuous = true;
-    this.speechRecognition.interimResults = true;
-    this.speechRecognition.onresult = this.onResult.bind(this);
-    this.speechRecognition.start();*/
   }
 
   stopListening() {
@@ -64,21 +60,43 @@ export class SpeechService {
     if (this.recognition) {
       this.recognition.stop();
     }
-    /*
-    if (this.speechRecognition) {
-      this.speechRecognition.stop();
-      this.phrases.next(this.currentTranscript);
-      this.currentTranscript = '';
-      this.speechRecognition = null;
-    }*/
   }
 
- /* private onResult(event: any) {
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      this.currentTranscript += transcript;
-      this.phrases.next(this.currentTranscript);
+
+
+  startRecordingAudio() {
+    // Start recording audio
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      this.mediaRecorder = new MediaRecorder(stream);
+      this.audioChunks = [];
+      
+      this.mediaRecorder.ondataavailable = (event: BlobEvent)=> {
+        this.audioChunks.push(event.data);
+      };
+
+      this.mediaRecorder.onstop = () => {
+        this.audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+        // Now, you can use this audioBlob to play the audio, or save it somewhere
+      };
+
+      this.mediaRecorder.start();
+    });
+  }
+
+  stopRecordingAudio() {
+    // Stop recording audio
+    if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
     }
-  }*/
+  }
+
+  playRecordedAudio() {
+    if (this.audioBlob) {
+      const audioUrl = URL.createObjectURL(this.audioBlob);
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  }
+
 }
 
