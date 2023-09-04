@@ -1,20 +1,20 @@
 
-<div class="container">
-  <div class="outerbox">
+<div class="container bg-dark">
+  <div class="outerbox bg-success">
     <div class="box1">
-      <div class="node-area">
+      <div class="node-area text-white">
        <app-node-space #nodeSpace></app-node-space>
       </div>
-      <div class="output-area">
+      <div class="output-area bg-success text-white">
         <app-gpt-summary style=></app-gpt-summary>
       </div>
     </div>
     <div class="box2">
-      <div class="chat-box">
+      <div class="chat-box bg-success text-white">
         <app-chat-space [displayText]="text"></app-chat-space>
       </div>
-      <div class="chat-area">
-        <app-chat-submit (submit)="updateText($event)"></app-chat-submit>
+      <div class="chat-area bg-primary text-white">
+        <app-chat-submit (submitit)="updateText($event)"></app-chat-submit>
       </div>
     </div>
   </div>

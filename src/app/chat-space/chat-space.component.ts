@@ -23,7 +23,9 @@ ngAfterViewInit(): void {
 
 ngOnChanges(changes: SimpleChanges): void {
   if (changes['displayText']) {
+    
     const change = changes['displayText'];
+   
     if (change.previousValue !== change.currentValue) {
       this.scrollChat += change.currentValue + '<br/>';
     }
