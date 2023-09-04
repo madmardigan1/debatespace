@@ -1,10 +1,16 @@
 
 <div class="container">
-<div #visNetwork id="mynetwork"  class="nodes" style="height:100%; width:100%"> </div>
+  <button class="btn btn-white">
+    <span class="custom-icon"></span>
+  </button>
+<div #visNetwork id="mynetwork"  class="nodes" style="height:100%; width:100%"> 
+  
+</div>
 <div class="buttons">
     <button mat-fab class="thumb-up" (click)="thumbup()" color="primary" >
       <mat-icon>thumb_up</mat-icon>
     </button>
+
     
     <!-- Red thumbs-down circular button -->
     <button mat-fab class="thumb-down" color="primary" (click)="thumbdown()">

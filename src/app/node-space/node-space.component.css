@@ -52,3 +52,16 @@
   height: 30px;
   background-color: red;
 }
+
+.custom-icon {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 100px;
+  height: 100px;
+  background: url('/assets/debate_icon1.jpg') no-repeat;
+  background-size: contain;
+  margin-right: 8px;
+  vertical-align: middle;
+}
