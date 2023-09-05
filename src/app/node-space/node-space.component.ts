@@ -134,7 +134,7 @@ this.network.on('click', params => {
     if (this.isRecording) {
       this.toggleRecording();
     }
-    
+
     if (params.nodes.length > 0) {
       const clickedNodeId = params.nodes[0];
     
@@ -256,6 +256,7 @@ this.network.on('click', params => {
           if (nodeToUpdate) {
             nodeToUpdate.text = this.wrapText(transcript, 20);
             nodeToUpdate.label = this.wrapText(transcript, 20);
+            this.speechService.stopRecordingAudio();
             nodeToUpdate.soundClip = this.speechService.returnAudio();
             this.nodes.update(nodeToUpdate);
             }
@@ -263,7 +264,7 @@ this.network.on('click', params => {
 
           const nodeData = this.nodes.get(this.selectedNodeIndex);  
           this.speechService.stopListening();
-          this.speechService.stopRecordingAudio();
+          
           
       
       } 
