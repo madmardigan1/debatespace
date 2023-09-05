@@ -55,6 +55,7 @@ export class NodeSpaceComponent implements AfterViewInit {
         image: 'path/to/image',
         borderWidth: 2,  
         labelHighlightBold: true,
+        font: { color: 'white' }, 
         color: {
           border: '#000000',
           background: '#FFFFFF'
@@ -129,10 +130,11 @@ this.network.stopSimulation();
       }
   });
 
-  this.network.on('click', params => {
-    /*if (this.isRecording) {
+this.network.on('click', params => {
+    if (this.isRecording) {
       this.toggleRecording();
-    }*/
+    }
+    
     if (params.nodes.length > 0) {
       const clickedNodeId = params.nodes[0];
     
@@ -358,29 +360,6 @@ traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: an
 
   return [text];
 }
- /*traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
-  let nodeData = nodes.get(nodeId);
-  let text = `${nodeData.user}: ${nodeData.text}`;
-
-  // Base condition: if we reach the original node, stop
-  if (nodeId === originalNodeId) {
-      return [text];
-  }
-
-  // Get connected edges to the current node
-  const connectedEdges = edges.get({
-      filter: (edge:any) => edge.to === nodeId
-  });
-
-  // If we have a predecessor, move to it and continue traversal
-  if (connectedEdges.length > 0) {
-      const predecessorNodeId = connectedEdges[0].from;
-      const previousTexts = this.traverseToOriginal(predecessorNodeId, originalNodeId, nodes, edges);
-      return [...previousTexts, text]; // appending current node's text to the result from predecessors
-  }
-
-  return [text];
-}*/
 }
 
 
