@@ -22,6 +22,7 @@ export class NodeSpaceComponent implements AfterViewInit {
   positions: any;
   globalnode: any;
   public selectedPicture = 0;
+  private highlightedEdges: any[] = [];
 
   // Initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
@@ -165,6 +166,16 @@ this.network.stopSimulation();
           easingFunction: 'easeInOutQuad'
         }  
       });
+    }
+    const resetEdges = this.highlightedEdges.map(edgeId => {
+      return { id: edgeId, color: '000000' }; // Assuming '000000' is the original color
+    });
+    this.edges.update(resetEdges);
+    this.highlightedEdges = [];
+
+    // Highlight the path from the initial node to the clicked node
+    if (params.nodes.length > 0) {
+      this.traverseToOriginal(params.nodes[0], 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
     }
   });
 }
@@ -319,7 +330,35 @@ play(): void {
  
 }
 
- traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
+traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
+  let nodeData = nodes.get(nodeId);
+  let text = `${nodeData.user}: ${nodeData.text}`;
+
+  // Base condition: if we reach the original node, stop
+  if (nodeId === originalNodeId) {
+    return [text];
+  }
+
+  // Get connected edges to the current node
+  const connectedEdges = edges.get({
+    filter: (edge: any) => edge.to === nodeId
+  });
+
+  // If we have a predecessor, move to it and continue traversal
+  if (connectedEdges.length > 0) {
+    const predecessorNodeId = connectedEdges[0].from;
+    this.highlightedEdges.push(connectedEdges[0].id); // Storing the edge ID
+    const previousTexts = this.traverseToOriginal(predecessorNodeId, originalNodeId, nodes, edges);
+
+    // Highlight the edge (this could be done in a different function if preferred)
+    this.edges.update([{ id: connectedEdges[0].id, color: 'yellow' }]);
+
+    return [...previousTexts, text]; // appending current node's text to the result from predecessors
+  }
+
+  return [text];
+}
+ /*traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
   let nodeData = nodes.get(nodeId);
   let text = `${nodeData.user}: ${nodeData.text}`;
 
@@ -341,7 +380,7 @@ play(): void {
   }
 
   return [text];
-}
+}*/
 }
 
 
