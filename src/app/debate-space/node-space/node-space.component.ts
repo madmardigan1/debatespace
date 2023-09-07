@@ -268,6 +268,7 @@ this.network.on('click', params => {
 
           const nodeData = this.nodes.get(this.selectedNodeIndex);  
           this.speechService.stopListening();
+          this.speechService.phrases.unsubscribe;
           
           
       

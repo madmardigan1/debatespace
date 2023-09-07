@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CardDataService, Card } from '../space-service.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class DebateSpaceComponent implements OnInit {
   card!: Card;
   cards!: any[];
 
-  constructor (private route: ActivatedRoute, private cardService: CardDataService){}
+  constructor (private route: ActivatedRoute, private cardService: CardDataService, private router: Router){}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -26,7 +26,9 @@ export class DebateSpaceComponent implements OnInit {
       }
     });
   }
-  
+  generateRoute(card: any) {
+    return ['/debate', card.id];
+  }
   
   updateText(newText: string) {
     this.text = newText;

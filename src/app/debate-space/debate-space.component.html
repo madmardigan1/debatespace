@@ -2,14 +2,13 @@
   <div class="channels text-white">
     <h1>Recommended Channels</h1>
     <div class="btn-group-vertical w-100">
-        <button *ngFor="let card of cards" type="button" [routerLink]="['/debate', card.id]" class="btn btn-primary w-100 mb-2">
+      <a *ngFor="let card of cards" [routerLink]="['/debate', card.id]" routerLinkActive="active" class="btn btn-primary w-100 mb-2">
+
+
             {{card.topic}}
-        </button>
+        </a>
     </div>
 </div>
-
-
-
   
     <div class="box1">
       <div class="node-area text-white">

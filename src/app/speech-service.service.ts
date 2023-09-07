@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-//import { ChangeDetectorRef } from '@angular/core';
 
-declare var webkitSpeechRecognition: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +12,7 @@ export class SpeechService {
   audioChunks: any[] = [];
   audioBlob: Blob | null = null;
   private recognition: any;
-  private speechRecognition: any;
+ 
   public phrases = new Subject<string>();
   private currentTranscript = '';
 
@@ -24,6 +23,19 @@ export class SpeechService {
       this.recognition = new SpeechRecognition();
       this.recognition.continuous = true;
       this.recognition.interimResults = true;
+   
+
+
+      
+    }
+  }
+
+  
+  startListening() {
+    this.transcript='';
+    this.finalTranscript = '';
+    if (this.recognition) {
+      this.recognition.start();
       this.recognition.onresult = (event: any) => {
         let interim_transcript = '';
 
@@ -40,16 +52,6 @@ export class SpeechService {
         // Manually trigger change detection
        
     };
-
-
-      
-    }
-  }
-
-  
-  startListening() {
-    if (this.recognition) {
-      this.recognition.start();
     }
   }
 
@@ -69,6 +71,7 @@ export class SpeechService {
 
   startRecordingAudio() {
     // Start recording audio
+
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
       this.mediaRecorder = new MediaRecorder(stream);
       this.audioChunks = [];
