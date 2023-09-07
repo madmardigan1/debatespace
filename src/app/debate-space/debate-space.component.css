@@ -1,0 +1,115 @@
+
+.chat-submit {
+    height:100%;
+    width: 100%;
+
+}
+.custom-icon {
+    display: inline-block;
+    width: 50px;  
+    height: 50px;  
+    background: url('/assets/debate_icon1.jpg') no-repeat;
+    background-size: contain;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  .icon-and-title {
+    display: flex;
+    align-items: center;
+  }
+  
+  .title {
+    color: white; 
+    font-size: 24px;
+    margin-left: 10px;
+  }
+  
+  .icon-title-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove underline */
+    color: white; /* Set the hyperlink text color */
+    border-radius: 5px; /* Optional, for rounded corners */
+  }
+  
+ 
+
+
+
+  
+  .banner {
+    height: 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .search-bar {
+    padding: 5px;
+    background-color: white;
+    border: 1px solid #ccc;
+    
+  }
+  
+  
+  
+.outerbox {
+    display: flex;
+    height: 92%;
+    width: 100%;
+}
+.channels {
+  display: flex;
+  flex-direction: column; /* Add this to stack children vertically */
+  align-items: stretch; /* Ensures that children stretch to the full width of the container */
+  width: 20%;
+  border: 1px solid;
+  padding: 10px;
+}
+
+
+
+.box1 {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    border: 1px solid;
+}
+
+.box2 {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    border: 1px solid;
+    
+}
+
+.node-area {
+    position: relative;
+    height: 70%;
+    border: 1px solid white;
+    
+}
+
+
+
+.output-area {
+    height: 30%;
+    border: 1px solid white;
+}
+
+.chat-box {
+    height: 90%;
+    border: 1px solid white;
+    overflow-y: auto;
+}
+
+.chat-area {
+    overflow: hidden;
+    height:10%;
+    border: 1px solid white;
+    display: flex;
+    
+}

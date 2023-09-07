@@ -1,31 +1,28 @@
-
-<div class="banner bg-dark">
-  <div class="icon-and-title">
-    <a href="your_target_url_here" class="icon-title-link">
-      <span class="custom-icon"></span>
-      <span class="title">Debate Spaces</span>
-    </a>
+<div class="container-fluid p-0" style="width:100%;">
+  <div class="row bg-primary align-items-center" style="height: 50px;">
+    <div class="col-md-4 text-left text-md-left">
+      <button type="button" class="btn btn-primary btn-md text-white" style="font-size:24px;" [routerLink]="['/']">Sequitur</button>
+      <a [routerLink]="['/']" class="btn btn-primary btn-lg">Debate</a>
+    </div>
+    <div class="col-md-4 text-center">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" />
+        <div class="input-group-text">
+          <i class="bi bi-search"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 d-flex justify-content-end">
+      <img src="assets/Steve1.jpeg" alt="Image" style="max-height: 50px; border-radius: 50%; border: 2px solid brown;" />
+    </div>
   </div>
-  <input type="text" placeholder="Search" class="search-bar"/>
 </div>
 
 
-  <div class="outerbox bg-dark">
-    <div class="channels">Recommended Channels</div>
-    <div class="box1">
-      <div class="node-area text-white">
-       <app-node-space #nodeSpace></app-node-space>
-      </div>
-      <div class="output-area bg-dark text-white">
-        <app-gpt-summary style=></app-gpt-summary>
-      </div>
-    </div>
-    <div class="box2">
-      <div class="chat-box bg-dark text-white">
-        <app-chat-space [displayText]="text"></app-chat-space>
-      </div>
-      <div class="chat-area bg-dark text-white">
-        <app-chat-submit (submitit)="updateText($event)"></app-chat-submit>
-      </div>
-    </div>
-  </div>
+
+
+
+
+<router-outlet></router-outlet>
+
+

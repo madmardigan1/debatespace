@@ -1,0 +1,16 @@
+.form-container {
+    position: absolute;
+    height: 50%;
+    width: 50%;
+    top: 25%;
+    left: 25%;
+    align-self: center;
+}
+
+.form-label {
+    align-items: center;
+    justify-content: center;
+    text-justify: center;
+    text-align: center;
+    
+}

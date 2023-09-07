@@ -1,0 +1,17 @@
+<div *ngIf="cards.length === 0" class="text-center mt-5">
+  <p class="display-4">...hmm. It's a bit quiet in here.</p>
+  <p>Click the button on the bottom right to start a space.</p>
+</div>
+<div *ngIf="cards.length > 0" class="text-white text-center display-4">Happening Now</div>
+
+
+<app-card-data *ngFor="let card of cards" [card]="card"></app-card-data>
+
+
+
+
+<div class="test">
+<button mat-fab color="primary" aria-label="Add" class="fab-button" [routerLink]="['/create']">
+  <mat-icon>add</mat-icon>
+</button>
+</div>

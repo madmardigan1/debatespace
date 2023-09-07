@@ -1,8 +1,8 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, Input} from '@angular/core';
 import { DataSet, Network } from 'vis-network/standalone';
-import { RtcService } from '../rtcservice.service';
-import { SpeechService } from '../speech-service.service';
-import { SharedserviceService } from '../sharedservice.service';
+import { RtcService } from '../../rtcservice.service';
+import { SpeechService } from '../../speech-service.service';
+import { SharedserviceService } from '../../sharedservice.service';
 
 @Component({
   selector: 'app-node-space',
@@ -14,7 +14,7 @@ export class NodeSpaceComponent implements AfterViewInit {
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
   @Output() nodeClicked = new EventEmitter<number>();
   @Output() notify: EventEmitter<string> = new EventEmitter<string>();
-
+  @Input() inputdata: any;
   floatingButton!: HTMLElement;
   isRecording = false;
   network!: Network;
@@ -26,7 +26,7 @@ export class NodeSpaceComponent implements AfterViewInit {
 
   // Initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
-    { id: 1, label: 'What is the meaning of life?', text: 'What is the meaning of life?', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0,soundClip: null},
+    { id: 1, label: '', text: '', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0,soundClip: null},
   ]);
   private edges = new DataSet<any>([]);
 
@@ -52,7 +52,6 @@ export class NodeSpaceComponent implements AfterViewInit {
         physics: true,
         shadow: true,
         shape: 'circularImage',
-        image: 'path/to/image',
         borderWidth: 2,  
         labelHighlightBold: true,
         font: { color: 'white' }, 
@@ -79,6 +78,11 @@ export class NodeSpaceComponent implements AfterViewInit {
     };
 
     this.network = new Network(this.visNetwork.nativeElement, data, options);
+    const node: any = this.nodes.get(1);
+    node.label = this.inputdata;
+    node.text = this.inputdata;
+    this.nodes.update(node);
+
 }
 
 private addEventListeners() {
