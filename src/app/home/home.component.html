@@ -1,13 +1,13 @@
 
-
- <!--  <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-lg-6"> 
+<!--
+   <div class="caro-main">
+  <div class="row justify-content-center align-items-center">
+    <div class="col"> 
       <div class="carousel-container">
         <ngb-carousel>
           <ng-template ngbSlide>
             <div class="picsum-img-wrapper">
-              <img src="https://picsum.photos/900/500?random=1" alt="Random first slide">
+              <img src="assets/background.png" alt="Random first slide">
             </div>
             <div class="carousel-caption">
               <h4>First slide label</h4>
@@ -27,18 +27,31 @@
       </div>
     </div>
   </div>
-</div> -->
-
-
-<div *ngIf="cards.length === 0" class="text-center mt-5">
-  <p class="display-2">...hmm. It's a bit quiet in here.</p>
-  <p class="display-4">Click the button on the bottom right to start a space.</p>
-  <p class="display-4">Navigate back here after you create a space and see what changed!</p>
 </div>
-<div *ngIf="cards.length > 0">
+-->
+<div class="entrance justify-content-center align-items-center text-center">
+  <div class="jumbotron jumbotron-fluid ">
+    <div class="container">
+      <h1 class="display-4">Welcome to Debate Spaces</h1>
+      <p class="lead">Click the button on the bottom right to make your own space or join one in progress</p>
+    </div>
+  </div>
+</div>
 
+<ngb-carousel>
+  <ng-template ngbSlide *ngFor="let card of cards">
+    <div class="slide-bg" style="background-image: url('assets/Steve.jpeg')"></div>
+    <div class="card bg-dark text-white align-items-center text-center" style="width: 100rem; height: 20rem;">
+      <div class="card-body">
+        <h1 class="card-title">{{ card.topic }}</h1>
+        <p class="card-text">{{ card.description }}</p>
+        <a [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg">Join</a>
+      </div>
+    </div>
+  </ng-template>
+</ngb-carousel>
 
-
+<div class="exterior">
 <div class="container my-4 mx-0">
   <!-- First Header -->
   <h2 class="text-left mb-2">Live Now</h2>
