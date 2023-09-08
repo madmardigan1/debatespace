@@ -3,13 +3,12 @@
     <h1>Recommended Channels</h1>
     <div class="btn-group-vertical w-100">
       <a *ngFor="let card of cards" [routerLink]="['/debate', card.id]" routerLinkActive="active" class="btn btn-primary w-100 mb-2">
-
-
             {{card.topic}}
         </a>
     </div>
 </div>
-  
+
+
     <div class="box1">
       <div class="node-area text-white">
        <app-node-space #nodeSpace [inputdata]="card.description"></app-node-space>

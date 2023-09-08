@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -7,3 +8,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     right: 30px;
     bottom: 30px;
   }
+  .scroll-container {
+    width: 100vw;
+    height: 180px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;  /* Add flex display */
+    align-items: center; /* Center the items vertically */
+}
+.porp {
+  display: flex;   /* This makes .porp a flex container */
+  flex-direction: column;  /* Stack children vertically */
+  width: 200px;
+  height: 100%;  
+  margin: 10px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  position: relative; 
+}
+.custom-card {
+  flex-grow: 1;
+  display: flex;  /* Makes .custom-card also a flex container, if needed */
+  flex-direction: column;  /* Stack its children vertically */
+  background-color: red;  /* Temporarily color it for visualization */
+}
+
