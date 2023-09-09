@@ -23,7 +23,7 @@
 .sharenode {
   margin-left:10px;
   margin-right: 10px;
-  background-color: rgb(145, 145, 162);
+
 }
 .expand-panel1.expanded {
   height: 8%;  
@@ -36,7 +36,7 @@
   width: 45;
   height: 45px;
   position: relative;
-
+  
   display: flex;
   
   
@@ -45,7 +45,7 @@
 .thumb-up {
   margin-left:10px;
   margin-right: 10px;
-  background-color: green;
+  
 }
 .record {
   margin-left:10px;
@@ -60,7 +60,5 @@
 .thumb-down {
   margin-left:10px;
   margin-right: 10px;
- 
-  background-color: red;
 }
 

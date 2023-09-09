@@ -138,7 +138,8 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
         keyboard: true,
       },
       edges: {
-        color: "000000",
+        color: ("white"),
+        transparency: .5,
         width: 4,
         shadow: true,
         smooth: false,
