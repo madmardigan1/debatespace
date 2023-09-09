@@ -24,6 +24,7 @@ import { CardDetailsComponent } from './card-details/card-details.component';
 import { HomeComponent } from './home/home.component';
 import { SpacecreateComponent } from './spacecreate/spacecreate.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 //node
 
 
@@ -40,6 +41,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CardDetailsComponent,
     HomeComponent,
     SpacecreateComponent,
+
     
     
 

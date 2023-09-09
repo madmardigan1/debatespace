@@ -1,0 +1,17 @@
+.banner-top {
+    height: 8%;
+    position: fixed; /* Use 'absolute' if you only want it on top within its parent container. */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensure it stays on top of other elements */
+  }
+  
+
+.routercontainer {
+    position: absolute;
+    height: 100%;
+    top: 8%;
+    left: 0;
+    width: 100%;
+}

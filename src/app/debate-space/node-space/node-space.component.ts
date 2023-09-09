@@ -1,15 +1,16 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, Input} from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, Input,  OnInit} from '@angular/core';
 import { DataSet, Network } from 'vis-network/standalone';
 import { RtcService } from '../../rtcservice.service';
 import { SpeechService } from '../../speech-service.service';
 import { SharedserviceService } from '../../sharedservice.service';
-
+import { NodeshareService } from 'src/app/nodeshare.service';
+import { NodeLinkService } from 'src/app/node-link.service';
 @Component({
   selector: 'app-node-space',
   templateUrl: './node-space.component.html',
   styleUrls: ['./node-space.component.css']
 })
-export class NodeSpaceComponent implements AfterViewInit {
+export class NodeSpaceComponent implements AfterViewInit, OnInit {
 
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
   @Output() nodeClicked = new EventEmitter<number>();
@@ -18,11 +19,13 @@ export class NodeSpaceComponent implements AfterViewInit {
   floatingButton!: HTMLElement;
   isRecording = false;
   network!: Network;
+ 
   selectedNodeIndex: number | null = null;
   positions: any;
   globalnode: any;
   public selectedPicture = 0;
   private highlightedEdges: any[] = [];
+  isPanelExpanded = false;
 
   // Initial arrays for nodes and edges upon load
   public nodes = new DataSet<any>([
@@ -30,13 +33,78 @@ export class NodeSpaceComponent implements AfterViewInit {
   ]);
   private edges = new DataSet<any>([]);
 
-  constructor(private rtcService: RtcService, private speechService: SpeechService, private sharedService: SharedserviceService) {}
+  constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService) {}
 
+  ngOnInit(): void {
+  }
   ngAfterViewInit() {
     this.initNetwork();
     this.addEventListeners();
-  }
+    this.nodeLink.getNodeLink().subscribe(data => {
+      const input = Number(data);
+      
+      if (this.isRecording) {
+        this.toggleRecording();
+      }
+  
+      if (input !==null) {
+        this.isPanelExpanded = true;
+        const clickedNodeId = input;
+        
+     
+       
+      
+    
+        this.selectedNodeIndex = clickedNodeId;
+       
+  
+        if (this.selectedNodeIndex !== null) {
+          this.nodeClicked.emit(clickedNodeId);
+    
+          // Ensure this.selectedNodeIndex is not null before using it as an argument
+          const node = this.nodes.get(this.selectedNodeIndex);
+          
+        
+          if (node !== null) {
+            const combinedText: string[] = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
+            const combinedString = combinedText.join('<br>');
+            
+            this.notify.emit(combinedString);
+            this.sharedService.changeNodeText(combinedString);
+        }
+        
+        }
+      
+        //this.rtcService.startStream();
+        
+        // zoom to the clicked node
+        this.network.focus(clickedNodeId, {
+          scale: 1.0,
+          animation: {
+            duration: 500,
+            easingFunction: 'easeInOutQuad'
+          }  
+        });
+      }
+      else  {
+        this.isPanelExpanded = !this.isPanelExpanded;
+      }
+      
+      const resetEdges = this.highlightedEdges.map(edgeId => {
+        return { id: edgeId, color: '000000' }; // Assuming '000000' is the original color
+      });
+      this.edges.update(resetEdges);
+      this.highlightedEdges = [];
+  
+      // Highlight the path from the initial node to the clicked node
+       
+        
+        this.traverseToOriginal(input, 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
+      
+    });
 
+  }
+  
   private initNetwork() {
 
     const data = {
@@ -86,6 +154,7 @@ export class NodeSpaceComponent implements AfterViewInit {
 }
 
 private addEventListeners() {
+
 
   this.network.on('hoverNode', params => {
     this.network.setOptions({ physics: false });
@@ -140,6 +209,7 @@ this.network.on('click', params => {
     }
 
     if (params.nodes.length > 0) {
+      this.isPanelExpanded = true;
       const clickedNodeId = params.nodes[0];
     
    
@@ -147,6 +217,8 @@ this.network.on('click', params => {
     
   
       this.selectedNodeIndex = clickedNodeId;
+      console.log(this.selectedNodeIndex);
+
       if (this.selectedNodeIndex !== null) {
         this.nodeClicked.emit(clickedNodeId);
   
@@ -173,6 +245,9 @@ this.network.on('click', params => {
         }  
       });
     }
+    else  {
+      this.isPanelExpanded = !this.isPanelExpanded;
+    }
     const resetEdges = this.highlightedEdges.map(edgeId => {
       return { id: edgeId, color: '000000' }; // Assuming '000000' is the original color
     });
@@ -184,6 +259,12 @@ this.network.on('click', params => {
       this.traverseToOriginal(params.nodes[0], 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
     }
   });
+}
+
+sharenode(): void {
+  const dataToSend = this.selectedNodeIndex;
+ 
+  this.nodeShare.emitEvent(dataToSend);
 }
 
   thumbdown(): void {
@@ -250,7 +331,7 @@ this.network.on('click', params => {
   }
   
   toggleRecording() {
-    console.log(this.selectedNodeIndex);
+    
     if (this.selectedNodeIndex){
       if (this.isRecording) {
        
@@ -281,6 +362,7 @@ this.network.on('click', params => {
        
           // If a node is selected, add the transcript to the node's text
           if (this.selectedNodeIndex !== null) {
+           
             let selectedImage;
             let selectedName;
     
@@ -298,9 +380,8 @@ this.network.on('click', params => {
             this.globalnode = newNodeId;
             this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
             this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
-            console.log(this.selectedNodeIndex);
-            //this.selectedNodeIndex = null;
-            
+          
+           
           }
        
       }

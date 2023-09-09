@@ -17,6 +17,7 @@ export class SpacecreateComponent implements AfterViewInit {
       topic: ['', Validators.required],
       description: ['', Validators.required],
       number: ['', Validators.required],
+      entrancefee: []
      
   });
 

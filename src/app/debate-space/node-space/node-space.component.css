@@ -3,49 +3,64 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
-.buttons {
+
+.expand-panel1 {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 15%;
-  height: 25%;
+  right: 0%;
+  bottom: 45px;
+  width: 100%;  
+  height: 0%;
+  justify-items: space-between;
+  align-items: space-between;
+  transition: height 0.5s ease-out;
+  display: flex;
+  justify-content: center; /* center the buttons container */
+  
+}
+.sharenode {
+  margin-left:10px;
+  margin-right: 10px;
+  background-color: rgb(145, 145, 162);
+}
+.expand-panel1.expanded {
+  height: 8%;  
   
 }
 
+
+
+.buttons {
+  width: 45;
+  height: 45px;
+  position: relative;
+
+  display: flex;
+  
+  
+  
+}
 .thumb-up {
-  position: absolute;
-  left: 25%;
-  bottom: 5%;
-  width: 30px;
-  height: 30px;
+  margin-left:10px;
+  margin-right: 10px;
   background-color: green;
 }
-
 .record {
-  position: absolute;
-  bottom:0%;
-  right: 0%;
-  width: 60px;
-  height: 60px;
-
+  margin-left:10px;
+  margin-right: 10px;
+  right: 0;
 }
-
 .play {
-  position: absolute;
-  left: 40%;
-  top: 30%;
-  width: 30px;
-  height: 30px;
-
+  margin-left:10px;
+  margin-right: 10px;
+  left: 0;
 }
 .thumb-down {
-  position: absolute;
-  right: 10%;
-  top: 10%;
-  width: 30px;
-  height: 30px;
+  margin-left:10px;
+  margin-right: 10px;
+ 
   background-color: red;
 }
 

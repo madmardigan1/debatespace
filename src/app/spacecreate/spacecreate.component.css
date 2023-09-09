@@ -1,6 +1,6 @@
 .form-container {
     position: absolute;
-    height: 50%;
+    height: flex;
     width: 50%;
     top: 25%;
     left: 25%;

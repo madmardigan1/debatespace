@@ -4,19 +4,22 @@
 <div #visNetwork id="mynetwork"  class="nodes" style="height:100%; width:100%"> 
   
 </div>
-<div class="buttons">
-    <button mat-fab class="thumb-up" (click)="thumbup()" color="primary" >
+<div class="expand-panel1" [ngClass]="{'expanded': isPanelExpanded}">
+  <div class="panel-content" 
+  [style.visibility]="isPanelExpanded ? 'visible' : 'hidden'"
+  [style.pointer-events]="isPanelExpanded ? 'auto' : 'none'">
+  <div class="buttons">
+    
+    <button mat-fab class="thumb-up" (click)="thumbup()" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" color="primary" >
       <mat-icon>thumb_up</mat-icon>
     </button>
-
-    
-    <!-- Red thumbs-down circular button -->
-    <button mat-fab class="thumb-down" color="primary" (click)="thumbdown()">
+    <button mat-fab class="thumb-down" color="primary" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="thumbdown()">
       <mat-icon>thumb_down</mat-icon>
     </button>
-    
-    <!-- Magenta record circular button -->
-    <button mat-fab class="record" id="record" (click)="toggleRecording()">
+    <button mat-fab class="sharenode" color="info" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="sharenode()">
+      <mat-icon>share</mat-icon>
+    </button>
+    <button mat-fab class="record" id="record" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="toggleRecording()">
         <mat-icon *ngIf="!isRecording">fiber_manual_record</mat-icon>
         <mat-icon *ngIf="isRecording">stop</mat-icon>
       </button>
@@ -25,4 +28,8 @@
         <mat-icon>play_arrow</mat-icon>
       </button>
     </div>
+    </div>
+</div>
+
+
 </div>
