@@ -12,6 +12,7 @@ export class HomeComponent{
   matchWindow = false;
   items: string[] = [];
   cards: Card[] = [];
+  selectedOption: string = '';
   constructor(private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder) {
     this.userForm = this.fb.group({
       roles: this.fb.group({
@@ -35,7 +36,6 @@ findMatch() : void {
 }
 
 submitForm(): void {
-  console.log(this.userForm.value);
   this.matchWindow = false;
 }
 
@@ -46,4 +46,5 @@ get topics(): FormArray {
 addTopic(topic: string): void {
   this.topics.push(this.fb.control(topic));
 }
+
 }
