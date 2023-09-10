@@ -16,6 +16,7 @@
   [style.visibility]="panelReveal ? 'visible' : 'hidden'"
   [style.pointer-events]="panelReveal ? 'auto' : 'none'">>
   <div class="profilearea">
+    <div class="Moment" style="position:absolute; top:0; right:0;">M: {{selectedMoment}}</div>
     <div *ngIf="selectedPhoto && selectedName">
       <img [src]="selectedPhoto" alt="{{ selectedName }}" class="bigger-image"> <!-- Adjust width as needed -->
       <div class="text-white" style="text-align: center; margin-top:10px;">{{ selectedName }}</div>
@@ -23,9 +24,14 @@
   </div>
   
   <div class="infoarea">
-    <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px;">follow</button>
-    <button class="btn btn-primary" style="margin-top:10px; margin-bottom:10px;">tip</button>
+    <div class="upper portion" style="display:flex; position:absolute; top:0; right:0; align-items: space-between;">
+    
+    <button class="btn btn-dark" style="background-color:transparent; border-color: transparent; padding-top:0; padding-right:0; margin:0;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-ellipsis-v"></i>
+    </button>
+    </div>
+    <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px; width:80%;">follow</button>
+    <button class="btn btn-success" style="margin-top:10px; margin-bottom:10px; width:80%;">tip</button>
    
-    <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px;">report</button>
   </div>
 </div>

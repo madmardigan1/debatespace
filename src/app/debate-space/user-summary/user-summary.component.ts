@@ -9,15 +9,17 @@ import { Component } from '@angular/core';
 export class UserSummaryComponent {
   public selectedPhoto!: string;
   public selectedName!: string;
+  selectedMoment!:number;
   panelReveal = false;
  public users = [
-    { name: 'Steve', role: 'host', photoUrl: 'assets/Steve1.jpeg' },
-    { name: 'Jared', role: 'speaker', photoUrl: 'assets/Jared.jpeg' },
+    { name: 'Steve', role: 'host', moment: 300, photoUrl: 'assets/Steve1.jpeg' },
+    { name: 'Jared', role: 'speaker', moment: 5, photoUrl: 'assets/Jared.jpeg' },
     // ... add more users as needed
   ];
-  getdetails(user: {name: string, photoUrl: string}) {
+  getdetails(user: {name: string, photoUrl: string, moment: number}) {
     this.panelReveal = true;
     this.selectedName = user.name;
     this.selectedPhoto = user.photoUrl;
+    this.selectedMoment = user.moment;
   }
 }

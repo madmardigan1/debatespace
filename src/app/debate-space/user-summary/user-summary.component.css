@@ -42,7 +42,7 @@
 .infoarea {
     position:absolute;
     top:0;
-    right:0;
+    right:20px;
     height: 100%;
     width: 30%;
     display: flex;
