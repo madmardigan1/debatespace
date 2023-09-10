@@ -14,6 +14,7 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
 
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
   @Output() nodeClicked = new EventEmitter<number>();
+  @Output() nodeSelected = new EventEmitter<boolean>();
   @Output() notify: EventEmitter<string> = new EventEmitter<string>();
   @Input() inputdata: any;
   floatingButton!: HTMLElement;
@@ -208,8 +209,9 @@ this.network.on('click', params => {
     if (this.isRecording) {
       this.toggleRecording();
     }
-
+    
     if (params.nodes.length > 0) {
+      this.nodeSelected.emit(true);
       this.isPanelExpanded = true;
       const clickedNodeId = params.nodes[0];
     
@@ -248,6 +250,7 @@ this.network.on('click', params => {
     }
     else  {
       this.isPanelExpanded = !this.isPanelExpanded;
+      this.nodeSelected.emit(false);
     }
     const resetEdges = this.highlightedEdges.map(edgeId => {
       return { id: edgeId, color: '000000' }; // Assuming '000000' is the original color

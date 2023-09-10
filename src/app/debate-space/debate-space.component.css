@@ -38,79 +38,79 @@
 
 
   
-  .banner {
-    height: 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
   
-  .search-bar {
-    padding: 5px;
-    background-color: white;
-    border: 1px solid #ccc;
-    
-  }
   
   
   
 .outerbox {
+  position: absolute;
     display: flex;
     height: 92%;
     width: 100%;
     overflow-y: scroll;
+    padding: 0px;
 }
+
 .channels {
+  position: absolute;
   display: flex;
   flex-direction: column; /* Add this to stack children vertically */
   align-items: stretch; /* Ensures that children stretch to the full width of the container */
   width: 20%;
-  border: 1px solid;
   padding: 10px;
+  border-right: 1px solid white;
+
 }
 
 
 
 .box1 {
+    position: absolute;
     display: flex;
     flex-direction: column;
+    left: 20%;
     width: 60%;
-    border: 1px solid;
+    height: 100%;
+   
 }
 
 .box2 {
+  position: absolute;
+  left: 80%;
     display: flex;
     flex-direction: column;
     width: 20%;
-    border: 1px solid;
+    height: 100%;
+   
     
 }
 
 .node-area {
     position: relative;
     height: 70%;
-    border: 1px solid white;
     
+    width: 100%;
 }
 
 
 
 .output-area {
+    position: relative;
     height: 30%;
-    border: 1px solid white;
+    width: 100%;
+    
 }
 
 .chat-box {
     height: 90%;
-    border: 1px solid white;
+    
     overflow-y: auto;
 }
 
 .chat-area {
     overflow: hidden;
     height:10%;
-    border: 1px solid white;
+    
     display: flex;
     
 }

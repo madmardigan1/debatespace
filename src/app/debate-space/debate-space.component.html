@@ -11,10 +11,11 @@
 
     <div class="box1">
       <div class="node-area text-white">
-       <app-node-space #nodeSpace [inputdata]="card.description"></app-node-space>
+       <app-node-space #nodeSpace [inputdata]="card.description" (nodeSelected)="receiveValue($event)"></app-node-space>
       </div>
-      <div class="output-area bg-dark text-white">
-        <app-gpt-summary style=></app-gpt-summary>
+      <div class="output-area bg-dark text-white" style="overflow: scroll;" >
+        <app-gpt-summary *ngIf="selectedNode"></app-gpt-summary>
+        <app-user-summary *ngIf="!selectedNode"></app-user-summary>
       </div>
     </div>
     <div class="box2">

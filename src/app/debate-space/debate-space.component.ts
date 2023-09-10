@@ -11,6 +11,7 @@ export class DebateSpaceComponent implements OnInit {
   text: string = '';
   card!: Card;
   cards!: any[];
+  selectedNode: boolean = false;
 
   constructor (private route: ActivatedRoute, private cardService: CardDataService, private router: Router){}
 
@@ -32,5 +33,10 @@ export class DebateSpaceComponent implements OnInit {
   
   updateText(newText: string) {
     this.text = newText;
+  }
+
+  receiveValue(value: boolean) {
+    this.selectedNode = value;
+
   }
 }

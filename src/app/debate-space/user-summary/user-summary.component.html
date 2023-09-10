@@ -1,0 +1,31 @@
+
+<div class="userpane">
+    <h1 style="padding-top:10px; padding-left:10px;">Speakers:</h1>
+    <div style="display:flex">
+    <div *ngFor="let user of users" style="display:flex; flex-direction: column; width:70px; align-items: center;">
+    <button (click)="getdetails(user)" style="background-color: transparent; border-color:transparent;">
+      <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image"> <!-- Adjust width as needed -->
+      <div style="text-align: center; color: white;">{{ user.name }}</div>
+      <div style="text-align: center; color: rgba(255, 255, 255, 0.625);">{{ user.role }}</div>
+    </button>
+    </div>
+  </div>
+</div>
+
+<div class="extendpane" 
+  [style.visibility]="panelReveal ? 'visible' : 'hidden'"
+  [style.pointer-events]="panelReveal ? 'auto' : 'none'">>
+  <div class="profilearea">
+    <div *ngIf="selectedPhoto && selectedName">
+      <img [src]="selectedPhoto" alt="{{ selectedName }}" class="bigger-image"> <!-- Adjust width as needed -->
+      <div class="text-white" style="text-align: center; margin-top:10px;">{{ selectedName }}</div>
+    </div>
+  </div>
+  
+  <div class="infoarea">
+    <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px;">follow</button>
+    <button class="btn btn-primary" style="margin-top:10px; margin-bottom:10px;">tip</button>
+   
+    <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px;">report</button>
+  </div>
+</div>
