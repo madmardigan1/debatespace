@@ -1,47 +1,21 @@
 
-<!--
-   <div class="caro-main">
-  <div class="row justify-content-center align-items-center">
-    <div class="col"> 
-      <div class="carousel-container">
-        <ngb-carousel>
-          <ng-template ngbSlide>
-            <div class="picsum-img-wrapper">
-              <img src="assets/background.png" alt="Random first slide">
-            </div>
-            <div class="carousel-caption">
-              <h4>First slide label</h4>
-              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </div>
-          </ng-template>
-          <ng-template ngbSlide>
-            <div class="picsum-img-wrapper">
-              <img src="https://picsum.photos/900/500?random=2" alt="Random second slide">
-            </div>
-            <div class="carousel-caption">
-              <h4>Second slide label</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-          </ng-template>
-        </ngb-carousel>
-      </div>
-    </div>
-  </div>
+<div class="left">
+
 </div>
--->
+<div class="center">
 <div class="entrance justify-content-center align-items-center text-center">
   <div class="jumbotron jumbotron-fluid ">
     <div class="container">
       <h1 class="display-4">Welcome to Debate Spaces</h1>
-      <p class="lead">Click the button on the bottom right to make your own space or join one in progress</p>
+      <p class="lead">Create a new space or join one that has already been started and enjoy!</p>
     </div>
   </div>
 </div>
-
-<ngb-carousel>
+<div class="carot">
+<ngb-carousel >
   <ng-template ngbSlide *ngFor="let card of cards">
     <div class="slide-bg" style="background-image: url('assets/Steve.jpeg')"></div>
-    <div class="card bg-dark text-white align-items-center text-center" style="width: 100rem; height: 20rem;">
+    <div class="card bg-dark text-white text-center" style="height: 20rem;">
       <div class="card-body">
         <h1 class="card-title">{{ card.topic }}</h1>
         <p class="card-text">{{ card.description }}</p>
@@ -50,9 +24,10 @@
     </div>
   </ng-template>
 </ngb-carousel>
+</div>
 
 <div class="exterior">
-<div class="container my-4 mx-0">
+<div class="container mt-2 p-0">
   <!-- First Header -->
   <h2 class="text-left mb-2">Live Now</h2>
   <div class="scroll-container mb-1">
@@ -120,20 +95,15 @@
 
 </div>
 
-
-
-
-
-
-
-    
-
-
-
-
-
-<div class="test">
-<button mat-fab color="primary" aria-label="Add" class="fab-button" [routerLink]="['/create']">
-  <mat-icon>add</mat-icon>
-</button>
 </div>
+<div class="right">
+  <div class="link-list">
+     <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['/create']" style="font-size: 1.5rem; text-align:left;"><i class="fas fas fa-plus-circle"></i> Create</button>
+     <button type="button" class="btn btn-outline-secondary custom-border custom-text" style="font-size: 1.5rem;text-align:left;"> <i class="fas fa-search"></i> Find Match</button>
+     <button type="button" class="btn btn-outline-secondary custom-border custom-text"  style="font-size: 1.5rem; text-align:left;"><i class="fas fa-eye"></i> Browse</button>
+  </div>
+</div>
+
+
+
+
