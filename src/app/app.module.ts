@@ -25,7 +25,7 @@ import { HomeComponent } from './home/home.component';
 import { SpacecreateComponent } from './spacecreate/spacecreate.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserSummaryComponent } from './debate-space/user-summary/user-summary.component';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 //node
 
 
@@ -49,6 +49,7 @@ import { UserSummaryComponent } from './debate-space/user-summary/user-summary.c
 
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

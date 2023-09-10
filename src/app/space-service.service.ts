@@ -6,6 +6,7 @@ export interface Card {
   topic: string;
   description: string;
   number: number;
+  entrancefee?: number;
 }
 
 @Injectable({

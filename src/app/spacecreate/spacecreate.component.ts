@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { CardDataService, Card } from '../space-service.service';
 import { Router } from '@angular/router';
+import { DebateAuthService } from '../debate-auth.service';
 
 @Component({
   selector: 'app-spacecreate',
@@ -12,7 +13,7 @@ export class SpacecreateComponent implements AfterViewInit {
   form: FormGroup;
   cards: Card[] = [];
   @ViewChild('topicInput') topicInput!: ElementRef;
-  constructor(private fb: FormBuilder, private cardService: CardDataService, private router: Router) {
+  constructor(private fb: FormBuilder, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService) {
     this.form = this.fb.group({
       topic: ['', Validators.required],
       description: ['', Validators.required],
@@ -33,6 +34,7 @@ export class SpacecreateComponent implements AfterViewInit {
     const formData = this.form.value;
     const id = Date.now().toString();
     this.cardService.addCard({ ...formData, id });
+    this.debateAuth.setUser('host');
     this.router.navigate(['/debate', id]);
   }
 }

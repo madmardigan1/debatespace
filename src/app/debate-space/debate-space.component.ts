@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardDataService, Card } from '../space-service.service';
-
+import { DebateAuthService } from '../debate-auth.service';
 @Component({
   selector: 'app-debate-space',
   templateUrl: './debate-space.component.html',
@@ -12,8 +12,10 @@ export class DebateSpaceComponent implements OnInit {
   card!: Card;
   cards!: any[];
   selectedNode: boolean = false;
-
-  constructor (private route: ActivatedRoute, private cardService: CardDataService, private router: Router){}
+  userType: string = '';
+  constructor (private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService){
+    this.userType=this.debateAuth.getUser();
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

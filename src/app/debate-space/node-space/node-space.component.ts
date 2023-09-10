@@ -5,6 +5,7 @@ import { SpeechService } from '../../speech-service.service';
 import { SharedserviceService } from '../../sharedservice.service';
 import { NodeshareService } from 'src/app/nodeshare.service';
 import { NodeLinkService } from 'src/app/node-link.service';
+import { DebateAuthService } from 'src/app/debate-auth.service';
 @Component({
   selector: 'app-node-space',
   templateUrl: './node-space.component.html',
@@ -17,6 +18,7 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
   @Output() nodeSelected = new EventEmitter<boolean>();
   @Output() notify: EventEmitter<string> = new EventEmitter<string>();
   @Input() inputdata: any;
+  @Input() userType: string = '';
   floatingButton!: HTMLElement;
   isRecording = false;
   network!: Network;
@@ -34,9 +36,12 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
   ]);
   private edges = new DataSet<any>([]);
 
-  constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService) {}
+  constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService) {}
 
   ngOnInit(): void {
+    this.userType=this.debateAuth.getUser();
+    console.log(this.userType);
+
   }
   ngAfterViewInit() {
     this.initNetwork();
@@ -140,7 +145,7 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
       },
       edges: {
         color: {
-          color: "rgba(255,255,255,0.1)", // white color with 0.1 opacity
+          color: "rgba(255,255,255,0.3)", // white color with 0.1 opacity
           highlight: "rgba(255,255,255,0.3)", // white color with 0.5 opacity when highlighted
           hover: "rgba(255,255,255,0.5)" 
         },
