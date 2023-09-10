@@ -139,9 +139,12 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
         keyboard: true,
       },
       edges: {
-        color: ("white"),
-        transparency: .5,
-        width: 4,
+        color: {
+          color: "rgba(255,255,255,0.1)", // white color with 0.1 opacity
+          highlight: "rgba(255,255,255,0.3)", // white color with 0.5 opacity when highlighted
+          hover: "rgba(255,255,255,0.5)" 
+        },
+        width: 2,
         shadow: true,
         smooth: false,
       }
@@ -253,7 +256,7 @@ this.network.on('click', params => {
       this.nodeSelected.emit(false);
     }
     const resetEdges = this.highlightedEdges.map(edgeId => {
-      return { id: edgeId, color: '000000' }; // Assuming '000000' is the original color
+      return { id: edgeId, color: "rgba(255,255,255, 0.1"}; // Assuming '000000' is the original color
     });
     this.edges.update(resetEdges);
     this.highlightedEdges = [];
@@ -383,7 +386,7 @@ sharenode(): void {
             const newNodeId = this.nodes.length + 1;
             this.globalnode = newNodeId;
             this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
-            this.edges.add({ from: this.selectedNodeIndex, to: newNodeId });
+            this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
           
            
           }
@@ -444,7 +447,7 @@ traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: an
     const previousTexts = this.traverseToOriginal(predecessorNodeId, originalNodeId, nodes, edges);
 
     // Highlight the edge (this could be done in a different function if preferred)
-    this.edges.update([{ id: connectedEdges[0].id, color: 'yellow' }]);
+    this.edges.update([{ id: connectedEdges[0].id, color: "rgba(0,100,255,0.7)" }]);
 
     return [...previousTexts, text]; // appending current node's text to the result from predecessors
   }

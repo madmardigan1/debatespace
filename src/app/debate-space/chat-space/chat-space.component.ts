@@ -28,7 +28,7 @@ ngAfterViewInit(): void {
     if (counter >= 40) {
       clearInterval(intervalId);
     }
-  }, 1000);
+  }, 10000);
 }
 
 

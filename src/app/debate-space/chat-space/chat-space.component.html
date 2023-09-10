@@ -1,4 +1,5 @@
 <div class="chat-area">
+  <h4>Welcome to the chat!</h4>
     <div *ngFor="let item of scrollChat">
       <ng-container *ngIf="item.id; else textTemplate">
         <button (click)="buttonClicked(item.id)" class="button bg-primary">{{ item.text }}</button><br/>
