@@ -134,6 +134,10 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
           background: '#FFFFFF'
         }
       },
+
+    
+
+
       manipulation: {
         enabled: false,
       },
@@ -191,7 +195,7 @@ private addEventListeners() {
   });
 
   this.network.on('blurNode', params => {
-    this.network.setOptions({ physics: true });
+    this.network.setOptions({ physics: false });
       const nodeId = params.node;
       const node: any = this.nodes.get(nodeId);
       node.size = 20; // Restore to original size
@@ -392,6 +396,14 @@ sharenode(): void {
             this.globalnode = newNodeId;
             this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
             this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
+             this.network.once("initRedraw", () => {
+      this.network.storePositions();
+      this.network.setData({
+        nodes: this.nodes,
+        edges: this.edges,
+      });
+    });
+   
           
            
           }
