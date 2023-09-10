@@ -70,7 +70,7 @@ height:100%;
 
 /* If you want the text color to remain white even after clicking (focus state), you can add: */
 .custom-text:focus {
-  color: white;
+  
 }
 .link-list {
   position:absolute;

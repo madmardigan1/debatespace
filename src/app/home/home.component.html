@@ -102,10 +102,42 @@
 <div class="right">
   <div class="link-list">
      <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['/create']" style="font-size: 1.5rem; text-align:left;" (click)="authorize('host')"><i class="fas fas fa-plus-circle"></i> Create</button>
-     <button type="button" class="btn btn-outline-secondary custom-border custom-text" style="font-size: 1.5rem;text-align:left;"> <i class="fas fa-search"></i> Find Match</button>
+     <button type="button" data-toggle="collapse" data-target="#userFormContainer" class="btn btn-outline-secondary custom-border custom-text" style="font-size: 1.5rem;text-align:left;" aria-expanded="false" aria-controls="userFormContainer"> <i class="fas fa-search"></i> Find Match</button>
+     <div class="mt-4 collapse" id="userFormContainer">
+      <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+    
+        <h5>Select Role(s)</h5>
+        <div formGroupName="roles">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="speaker" formControlName="speaker">
+            <label class="form-check-label" for="speaker">Speaker</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="host" formControlName="host">
+            <label class="form-check-label" for="host">Host</label>
+          </div>
+        </div>
+    
+        <h5 class="mt-4">Select Topic(s) of Interest</h5>
+        <div formArrayName="topics">
+          <div class="form-check" *ngFor="let topic of ['politics', 'money', 'art']">
+            <input class="form-check-input" type="checkbox" [id]="topic" (change)="addTopic(topic)">
+            <label class="form-check-label" [for]="topic">{{ topic }}</label>
+          </div>
+        </div>
+    
+        <button type="submit" class="btn btn-primary mt-4">Submit</button>
+      </form>
+    </div>
      <button type="button" class="btn btn-outline-secondary custom-border custom-text"  style="font-size: 1.5rem; text-align:left;"><i class="fas fa-eye"></i> Browse</button>
+     <button type="button" class="btn btn-outline-secondary custom-border custom-text"  style="font-size: 1.5rem; text-align:left;"><i class="fas fa-trophy"></i> Tournaments</button>
   </div>
 </div>
+
+
+
+  
+  
 
 
 
