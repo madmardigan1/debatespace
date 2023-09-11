@@ -1,4 +1,4 @@
-<div class="homePage" [class.blur-content]="matchWindow" >
+<div class="homePage" [class.blur-content]="matchWindow"[class.unblur-content]="!matchWindow"  >
 <div class="left">
 
 </div>
@@ -102,7 +102,15 @@
 <div class="right">
   <div class="link-list">
      <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['/create']" style="font-size: 1.5rem; text-align:left;" (click)="authorize('host')"><i class="fas fas fa-plus-circle"></i> Create</button>
-     <button type="button" class="btn btn-outline-secondary custom-border custom-text" style="font-size: 1.5rem;text-align:left;" (click)="findMatch()"> <i class="fas fa-search"></i> Group Finder</button>
+     <button type="button" class="btn btn-outline-secondary custom-border custom-text" style="font-size: 1.5rem;text-align:left;" data-toggle="modal" data-target="#findDebateModal" (click)="findMatch()"> 
+      <div *ngIf="!spinner">
+      <i class="fas fa-search"></i> Group Finder
+    </div>
+    <div *ngIf="spinner" style="display:flex;">
+    <div id="loader" class="spinner" style="margin-left:0;margin-right:7px;" *ngIf="spinner"></div>Finding Group
+    </div>
+    </button>
+    
      <button type="button" class="btn btn-outline-secondary custom-border custom-text"  style="font-size: 1.5rem; text-align:left;"><i class="fas fa-eye"></i> Browse</button>
      <button type="button" class="btn btn-outline-secondary custom-border custom-text"  style="font-size: 1.5rem; text-align:left;"><i class="fas fa-trophy"></i> Tournaments</button>
   </div>
@@ -110,37 +118,67 @@
 
 </div>
 
-  
-<div class="formWindow" *ngIf="matchWindow">
-  <form [formGroup]="userForm" (ngSubmit)="submitForm()">
 
-    <h5>Select Role(s)</h5>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary">
-        <input type="checkbox" name="roles" id="speaker" autocomplete="off"> Speaker
-      </label>
-      <label class="btn btn-secondary">
-        <input type="checkbox" name="roles" id="host" autocomplete="off"> Host
-      </label>
-    </div>
+
+
+    <div class="groupForm bg-dark" style="border-radius: 15px;"*ngIf="matchWindow">
+        <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
+
+          <h3 class="text-center mb-4 text-white">Find a Debate</h3>
+
+          <div class="form-row">
+            <!-- Role Selection -->
+            <div class="col-4">
+              <label>Select Role</label>
+              <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+                <label class="btn btn-outline-primary flex-grow-1 mr-3">
+                  <input type="checkbox" name="roles" id="speaker" autocomplete="off" hidden> Speaker
+                </label>
+                <label class="btn btn-outline-primary flex-grow-1 ml-2">
+                  <input type="checkbox" name="roles" id="host" autocomplete="off" hidden> Host
+                </label>
+              </div>
+            </div>
+            
+            <!-- Number of Speakers Selection -->
+            <div class="col-4">
+              <label for="numSpeakers">Number of Speakers</label>
+              <select class="form-control" id="numSpeakers" name="numSpeakers">
+                <option>2</option>
+                <option>4</option>
+                <option>8</option>
+              </select>
+            </div>
+      
+            <!-- Debate Type Radio Selection -->
+            <div class="col-4">
+              <label>Debate Type</label>
+              <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+                <label class="btn btn-outline-primary flex-grow-1 mr-3">
+                  <input type="radio" name="debateType" id="normal" value="normal" checked hidden> Normal
+                </label>
+                <label class="btn btn-outline-primary flex-grow-1">
+                  <input type="radio" name="debateType" id="ranked" value="ranked" hidden> Ranked
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="form-group mt-4" >
+            <h5>Topic</h5>
+            <div class="list-group scrollable-list2">
+              <a href="javascript:void(0);" 
+                 class="list-group-item list-group-item-action" 
+                 [class.active]="selectedOption === card.topic" 
+                 (click)="selectedOption = card.topic" 
+                 *ngFor="let card of cards">
+                {{ card.topic }}
+              </a>
+            </div>
+          </div>
+          <div class="form-group mt-4 text-center">
+            <button type="submit" class="btn btn-primary" >Find a group</button>
+          </div>
+        </form>
     
-    
-
-   
-    <h5 class="mt-4">Topic</h5>
-    <div class="list-group scrollable-list2">
-      <a href="javascript:void(0);" 
-         class="list-group-item list-group-item-action" 
-         [class.active]="selectedOption === card.topic" 
-         (click)="selectedOption = card.topic" 
-         *ngFor="let card of cards">
-        {{ card.topic }}
-      </a>
-    </div>
-    <button type="submit" class="btn btn-primary mt-4 mb-4, mr-5 justify-content-center">Submit</button>
-  </form>
-</div>
-
-
-
-
+      </div>

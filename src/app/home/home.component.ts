@@ -2,6 +2,8 @@ import { Component} from '@angular/core';
 import { CardDataService, Card } from '../space-service.service';
 import { DebateAuthService } from '../debate-auth.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -13,7 +15,9 @@ export class HomeComponent{
   items: string[] = [];
   cards: Card[] = [];
   selectedOption: string = '';
-  constructor(private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder) {
+  spinner = false;
+
+  constructor(private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
     this.userForm = this.fb.group({
       roles: this.fb.group({
         speaker: [false],
@@ -37,6 +41,7 @@ findMatch() : void {
 
 submitForm(): void {
   this.matchWindow = false;
+  this.spinner=true;
 }
 
 get topics(): FormArray {
