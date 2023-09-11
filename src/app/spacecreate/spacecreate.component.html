@@ -1,40 +1,83 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded">
-
     <h2 class="text-center text-white mb-4">Create a new space!</h2>
-    <div class="d-flex justify-content-between align-items-center mb-2">
+
+    <!-- Topic Input -->
     <div class="form-group">
         <label for="topic" class="text-white">Topic</label>
         <input #topicInput formControlName="topic" type="text" class="form-control" id="topic" placeholder="Enter the topic">
-        
     </div>
-    <div class="form-group mb-0 mr-2" style="width: auto;">
-        <label for="Max Speakers" class="text-white">Max Speakers</label>
-        <select formControlName="number" class="form-control mx-4" id="Max Speakers" style="width: auto;">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-    </div>
-</div>
+
+    <!-- Description -->
     <div class="form-group">
         <label for="description" class="text-white">Description</label>
         <textarea class="form-control" formControlName="description" id="description" placeholder="Describe the space" rows="3" style="resize: none;"></textarea>
     </div>
-  
-    <!-- Fee, Number of Speakers, and Submit Button on the same row using flex -->
-    <div class="d-flex justify-content-between align-items-center mb-2 mt-2">
+
+    <!-- Event Type -->
+    <div class="d-flex align-items-center mb-2">
+        <label class="mr-2 text-white">Event Type:</label>
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="radio" name="eventType" id="publicEvent" value="public" checked onchange="handleTypeChange()">
+            <label class="form-check-label">
+                Public
+            </label>
+        </div>
+
+        <div class="form-check">
+            <label class="mr-2 text-white">Public or Invite</label>
+            <input class="form-check-input" type="radio" name="eventType" id="inviteEvent" value="invite" onchange="handleTypeChange()">
+            <input class="form-check-input" type="radio" name="eventType" id="inviteEvent" value="invite" onchange="handleTypeChange()">
+            <label class="form-check-label">
+                Invite Only
+            </label>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center mb-2">
+        <label class="mr-2 text-white">Debate Type:</label>
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="radio" name="debateType" id="formalDebate" value="formal">
+            <label class="form-check-label">
+                Formal
+            </label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="debateType" id="informalDebate" value="informal">
+            <label class="form-check-label">
+                Informal
+            </label>
+        </div>
+    </div>
+
+    <!-- Search Contacts (Only if Invite Only) -->
+    <div class="form-group" id="inviteSearch" style="display: none;">
+        <label for="searchContacts">Search Contacts:</label>
+        <input type="text" class="form-control" id="searchContacts" placeholder="Search for a contact...">
+    </div>
+
+    <!-- Max Speakers and Entrance Fee -->
+    <div class="d-flex justify-content-between align-items-end mb-2">
+
+        <!-- Max Speakers -->
+        <div class="form-group mb-0 mr-2" style="width: auto;">
+            <label for="Max Speakers" class="text-white">Max Speakers</label>
+            <select formControlName="number" class="form-control mx-4" id="Max Speakers" style="width: auto;">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+        <!-- Entrance Fee -->
         <div class="form-group mb-0 mr-2">
             <label for="entranceFee" class="text-white">Entrance Fee (Optional)</label>
             <input formControlName="entranceFee" type="number" class="form-control" id="entranceFee" placeholder="Fee" style="max-width: 100px;">
         </div>
-        
-        
-        
-        <!-- Submit button on the right -->
+
+        <!-- Submit button -->
         <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-lg mt-3">Create Space</button>
     </div>
-    
-  </form>
-  
+</form>

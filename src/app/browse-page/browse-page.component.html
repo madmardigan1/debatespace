@@ -1,9 +1,36 @@
-<div class="container">
-    <h1>Browse</h1>
-    <div style="display:flex">
-    <button class="btn btn-primary">Categories</button>
-    <button class="btn btn-primary">Live Channels</button>
-    </div>
-    <input type="text" class="form-control d-inline-block" style="padding-right: 40px;" placeholder="Search...">
+<div class="container" style="position:relative; top:0%;left:0%;width:90%; top:5%;">
+    <h1 class="mb-4">Browse</h1> <!-- Added margin-bottom for vertical spacing -->
     
+    <!-- Button Group -->
+    <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
+        <button class="btn btn-primary" style="width: auto; margin-right: 10px">Categories</button> <!-- Added margin-right for spacing between buttons -->
+        <button class="btn btn-primary">Live Channels</button>
+    </div>
+    
+    <!-- Search Input -->
+    <div class="mb-4"> <!-- Added margin-bottom for vertical spacing -->
+        <input type="text" class="form-control d-inline-block" style="width: 20%; padding-right: 40px;" placeholder="Search Topics"> <!-- Set width to 50% -->
+    </div>
+
+    <!-- Cards Container -->
+    <div style="display: flex; flex-wrap: wrap;">
+        <div *ngFor="let card of cards" class="porp mb-4" style="flex-basis: calc(25% - 10px); margin-right: 10px;"> <!-- Added margin-bottom for vertical spacing between cards -->
+
+            <div class="custom-card shadow-lg bg-dark text-white">
+                <!-- Content of your card -->
+                <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
+                <p class="card-text mb-3">{{card.description}}</p>
+                <div class="user-info">
+                    <div style="display:flex; flex-direction: column;">
+                        <img [src]="'/assets/Steve1.jpeg'" alt="Steve" class="bigger-image" style="border-radius:50%; width:40px; height:40px;object-fit: cover; display: block; position:relative; bottom:0;">
+                        <h5 style="padding-left:10px; margin-bottom:0;">Steve</h5>
+                    </div>
+                    <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
+                        <span>100 spectating</span>
+                        <button [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
