@@ -1,0 +1,15 @@
+.bulletin-board {
+    background-color: #f7e4a3;
+    padding: 20px;
+    border: 1px solid #d4b461;
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .tournament-card {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  

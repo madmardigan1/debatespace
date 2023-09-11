@@ -26,6 +26,7 @@ import { SpacecreateComponent } from './spacecreate/spacecreate.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserSummaryComponent } from './debate-space/user-summary/user-summary.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TournamentBulletinComponent } from './tournament-bulletin/tournament-bulletin.component';
 //node
 
 
@@ -43,6 +44,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HomeComponent,
     SpacecreateComponent,
     UserSummaryComponent,
+    TournamentBulletinComponent,
 
     
     

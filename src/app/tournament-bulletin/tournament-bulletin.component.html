@@ -1,0 +1,11 @@
+<div class="bulletin-board">
+    <div class="tournament-card" *ngFor="let tournament of tournaments">
+      <h1 style="text-align: center;">Allcomer Showdown!</h1>
+        <h1>{{ tournament.name }}</h1>
+        <h1> Top Place prizes: 1st- $100, 2nd- 100M, 3rd, 50M</h1>
+      <p>Date: {{ tournament.date | date }}</p>
+       <button class="btn btn-primary" type="submit">Reserve a spot</button>
+       
+    </div>  
+  </div>
+  
