@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, Input,  OnInit} from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, Input,  OnInit, NgZone} from '@angular/core';
 import { DataSet, Network } from 'vis-network/standalone';
 import { RtcService } from '../../rtcservice.service';
 import { SpeechService } from '../../speech-service.service';
@@ -36,7 +36,7 @@ export class NodeSpaceComponent implements AfterViewInit, OnInit {
   ]);
   private edges = new DataSet<any>([]);
 
-  constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService) {}
+  constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService, private ngZone: NgZone) {}
 
   ngOnInit(): void {
     this.userType=this.debateAuth.getUser();
@@ -394,8 +394,10 @@ sharenode(): void {
     
             const newNodeId = this.nodes.length + 1;
             this.globalnode = newNodeId;
+            
             this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
             this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
+           
              this.network.once("initRedraw", () => {
       this.network.storePositions();
       this.network.setData({
@@ -403,9 +405,15 @@ sharenode(): void {
         edges: this.edges,
       });
     });
-   
-          
-           
+      
+    setTimeout(() => {
+      this.ngZone.runOutsideAngular(() => {
+        this.centerOnNode(this.globalnode);
+      });
+    }, 1);
+      
+    
+
           }
        
       }
@@ -413,6 +421,23 @@ sharenode(): void {
       this.isRecording = !this.isRecording;  // toggle the recording state
     }
     };
+
+    centerOnNode(nodeId: any) {
+      const position = this.getNodePosition(nodeId);
+      this.network.moveTo({
+        scale: 1.0,
+        position: position,
+        animation: {
+          duration: 500,
+          easingFunction: 'easeInOutQuad'
+        }
+      });
+    }
+    
+    getNodePosition(nodeId: any): { x: number, y: number } {
+      const nodePosition = this.network.getPositions([nodeId]);
+      return nodePosition[nodeId];
+    }
 
   wrapText(text: string, maxCharsPerLine: number): string {
     let wrappedText = '';
