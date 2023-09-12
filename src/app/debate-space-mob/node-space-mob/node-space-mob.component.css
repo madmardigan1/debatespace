@@ -1,0 +1,65 @@
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  
+  .expand-panel1 {
+    position: absolute;
+    right: 0%;
+    bottom: 45px;
+    width: 100%;  
+    height: 0%;
+    justify-items: space-between;
+    align-items: space-between;
+    transition: height 0.5s ease-out;
+    display: flex;
+    justify-content: center; /* center the buttons container */
+    
+  }
+  .sharenode {
+    margin-left:10px;
+    margin-right: 10px;
+  
+  }
+  .expand-panel1.expanded {
+    height: 8%;  
+    
+  }
+  
+  
+  
+  .buttons {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    
+    display: flex;
+    
+    
+    
+  }
+  .thumb-up {
+    margin-left:10px;
+    margin-right: 10px;
+    right:0px;
+  }
+  .record {
+    margin-left:10px;
+    margin-right: 10px;
+    right: 0;
+  }
+  .play {
+    margin-left:10px;
+    margin-right: 10px;
+    left: 0;
+  }
+  .thumb-down {
+    margin-left:10px;
+    margin-right: 10px;
+  }
+  
+  

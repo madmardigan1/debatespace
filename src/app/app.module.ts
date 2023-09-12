@@ -16,6 +16,7 @@ import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { SharedserviceService } from './sharedservice.service';
 import { DebateSpaceComponent } from './debate-space/debate-space.component';
 import { ActivespaceComponent } from './activespace/activespace.component';
@@ -28,6 +29,15 @@ import { UserSummaryComponent } from './debate-space/user-summary/user-summary.c
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TournamentBulletinComponent } from './tournament-bulletin/tournament-bulletin.component';
 import { BrowsePageComponent } from './browse-page/browse-page.component';
+import { DebateSpaceMobComponent } from './debate-space-mob/debate-space-mob.component';
+import { ChatSpaceMobComponent } from './debate-space-mob/chat-space-mob/chat-space-mob.component';
+import { ChatSubmitMobComponent } from './debate-space-mob/chat-submit-mob/chat-submit-mob.component';
+import { UserSummaryMobComponent } from './debate-space-mob/user-summary-mob/user-summary-mob.component';
+import { NodeSpaceMobComponent } from './debate-space-mob/node-space-mob/node-space-mob.component';
+import { GptsummaryMobComponent } from './debate-space-mob/gptsummary-mob/gptsummary-mob.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-control-mob.component';
+
 //node
 
 
@@ -47,12 +57,20 @@ import { BrowsePageComponent } from './browse-page/browse-page.component';
     UserSummaryComponent,
     TournamentBulletinComponent,
     BrowsePageComponent,
+    DebateSpaceMobComponent,
+    ChatSpaceMobComponent,
+    ChatSubmitMobComponent,
+    UserSummaryMobComponent,
+    NodeSpaceMobComponent,
+    GptsummaryMobComponent,
+    AvControlMobComponent,
 
     
     
 
   ],
   imports: [
+    MatTabsModule,
     FontAwesomeModule,
     BrowserModule,
     AppRoutingModule,

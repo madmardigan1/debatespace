@@ -6,13 +6,15 @@ import { SpacecreateComponent } from './spacecreate/spacecreate.component';
 import { DebateSpaceComponent } from './debate-space/debate-space.component';
 import { TournamentBulletinComponent } from './tournament-bulletin/tournament-bulletin.component';
 import { BrowsePageComponent } from './browse-page/browse-page.component';
+import { DebateSpaceMobComponent } from './debate-space-mob/debate-space-mob.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'card-details/:id', component: CardDetailsComponent },
   { path: 'create' , component: SpacecreateComponent},
   { path: 'debate/:id', component: DebateSpaceComponent},
   { path: 'tournament', component: TournamentBulletinComponent},
-  { path: 'browse', component: BrowsePageComponent}
+  { path: 'browse', component: BrowsePageComponent},
+  { path: 'debateMob/:id', component: DebateSpaceMobComponent}
 ];
 
 @NgModule({

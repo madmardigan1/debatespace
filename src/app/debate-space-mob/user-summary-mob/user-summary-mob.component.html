@@ -1,0 +1,42 @@
+<h1>Speakers</h1>
+<div class="organizer" style="height:100%; display:flex; flex-direction: column;">
+<div class="scroll-container mb-1">
+  <div *ngFor="let user of users" class="porp">
+         <div class="form-group">
+        <button (click)="getdetails(user)" style="background-color: transparent; border-color:transparent;">
+          <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image"> <!-- Adjust width as needed -->
+          <div style="text-align: center; color: white;">{{ user.name }}</div>
+          <div style="text-align: center; color: rgba(255, 255, 255, 0.625);">{{ user.role }}</div>
+        </button>
+    </div>
+        </div> 
+        
+      </div>
+
+<div class="extendpane" 
+  [style.visibility]="panelReveal ? 'visible' : 'hidden'"
+  [style.pointer-events]="panelReveal ? 'auto' : 'none'">>
+  <div class="form-group text-center mt-2, mx-2">
+    <div class="Moment">M: {{selectedMoment}}</div>
+    <div *ngIf="selectedPhoto && selectedName">
+      <img [src]="selectedPhoto" alt="{{ selectedName }}" class="bigger-image"> 
+      <div class="text-white">{{ selectedName }}</div>
+    </div>
+  </div>
+
+
+  <div class="infoarea">
+    <div class="upper portion" style="display:flex; flex-direction: column; align-items: space-between;">
+    
+    <button class="btn btn-dark" style="background-color:transparent; border-color: transparent; padding-top:0; padding-right:0; margin:0;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-ellipsis-v"></i>
+    </button>
+  
+
+    <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px; ">follow</button>
+    <button class="btn btn-success" style="margin-top:10px; margin-bottom:10px; ">tip</button>
+</div>
+  </div>
+  </div>
+
+</div>

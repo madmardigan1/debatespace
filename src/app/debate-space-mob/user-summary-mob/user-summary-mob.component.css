@@ -1,0 +1,63 @@
+.circular-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+.userpane {
+    
+    padding-left: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+
+.scroll-container {
+    width: 100%;
+    height: auto;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;  /* Add flex display */
+    align-items: center; /* Center the items vertically */
+    border:1px solid grey;
+}
+.porp {
+  display: flex;   /* This makes .porp a flex container */
+  flex-direction: column;  /* Stack children vertically */
+  width: 300px;
+  height: auto;
+  margin-right: 10px;
+  overflow-wrap: break-word;
+  overflow-x:block;
+  word-wrap: break-word;
+  position: relative; 
+}
+.profilearea {
+    
+    height:100%;
+    width:70%;
+    display:flex;
+    flex-direction: column;
+   
+}
+
+.bigger-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    
+}
+
+.extendpane {
+ 
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+

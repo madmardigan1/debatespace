@@ -1,0 +1,11 @@
+.container {
+    
+    display: flex;
+    flex-direction: column;
+     /* Horizontally center the content */
+        /* Vertically center the content */
+
+    padding-left: 0;             /* Remove padding */
+    margin: 0;               /* Remove margin */
+  }
+  
