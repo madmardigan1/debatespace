@@ -4,8 +4,22 @@ import { CardDataService, Card } from '../space-service.service';
 import { DebateAuthService } from '../debate-auth.service';
 import { ChatToNodeService } from '../chat-to-node.service';
 import { Subject } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
+  animations: [
+    trigger('expandShrink', [
+      state('expanded', style({
+        height: '60%',
+      })),
+      state('shrunk', style({
+        height: '40%',
+      })),
+      transition('expanded <=> shrunk', [
+        animate('0.3s')
+      ]),
+    ])
+  ],
   selector: 'app-debate-space-mob',
   templateUrl: './debate-space-mob.component.html',
   styleUrls: ['./debate-space-mob.component.css']
@@ -19,6 +33,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     selectedNode: boolean = false;
     userType: string = '';
     buttonType: string = '';
+    nodeState: string = 'shrunk';
+    theRestState: string = 'expanded';
+    expandShrink=false;
     buttonTypeSubject = new Subject<string>();
     constructor (private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatN:ChatToNodeService ){
       this.userType=this.debateAuth.getUser();
@@ -49,8 +66,21 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     }
   
     receiveValue(value: boolean) {
-      this.selectedNode = value;
-  
+      
+      if (!value) {
+        if (!this.expandShrink) {
+          this.nodeState = 'expanded';
+          this.theRestState = 'shrunk';
+        }
+        else {
+          this.nodeState = 'shrunk';
+          this.theRestState = 'expanded';
+        }
+        this.expandShrink = !this.expandShrink;
+       
+      } else {
+        
+      }
     }
 
     private scrollToBottom(): void {

@@ -1,11 +1,11 @@
 
 
 <div class="container">
-    <form (submit)="onSubmitit($event)">
-        <div class="input-group">
+    <form (submit)="onSubmitit($event)" style="width:100%;">
+        <div class="input-group" style="width:100%;">
             <input type="text" class="form-control" placeholder="Enter something..." aria-label="value" aria-describedby="button-addon2" [(ngModel)]="value" name="inputValue">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="submit" id="button-addon2">Submit</button>
+            <div class="input-group-append bg-white">
+                <button class="btn btn-success rounded-circle" type="submit" id="button-addon2"> <i class="fas fa-arrow-right"></i> </button>
             </div>
         </div>
     </form>
