@@ -37,8 +37,8 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, 
 })
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   animationState: 'up' | 'down' | 'void' = 'void';
+  @ViewChild('visNetwork', { static: false }) container!: ElementRef;
 
-  
     @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
     @Output() nodeClicked = new EventEmitter<number>();
     @Output() nodeSelected = new EventEmitter<boolean>();
@@ -208,10 +208,10 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   
   
     this.network.on('hoverNode', params => {
-      this.network.setOptions({ physics: false });
+      
         const nodeId = params.node;
         const node: any = this.nodes.get(nodeId);
-        this.nodes.update(node);
+        
         
         
        if (node && node.shape === "circularImage") {
@@ -314,11 +314,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     });
   }
   
-  sharenode(): void {
-    const dataToSend = this.selectedNodeIndex;
-   
-    this.nodeShare.emitEvent(dataToSend);
-  }
+  
   
     thumbdown(): void {
      // Check if a node is selected
@@ -344,15 +340,17 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       }
         // Update the node data in the DataSet
         this.nodes.update(nodeData);
-        
-        // Optionally, emit an event or do something else
-        // ...  
+        this.network.setOptions({ physics: true });
+        this.network.setData;
+       
+
       }
     }
     
     }
   
     thumbup(): void {
+      
       // Check if a node is selected
       if (this.selectedNodeIndex !== null) {
         
