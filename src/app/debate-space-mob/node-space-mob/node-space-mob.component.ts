@@ -7,14 +7,36 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, 
   import { NodeLinkService } from 'src/app/node-link.service';
   import { DebateAuthService } from 'src/app/debate-auth.service';
   import { Subject } from 'rxjs';
-
+  import { trigger, state, style, transition, animate } from '@angular/animations';
 @Component({
   selector: 'app-node-space-mob',
   templateUrl: './node-space-mob.component.html',
-  styleUrls: ['./node-space-mob.component.css']
+  styleUrls: ['./node-space-mob.component.css'],
+    animations: [
+      trigger('arrowAnimation', [
+        state('void', style({
+          opacity: 1
+        })),
+        state('up', style({
+          transform: 'translateY(-100px)',
+          opacity: 0
+        })),
+        state('down', style({
+          transform: 'translateY(100px)',
+          opacity: 0
+        })),
+        transition('* => up', [
+          animate('0.5s')
+        ]),
+        transition('* => down', [
+          animate('0.5s')
+        ])
+      ])
+    ]
+
 })
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
-  
+  animationState: 'up' | 'down' | 'void' = 'void';
 
   
     @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
@@ -49,11 +71,10 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       console.log(this.buttonTypeSubject);
       if (this.buttonTypeSubject) {
       this.buttonTypeSubject.subscribe(type => {
-        if (type === "thumbup") {
-          this.thumbup();
-        } else if (type === "thumbdown") {
-          this.thumbdown();
-        } else if (type === "toggle") {
+        if (type === "play") {
+          this.play();
+        } 
+        else if (type === "toggle") {
           this.toggleRecording();
         }
       });}
@@ -309,7 +330,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       if (nodeData) {
         // Increment the likes count
         nodeData.Moment = (nodeData.Moment) - 1;
-     
+        this.animationState = 'down';
           // Check if likes reach 50
       if (nodeData.Moment <= 0) {
         nodeData.color = { border: 'red', background: nodeData.color?.background || '#FFFFFF' };
@@ -341,7 +362,11 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         if (nodeData) {
           // Increment the likes count
           nodeData.Moment = (nodeData.Moment) + 1;
-    
+          this.animationState = 'up';
+          setTimeout(() => {
+            this.animationState = 'void';
+          }, 500);
+         
             // Check if likes reach 50
         if (nodeData.Moment >= 5) {
           nodeData.color = { border: 'green', background: nodeData.color?.background || '#FFFFFF' };

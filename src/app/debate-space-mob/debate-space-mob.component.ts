@@ -6,7 +6,7 @@ import { ChatToNodeService } from '../chat-to-node.service';
 import { Subject } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ChatSpaceMobComponent } from './chat-space-mob/chat-space-mob.component';
-import { SpacecreateComponent } from '../spacecreate/spacecreate.component';
+
 @Component({
   animations: [
     trigger('expandShrink', [
@@ -31,14 +31,16 @@ import { SpacecreateComponent } from '../spacecreate/spacecreate.component';
         animate('0.3s')
       ]),
     ])
+    
   ],
+  
   selector: 'app-debate-space-mob',
   templateUrl: './debate-space-mob.component.html',
   styleUrls: ['./debate-space-mob.component.css']
 })
 export class DebateSpaceMobComponent implements AfterViewChecked {
   @ViewChild(ChatSpaceMobComponent, { static: false }) secondChild!: ChatSpaceMobComponent;
-
+ 
   selectedButton: number = 1;
   @ViewChild('chatView') private chatContainer!: ElementRef;
     text: string = '';
@@ -114,9 +116,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     }
 
   
-    toggle(): void {
-      this.buttonType= "toggle";
-      this.buttonTypeSubject.next(this.buttonType);
+    toggle(buttonType: string): void {
+      this.buttonTypeSubject.next(buttonType);
     }
   }
   

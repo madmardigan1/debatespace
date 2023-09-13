@@ -50,10 +50,7 @@
           <div class="submitArea" >
             <app-chat-submit-mob (submitit)="updateText($event)"></app-chat-submit-mob>
           </div>
-          <button class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:15px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggle()">
-            <i *ngIf="1==1" class="fa fa-microphone" style="font-size: 20px;"></i>
-              <!--   <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>-->   
-              </button>
+          
           <div class="1" style="position:absolute;right:5px;bottom:5px;display:flex;">
             
         
@@ -86,7 +83,15 @@
         
         </div>
 
-        
+        <button *ngIf="userType=='host'||'speaker'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:15px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggle('toggle')">
+            <i *ngIf="1==1" class="fa fa-microphone" style="font-size: 20px;"></i>
+           
+              <!--   <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>-->   
+              </button>
+              <button *ngIf="userType=='spectator'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:15px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggle('play')">
+                <i *ngIf="1==1" class="fa fa-play" style="font-size: 20px;"></i>
+                  <!--   <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>-->   
+                  </button>
         </div>
           
  </div>
