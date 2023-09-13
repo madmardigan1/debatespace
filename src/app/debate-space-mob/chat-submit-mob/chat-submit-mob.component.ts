@@ -6,23 +6,23 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./chat-submit-mob.component.css']
 })
 export class ChatSubmitMobComponent {
-  
-
 
     value = '';
     @Output() submitit = new EventEmitter<string>();
   
     constructor () {
     }
-    onSubmitit(event: Event) { // <-- Accept the event argument here
+
+    onSubmitit(event: Event) {
       event.preventDefault(); 
-      //console.log('Custom onSubmit called:', this.value[0]);
       if (this.value) {
         this.submitit.emit(this.value);
         this.value = '';
       }
     }
-    
-    
-  }
-  
+
+    // This function gets triggered when the link icon is clicked.
+    LinkNode() {
+       
+    }
+}

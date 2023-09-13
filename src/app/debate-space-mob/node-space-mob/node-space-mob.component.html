@@ -4,62 +4,19 @@
     <div #visNetwork id="mynetwork"  class="nodes" style="height:100%; width:100%"> 
       
     </div>
-    <div class="expand-panel1" [ngClass]="{'expanded': isPanelExpanded}">
-      <div class="panel-content" 
-      [style.visibility]="isPanelExpanded ? 'visible' : 'hidden'"
-      [style.pointer-events]="isPanelExpanded ? 'auto' : 'none'">
-      <div *ngIf="userType=='spectator'" class="buttons">
-        
-        <button mat-fab class="thumb-up" (click)="thumbup()" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" color="transparent" >
-          <mat-icon>thumb_up</mat-icon>
+    <div *ngIf="selectedNodeIndex" class="buttons" style="opacity:.7">
+      <div id="likeButton" class="floating-buttons small-button" style="position:absolute; bottom:10px; left:10px;">
+        <button mat-fab class="thumb-up" (click)="thumbup()" style="background-color:green;">
+          <mat-icon class="small-icon">thumb_up</mat-icon>
         </button>
-        <button mat-fab class="thumb-down" color="transparent" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="thumbdown()">
-          <mat-icon>thumb_down</mat-icon>
-        </button>
-        <button mat-fab class="sharenode" color="transparent" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="sharenode()">
-          <mat-icon>share</mat-icon>
-        </button>
-          <button mat-fab class="play" color="transparent" (click)="play()">
-            <mat-icon>play_arrow</mat-icon>
-          </button>
-        </div>
-    
-        <div *ngIf="userType=='host'" class="buttons">
-        
-         
-          <button mat-fab class="sharenode" color="transparent" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="sharenode()">
-            <mat-icon>share</mat-icon>
-          </button>
-          <button mat-fab class="record" color="transparent" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="toggleRecording()">
-            <mat-icon *ngIf="!isRecording">fiber_manual_record</mat-icon>
-            <mat-icon *ngIf="isRecording">stop</mat-icon>
-          </button>
-            <button mat-fab class="play" color="transparent" (click)="play()">
-              <mat-icon>play_arrow</mat-icon>
-            </button>
-    
-            
-          </div>
-          <div *ngIf="userType=='speaker'" class="buttons">
-        
-         
-            <button mat-fab class="sharenode" color="transparent" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="sharenode()">
-              <mat-icon>share</mat-icon>
-            </button>
-            <button mat-fab class="record" color="transparent" *ngIf="isPanelExpanded" [disabled]="!isPanelExpanded" (click)="toggleRecording()">
-              <mat-icon *ngIf="!isRecording">fiber_manual_record</mat-icon>
-              <mat-icon *ngIf="isRecording">stop</mat-icon>
-            </button>
-              <button mat-fab class="play" color="transparent" (click)="play()">
-                <mat-icon>play_arrow</mat-icon>
-              </button>
-      
-              
-            </div>
-        </div>
     </div>
     
-    
+     <div id="dislikeButton" class="floating-buttons small-button" style="position:absolute;bottom:10px;right:10px;">
+      <button mat-fab class="thumb-down" (click)="thumbdown()" style="background-color:red;" >
+        <mat-icon>thumb_down</mat-icon>
+      </button>
+       </div> 
+      </div>
     </div>
    
     

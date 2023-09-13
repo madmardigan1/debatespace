@@ -1,12 +1,12 @@
 <div class="chat-area">
     <h1 style="margin:0;padding:0;">Chat</h1>
-      <div *ngFor="let item of scrollChat">
-        <ng-container *ngIf="item.id; else textTemplate">
-          <button (click)="buttonClicked(item.id)" class="button bg-primary">{{ item.text }}</button><br/>
-        </ng-container>
-        <ng-template #textTemplate>
-          {{ item.text }}<br>
-        </ng-template>
-      </div>
+    <div *ngFor="let item of scrollChat">
+      <ng-container *ngIf="item.id; else textTemplate">
+        <button (click)="buttonClicked(item.id)" class="button bg-primary">{{ item.text }}</button><br/>
+      </ng-container>
+      <ng-template #textTemplate>
+        <span><strong [style.color]="item.color">{{ item.sender }}:</strong> {{ item.text }}</span><br>
+      </ng-template>
     </div>
-    
+  </div>
+  

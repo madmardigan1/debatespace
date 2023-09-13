@@ -4,7 +4,7 @@
     <app-node-space-mob #nodeSpace [buttonTypeSubject]="buttonTypeSubject" [userType]="userType" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" ></app-node-space-mob>
    </div>
 
-   <div class="theRest" [@expandShrink]="theRestState">
+   <div class="theRest" [@expandShrinkrest]="theRestState">
         <div class="navigationPane d-flex text-white bg-dark" style="border-top:1px solid grey;">
             <div class="container" style="padding-left:10%; padding-right:10%;">
                 <div class="d-flex justify-content-between" role="group" aria-label="Button group">
@@ -42,26 +42,20 @@
         </div>
        
        <div class="viewsecond bg-dark">
-        <div #chatView *ngIf="selectedButton===1" class="chat-output-area bg-dark text-white" style="position: relative;overflow-y:scroll; display:flex; flex: 0 0 auto; flex-direction: column; word-wrap: break-word;height:100%;
+        <div *ngIf="selectedButton===1" class="chat-output-area bg-dark text-white" style="position: relative; display:flex; flex: auto; flex-direction: column;  overflow:auto;
         overflow-wrap: break-word; /* Modern browsers */">
-           <div class="chat-read-area" style="flex: 1 0 auto;position:relative;">
+           <div #chatView class="chat-read-area" style="flex: auto;position:relative; top:0; width:100%; overflow:auto">
           <app-chat-space-mob [displayText]="text"></app-chat-space-mob>
         </div>
           <div class="submitArea" >
             <app-chat-submit-mob (submitit)="updateText($event)"></app-chat-submit-mob>
           </div>
-          <button class="btn btn-primary" style="position:absolute; bottom:60px;right:15px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggle()">
+          <button class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:15px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggle()">
             <i *ngIf="1==1" class="fa fa-microphone" style="font-size: 20px;"></i>
               <!--   <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>-->   
               </button>
           <div class="1" style="position:absolute;right:5px;bottom:5px;display:flex;">
             
-            <button type="button" class="btn btn-success"style="border-radius:50%; width:45px;height:45px;z-index:1000;" (click)="thumbup()">
-                <i class="fas fa-thumbs-up"></i> 
-            </button>
-            <button type="button" class="btn btn-danger"style="border-radius:50%; width:45px;height:45px;z-index:1000;" (click)="thumbdown()">
-                <i class="fas fa-thumbs-down"></i> 
-            </button>
         
         </div>
         </div>

@@ -5,15 +5,27 @@ import { DebateAuthService } from '../debate-auth.service';
 import { ChatToNodeService } from '../chat-to-node.service';
 import { Subject } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-
+import { ChatSpaceMobComponent } from './chat-space-mob/chat-space-mob.component';
+import { SpacecreateComponent } from '../spacecreate/spacecreate.component';
 @Component({
   animations: [
     trigger('expandShrink', [
       state('expanded', style({
-        height: '60%',
+        height: '75%',
       })),
       state('shrunk', style({
         height: '40%',
+      })),
+      transition('expanded <=> shrunk', [
+        animate('0.3s')
+      ]),
+    ]),
+    trigger('expandShrinkrest', [
+      state('expanded', style({
+        height: '60%',
+      })),
+      state('shrunk', style({
+        height: '25%',
       })),
       transition('expanded <=> shrunk', [
         animate('0.3s')
@@ -25,6 +37,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   styleUrls: ['./debate-space-mob.component.css']
 })
 export class DebateSpaceMobComponent implements AfterViewChecked {
+  @ViewChild(ChatSpaceMobComponent, { static: false }) secondChild!: ChatSpaceMobComponent;
+
   selectedButton: number = 1;
   @ViewChild('chatView') private chatContainer!: ElementRef;
     text: string = '';
@@ -63,6 +77,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     
     updateText(newText: string) {
       this.text = newText;
+      this.secondChild.updateChat({sender:'Steve',text:this.text,color:this.secondChild.getRandomColor()});
+      this.scrollToBottom();
     }
   
     receiveValue(value: boolean) {
@@ -97,14 +113,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.selectedButton = buttonNumber;
     }
 
-    thumbup(): void {
-      this.buttonType = "thumbup";
-      this.buttonTypeSubject.next(this.buttonType);
-    }
-    thumbdown(): void {
-      this.buttonType = "thumbdown";
-      this.buttonTypeSubject.next(this.buttonType);
-    }
+  
     toggle(): void {
       this.buttonType= "toggle";
       this.buttonTypeSubject.next(this.buttonType);

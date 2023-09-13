@@ -1,13 +1,38 @@
-
-
 <div class="container">
-    <form (submit)="onSubmitit($event)" style="width:100%;">
-        <div class="input-group" style="width:100%;">
-            <input type="text" class="form-control" placeholder="Enter something..." aria-label="value" aria-describedby="button-addon2" [(ngModel)]="value" name="inputValue">
-            <div class="input-group-append bg-white">
-                <button class="btn btn-success rounded-circle" type="submit" id="button-addon2"> <i class="fas fa-arrow-right"></i> </button>
+    <form (submit)="onSubmitit($event)">
+        <div class="input-group d-flex">
+            
+            <!-- This div acts as a container for the input and the link icon -->
+            <div style="position: relative; flex-grow: 1;">
+                
+                <!-- Input Field -->
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Enter something..." 
+                    aria-label="value" 
+                    aria-describedby="button-addon2" 
+                    [(ngModel)]="value" 
+                    name="inputValue" 
+                    style="padding-right: 40px;"  
+                >
+                
+                <!-- Link icon inside the input on the right -->
+                <button 
+                    class="btn btn-link text-secondary" 
+                    type="button" 
+                    style="color: lightgray; position: absolute; top: 50%; transform: translateY(-50%); right: 10px; background: none; border: none;"
+                    (click)="LinkNode()"
+                >
+                    <i class="fas fa-link"></i>
+                </button>
             </div>
+
+            <!-- Submit button (will be hidden if `value` is empty) -->
+            <button *ngIf="value.length > 0" class="btn btn-success rounded-circle" type="submit" id="button-addon2">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
         </div>
     </form>
-  </div>
-  
+</div>
