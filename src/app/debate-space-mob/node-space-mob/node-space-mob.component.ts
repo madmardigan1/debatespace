@@ -340,8 +340,8 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       }
         // Update the node data in the DataSet
         this.nodes.update(nodeData);
-        this.network.setOptions({ physics: true });
-        this.network.setData;
+        
+       
        
 
       }

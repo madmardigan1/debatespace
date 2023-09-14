@@ -1,65 +1,12 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded">
-    <h2 class="text-center text-white mb-4">Create a new space!</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded">
+        <h2 class="text-center text-white mb-4">Create a new space!</h2>
 
-    <!-- Topic Input -->
-    <div class="form-group">
-        <label for="topic" class="text-white">Topic</label>
-        <input #topicInput formControlName="topic" type="text" class="form-control" id="topic" placeholder="Enter the topic">
-    </div>
-
-    <!-- Description -->
-    <div class="form-group">
-        <label for="description" class="text-white">Description</label>
-        <textarea class="form-control" formControlName="description" id="description" placeholder="Describe the space" rows="3" style="resize: none;"></textarea>
-    </div>
-
-    <!-- Event Type -->
-    <div class="d-flex align-items-center mb-2">
-        <label class="mr-2 text-white">Event Type:</label>
-        <div class="form-check mr-2">
-            <input class="form-check-input" type="radio" name="eventType" id="publicEvent" value="public" checked onchange="handleTypeChange()">
-            <label class="form-check-label">
-                Public
-            </label>
+        <!-- Topic Input -->
+        <div class="d-flex" style="justify-content: space-between;">
+        <div class="form-group">
+            <label for="topic" class="text-white">Topic</label>
+            <input #topicInput formControlName="topic" type="text" class="form-control" id="topic" placeholder="Enter the topic">
         </div>
-
-        <div class="form-check">
-            <label class="mr-2 text-white">Public or Invite</label>
-            <input class="form-check-input" type="radio" name="eventType" id="inviteEvent" value="invite" onchange="handleTypeChange()">
-            <input class="form-check-input" type="radio" name="eventType" id="inviteEvent" value="invite" onchange="handleTypeChange()">
-            <label class="form-check-label">
-                Invite Only
-            </label>
-        </div>
-    </div>
-
-    <div class="d-flex align-items-center mb-2">
-        <label class="mr-2 text-white">Debate Type:</label>
-        <div class="form-check mr-2">
-            <input class="form-check-input" type="radio" name="debateType" id="formalDebate" value="formal">
-            <label class="form-check-label">
-                Formal
-            </label>
-        </div>
-
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="debateType" id="informalDebate" value="informal">
-            <label class="form-check-label">
-                Informal
-            </label>
-        </div>
-    </div>
-
-    <!-- Search Contacts (Only if Invite Only) -->
-    <div class="form-group" id="inviteSearch" style="display: none;">
-        <label for="searchContacts">Search Contacts:</label>
-        <input type="text" class="form-control" id="searchContacts" placeholder="Search for a contact...">
-    </div>
-
-    <!-- Max Speakers and Entrance Fee -->
-    <div class="d-flex justify-content-between align-items-end mb-2">
-
-        <!-- Max Speakers -->
         <div class="form-group mb-0 mr-2" style="width: auto;">
             <label for="Max Speakers" class="text-white">Max Speakers</label>
             <select formControlName="number" class="form-control mx-4" id="Max Speakers" style="width: auto;">
@@ -70,14 +17,46 @@
                 <option value="5">5</option>
             </select>
         </div>
-
-        <!-- Entrance Fee -->
-        <div class="form-group mb-0 mr-2">
-            <label for="entranceFee" class="text-white">Entrance Fee (Optional)</label>
-            <input formControlName="entranceFee" type="number" class="form-control" id="entranceFee" placeholder="Fee" style="max-width: 100px;">
+    </div>
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description" class="text-white">Description</label>
+            <textarea class="form-control" formControlName="description" id="description" placeholder="Describe the space" rows="3" style="resize: none;"></textarea>
         </div>
+
+        <!-- Conversation Type Toggle -->
+        <div class="d-flex align-items-center mb-2 mt-2 text-white" style="justify-content: space-between;">
+            <div class="d-flex align-items-center">
+            <span style="margin-right:5px;">Casual</span>
+            <div class="custom-toggle" (click)="printToggleValue()">
+                <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled" (change)="onToggleChange()">
+
+                <label for="customToggle" class="custom-toggle-label"></label>
+            </div>
+            <span style="margin-left:5px;">Ranked</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <span style="margin-right:5px;">Match me</span>
+            <div class="custom-toggle1" (click)="printToggleValue()">
+                <input type="checkbox" id="customToggle1" class="custom-toggle-checkbox1" formControlName="isToggled1" (change)="inviteToggle()">
+
+                <label for="customToggle1" class="custom-toggle-label1"></label>
+            </div>
+            <span style="margin-left:5px;">Invite</span>
+            
+        </div>
+              
+            
+    
+        </div>
+        
+
+
+
+
+        <!-- Max Speakers -->
+        
 
         <!-- Submit button -->
         <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-lg mt-3">Create Space</button>
-    </div>
-</form>
+    </form>

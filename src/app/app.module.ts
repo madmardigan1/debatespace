@@ -37,7 +37,7 @@ import { NodeSpaceMobComponent } from './debate-space-mob/node-space-mob/node-sp
 import { GptsummaryMobComponent } from './debate-space-mob/gptsummary-mob/gptsummary-mob.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-control-mob.component';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 //node
 
 
@@ -70,6 +70,7 @@ import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-cont
 
   ],
   imports: [
+    MatSlideToggleModule,
     MatTabsModule,
     FontAwesomeModule,
     BrowserModule,
