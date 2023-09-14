@@ -92,12 +92,12 @@
         
         </div>
 
-        <button *ngIf="userType=='host'||'speaker'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:15px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggle('toggle')">
+        <button *ngIf="userType=='host'||'speaker'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:60px;border-radius:50%; width:40px;height:40px;z-index:1000;" (click)="toggle('toggle')">
             <i *ngIf="1==1" class="fa fa-microphone" style="font-size: 20px;"></i>
            
               <!--   <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>-->   
               </button>
-              <button *ngIf="userType=='host'||'speaker'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:80px;border-radius:50%; width:65px;height:65px;z-index:1000;" (click)="toggleChat()">
+              <button *ngIf="userType=='host'||'speaker'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:12px;border-radius:50%; width:40px;height:40px;z-index:1000;" (click)="toggleChat()">
                 <i *ngIf="1==1" class="fas fa-pencil-alt" style="font-size: 20px;"></i>
                
                   <!--   <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>-->   
