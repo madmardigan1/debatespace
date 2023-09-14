@@ -315,8 +315,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
         const newNodeId = this.nodes.length + 1;
         this.globalnode = newNodeId;
-        
-        this.nodes.add({ id: newNodeId, label: submitText, text: submitText, shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
+        this.nodes.add({ id: newNodeId,label: this.wrapText(submitText, 20), text: this.wrapText(submitText, 200), shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
         this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
        
          this.network.once("initRedraw", () => {
@@ -448,7 +447,9 @@ setTimeout(() => {
           }
       }
       wrappedText += currentLine;  // Append the last line
+      console.log(wrappedText);
       return wrappedText.trim();
+     
   }
   
   play(): void {
