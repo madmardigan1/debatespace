@@ -8,6 +8,9 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, 
   import { DebateAuthService } from 'src/app/debate-auth.service';
   import { Subject } from 'rxjs';
   import { trigger, state, style, transition, animate } from '@angular/animations';
+  import { ChatToNodeService } from 'src/app/chat-to-node.service';
+  import { Subscription } from 'rxjs';
+import { ChatsubmitToNodeService } from 'src/app/chatsubmit-to-node.service';
 @Component({
   selector: 'app-node-space-mob',
   templateUrl: './node-space-mob.component.html',
@@ -38,7 +41,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, 
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   animationState: 'up' | 'down' | 'void' = 'void';
   @ViewChild('visNetwork', { static: false }) container!: ElementRef;
-
+    submitText = '';
     @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
     @Output() nodeClicked = new EventEmitter<number>();
     @Output() nodeSelected = new EventEmitter<boolean>();
@@ -63,12 +66,12 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       { id: 1, label: '', text: '', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0,soundClip: null},
     ]);
     private edges = new DataSet<any>([]);
-  
-    constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService, private ngZone: NgZone) {}
+   private subscription?: Subscription;
+    constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private chattoNode: ChatsubmitToNodeService,private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService, private ngZone: NgZone) {}
   
     ngOnInit(): void {
       this.userType=this.debateAuth.getUser();
-      console.log(this.buttonTypeSubject);
+      
       if (this.buttonTypeSubject) {
       this.buttonTypeSubject.subscribe(type => {
         if (type === "play") {
@@ -78,73 +81,24 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
           this.toggleRecording();
         }
       });}
+      this.subscription = this.chattoNode.getResponse().subscribe(text => {
+        this.submitText = text;
+        if (this.submitText !== '') {
+          this.submitNode(this.submitText);
+        }
+      });
     }
  
     ngAfterViewInit() {
       this.initNetwork();
+      
       this.addEventListeners();
       this.nodeLink.getNodeLink().subscribe(data => {
         const input = Number(data);
-        
-        if (this.isRecording) {
-          this.toggleRecording();
-        }
-    
-        if (input !==null) {
-          this.isPanelExpanded = true;
-          const clickedNodeId = input;
+        this.handleNodeClick({
+          nodes: [input],
           
-       
-         
-        
-      
-          this.selectedNodeIndex = clickedNodeId;
-         
-    
-          if (this.selectedNodeIndex !== null) {
-            this.nodeClicked.emit(clickedNodeId);
-      
-            // Ensure this.selectedNodeIndex is not null before using it as an argument
-            const node = this.nodes.get(this.selectedNodeIndex);
-            
-          
-            if (node !== null) {
-              const combinedText: string[] = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
-              const combinedString = combinedText.join('<br>');
-              
-              this.notify.emit(combinedString);
-              this.sharedService.changeNodeText(combinedString);
-          }
-          
-          }
-        
-          //this.rtcService.startStream();
-          
-          // zoom to the clicked node
-          this.network.focus(clickedNodeId, {
-            scale: 1.0,
-            animation: {
-              duration: 500,
-              easingFunction: 'easeInOutQuad'
-            }  
-          });
-        }
-        else  {
-          this.isPanelExpanded = !this.isPanelExpanded;
-        }
-        
-        const resetEdges = this.highlightedEdges.map(edgeId => {
-          return { id: edgeId, color: '000000' }; // Assuming '000000' is the original color
-        });
-        this.edges.update(resetEdges);
-        this.highlightedEdges = [];
-    
-        // Highlight the path from the initial node to the clicked node
-         
-          
-          this.traverseToOriginal(input, 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
-        
-      });
+      });});
   
     }
     
@@ -201,9 +155,19 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       node.label = this.inputdata;
       node.text = this.inputdata;
       this.nodes.update(node);
+      this.network.selectNodes([1]); // Select the node
+      this.handleNodeClick({
+        nodes: [1],
+        
+    });
+
+      //autoselect Node 1
+    
   
+  
+
+    
   }
-  
   private addEventListeners() {
   
   
@@ -254,65 +218,14 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         }
     });
   
+
+  
+  
   this.network.on('click', params => {
-      if (this.isRecording) {
-        this.toggleRecording();
-      }
-      
-      if (params.nodes.length > 0) {
-        this.nodeSelected.emit(true);
-        this.isPanelExpanded = true;
-        const clickedNodeId = params.nodes[0];
-      
-     
-       
-      
-    
-        this.selectedNodeIndex = clickedNodeId;
-        console.log(this.selectedNodeIndex);
+    this.handleNodeClick(params);
   
-        if (this.selectedNodeIndex !== null) {
-          this.nodeClicked.emit(clickedNodeId);
-    
-          // Ensure this.selectedNodeIndex is not null before using it as an argument
-          const node = this.nodes.get(this.selectedNodeIndex);
-          if (node !== null) {
-            const combinedText: string[] = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
-            const combinedString = combinedText.join('<br>');
-            
-            this.notify.emit(combinedString);
-            this.sharedService.changeNodeText(combinedString);
-        }
-        
-        }
-      
-        //this.rtcService.startStream();
-        
-        // zoom to the clicked node
-        this.network.focus(clickedNodeId, {
-          scale: 1.0,
-          animation: {
-            duration: 500,
-            easingFunction: 'easeInOutQuad'
-          }  
-        });
-      }
-      else  {
-        this.isPanelExpanded = !this.isPanelExpanded;
-        this.nodeSelected.emit(false);
-      }
-      const resetEdges = this.highlightedEdges.map(edgeId => {
-        return { id: edgeId, color: "rgba(255,255,255, 0.1"}; // Assuming '000000' is the original color
-      });
-      this.edges.update(resetEdges);
-      this.highlightedEdges = [];
-  
-      // Highlight the path from the initial node to the clicked node
-      if (params.nodes.length > 0) {
-        this.traverseToOriginal(params.nodes[0], 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
-      }
-    });
-  }
+  });
+}
   
   
   
@@ -384,7 +297,48 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         }
       }
     }
-    
+    submitNode(submitText:string) {
+      if (this.selectedNodeIndex !== null) {
+             
+        let selectedImage;
+        let selectedName;
+
+        if (this.selectedPicture == 0) {
+            selectedImage = "assets/Jared.jpeg";
+            this.selectedPicture += 1;
+            selectedName = 'Jared';
+        } else {
+            selectedImage = "assets/Steve.jpeg";
+            this.selectedPicture -= 1;
+            selectedName= 'Steve'
+        }
+
+        const newNodeId = this.nodes.length + 1;
+        this.globalnode = newNodeId;
+        
+        this.nodes.add({ id: newNodeId, label: submitText, text: submitText, shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
+        this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
+       
+         this.network.once("initRedraw", () => {
+  this.network.storePositions();
+  this.network.setData({
+    nodes: this.nodes,
+    edges: this.edges,
+  });
+  this.network.selectNodes([this.globalnode]);
+  this.nodeClicked.emit(this.globalnode);
+  this.selectedNodeIndex=this.globalnode;
+setTimeout(() => {
+  this.ngZone.runOutsideAngular(() => {
+    this.centerOnNode(this.globalnode);
+  });
+}, 1);
+
+  
+});
+
+      }
+    }
     toggleRecording() {
       
       if (this.selectedNodeIndex){
@@ -443,15 +397,17 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
           nodes: this.nodes,
           edges: this.edges,
         });
-      });
-        
-      setTimeout(() => {
+        this.network.selectNodes([this.globalnode]);
+        this.nodeClicked.emit(this.globalnode);
+        this.selectedNodeIndex=this.globalnode;
+     setTimeout(() => {
         this.ngZone.runOutsideAngular(() => {
           this.centerOnNode(this.globalnode);
         });
       }, 1);
+     
         
-      
+    });
   
             }
          
@@ -507,6 +463,70 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
    
   }
   
+  handleNodeClick(params: any): void {
+    
+    if (this.isRecording) {
+      this.toggleRecording();
+    }
+    
+    if (params.nodes.length > 0) {
+     
+      this.nodeSelected.emit(true);
+      this.isPanelExpanded = true;
+      const clickedNodeId = params.nodes[0];
+    
+   
+     
+    
+  
+      this.selectedNodeIndex = clickedNodeId;
+      
+
+      this.nodeShare.emitEvent(this.selectedNodeIndex);
+      console.log(this.selectedNodeIndex);
+
+      if (this.selectedNodeIndex !== null) {
+        this.nodeClicked.emit(clickedNodeId);
+  
+        // Ensure this.selectedNodeIndex is not null before using it as an argument
+        const node = this.nodes.get(this.selectedNodeIndex);
+        if (node !== null) {
+          const combinedText: string[] = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
+          const combinedString = combinedText.join('<br>');
+          
+          this.notify.emit(combinedString);
+          this.sharedService.changeNodeText(combinedString);
+      }
+      
+      }
+    
+      //this.rtcService.startStream();
+      
+      // zoom to the clicked node
+      this.network.focus(clickedNodeId, {
+        scale: 1.0,
+        animation: {
+          duration: 500,
+          easingFunction: 'easeInOutQuad'
+        }  
+      });
+    }
+    else  {
+      this.isPanelExpanded = !this.isPanelExpanded;
+      this.nodeSelected.emit(false);
+    }
+    const resetEdges = this.highlightedEdges.map(edgeId => {
+      return { id: edgeId, color: "rgba(255,255,255, 0.1"}; // Assuming '000000' is the original color
+    });
+    this.edges.update(resetEdges);
+    this.highlightedEdges = [];
+
+    // Highlight the path from the initial node to the clicked node
+    if (params.nodes.length > 0) {
+      this.traverseToOriginal(params.nodes[0], 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
+    }
+  }
+
   traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
     let nodeData = nodes.get(nodeId);
     let text = `${nodeData.user}: ${nodeData.text}`;

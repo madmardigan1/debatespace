@@ -40,7 +40,8 @@ import { ChatSpaceMobComponent } from './chat-space-mob/chat-space-mob.component
 })
 export class DebateSpaceMobComponent implements AfterViewChecked {
   @ViewChild(ChatSpaceMobComponent, { static: false }) secondChild!: ChatSpaceMobComponent;
- 
+  toggleChats:boolean = false;
+  toggleChatsText:string = "Type in chat";
   selectedButton: number = 1;
   @ViewChild('chatView') private chatContainer!: ElementRef;
     text: string = '';
@@ -83,6 +84,15 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.scrollToBottom();
     }
   
+    toggleChat () {
+      this.toggleChats = !this.toggleChats;
+      if (this.toggleChats) {
+        this.toggleChatsText = "Type in chat";
+      }
+      else {
+        this.toggleChatsText = "Respond to speaker";
+      }
+    }
     receiveValue(value: boolean) {
       
       if (!value) {

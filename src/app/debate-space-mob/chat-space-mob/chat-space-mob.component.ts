@@ -2,34 +2,48 @@ import { Component, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angu
 import { NodeshareService } from 'src/app/nodeshare.service';
 import { NodeLinkService } from 'src/app/node-link.service';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { Subscription } from 'rxjs';
+import { ChatsubmitToChatspaceService } from 'src/app/chatsubmit-to-chatspace.service';
 @Component({
   selector: 'app-chat-space-mob',
   templateUrl: './chat-space-mob.component.html',
   styleUrls: ['./chat-space-mob.component.css']
 })
+
 export class ChatSpaceMobComponent implements AfterViewInit, OnChanges  {
 
-  scrollChat: Array<{ sender: string, text: string, color: string | undefined, id?: number }> = [];
+  scrollChat: Array<{ sender: string, text: string, color?: string, id?: number }> = [];
 
+   private nodeSelected:number=0;
+  private isButton: boolean=false;
 
-
-
+ 
   
   @Input() displayText: string = '';
-  
-  constructor (private nodeShare: NodeshareService, private nodeLink: NodeLinkService, private sanitizer: DomSanitizer) {};
+  private subscription: Subscription;
+  constructor (private chatToSpace: ChatsubmitToChatspaceService,private nodeShare: NodeshareService, private nodeLink: NodeLinkService, private sanitizer: DomSanitizer) {
+    this.subscription = this.chatToSpace.buttonPressed$.subscribe(() => {
+      if (this.nodeSelected > 0) {
+        console.log("check");
+        this.isButton = true;
+        this.updateChat({
+          sender: "Steve",
+          text: "check out this node",
+          color: this.getRandomColor(),
+          id: this.nodeSelected
+        });
+      }
+    });
+    
+  };
   
   
   ngAfterViewInit(): void {
     
     this.nodeShare.getEvent().subscribe(data => {
-      this.updateChat({
-        sender: 'Steve',
-        text: 'Come check out this node!',
-        color: this.getRandomColor()
-      }, true, data);
+      this.nodeSelected=data;
     });
+
     
     
     let counter = 0;
@@ -52,13 +66,20 @@ export class ChatSpaceMobComponent implements AfterViewInit, OnChanges  {
    
   }
   
-  updateChat(message: { sender: string, text: string, color?: string }, isButton: boolean = false, id?: number): void {
-    if (isButton) {
-      this.scrollChat.push({ sender: 'Steve', text: message.text, color: this.getRandomColor(), id });
-    } else {
-      this.scrollChat.push({ sender: 'Steve', text: message.text, color: this.getRandomColor() });
+  updateChat(message: { sender: string, text: string, color?: string, id?: number }, isButton: boolean = false): void {
+    if (!message.color) {
+        message.color = this.getRandomColor();
     }
-  }
+
+    if (isButton) {
+        this.scrollChat.push({ ...message, id: this.nodeSelected });
+    } else {
+        this.scrollChat.push(message);
+    }
+}
+
+  
+  
   
   
   
@@ -95,7 +116,10 @@ export class ChatSpaceMobComponent implements AfterViewInit, OnChanges  {
   }
   
   
-  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    // ... any other subscriptions you might have
+  }
   }
   
   

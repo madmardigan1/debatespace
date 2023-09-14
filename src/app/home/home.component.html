@@ -1,4 +1,5 @@
-<div class="homePage" [class.blur-content]="matchWindow"[class.unblur-content]="!matchWindow"  >
+<div class="homePage"   >
+  <div class="pageContents"[class.blur-content]="matchWindow"[class.unblur-content]="!matchWindow">
 <div class="left">
 
 </div>
@@ -127,70 +128,75 @@
     </div>
   
 </div>
+</div>
+<div class="groupForm bg-dark" style="border-radius: 15px;"*ngIf="matchWindow">
+  <div class="popUpForm">
+  <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
 
+    <h3 class="text-center mb-4 text-white">Find a Debate</h3>
+
+  
+      <!-- Role Selection -->
+      
+    
+        <div class="d-flex text-white" style="justify-content: space-between; align-items: center;">
+          <div style="align-items: center;">
+            <div style="align-items:center;">
+        <span style="margin-right:5px;">Casual</span>
+        <div class="custom-toggle">
+            <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled">
+
+            <label for="customToggle" class="custom-toggle-label"></label>
+        </div>
+        <span style="margin-left:5px;">Ranked</span>
+      </div>
+      </div>
+      <div>
+        <div class="text-white mt-3">
+          <label for="numSpeakers" style="text-wrap: nowrap; text-align:center;">Group Size</label>
+          <select class="form-control" id="numSpeakers" name="numSpeakers" style="width:auto;">
+            <option>2</option>
+            <option>4</option>
+            <option>8</option>
+          </select>
+        </div>
+      </div>
+      </div>
+    
+    
+    <div class="form-group mt-4 text-white"  style="width:auto;" >
+      <h5>Topic</h5>
+      <div class="list-group scrollable-list2"> 
+        <a href="javascript:void(0);" 
+           class="list-group-item list-group-item-action" 
+           [class.active]="selectedOption === card.topic" 
+           (click)="selectedOption = card.topic" 
+           *ngFor="let card of cards">
+          {{ card.topic }}
+        </a>
+      </div>
+    </div>
+    
+
+   
+    
+
+      
+      <!-- Number of Speakers Selection -->
+     
+
+      
+
+
+    <div class="form-group mt-4 text-center">
+      <button type="submit" class="btn btn-primary" >Find a group</button>
+    </div>
+  </form>
+</div>
+</div>
 </div>
 
 
 
 
-    <div class="groupForm bg-dark" style="border-radius: 15px;"*ngIf="matchWindow">
-        <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
-
-          <h3 class="text-center mb-4 text-white">Find a Debate</h3>
-
-          <div class="form-row">
-            <!-- Role Selection -->
-            <div class="col-4">
-              <label>Select Role</label>
-              <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
-                <label class="btn btn-outline-primary flex-grow-1 mr-3">
-                  <input type="checkbox" name="roles" id="speaker" autocomplete="off" hidden> Speaker
-                </label>
-                <label class="btn btn-outline-primary flex-grow-1 ml-2">
-                  <input type="checkbox" name="roles" id="host" autocomplete="off" hidden> Host
-                </label>
-              </div>
-            </div>
-            
-            <!-- Number of Speakers Selection -->
-            <div class="col-4">
-              <label for="numSpeakers">Number of Speakers</label>
-              <select class="form-control" id="numSpeakers" name="numSpeakers">
-                <option>2</option>
-                <option>4</option>
-                <option>8</option>
-              </select>
-            </div>
-      
-            <!-- Debate Type Radio Selection -->
-            <div class="col-4">
-              <label>Debate Type</label>
-              <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
-                <label class="btn btn-outline-primary flex-grow-1 mr-3">
-                  <input type="radio" name="debateType" id="normal" value="normal" checked hidden> Normal
-                </label>
-                <label class="btn btn-outline-primary flex-grow-1">
-                  <input type="radio" name="debateType" id="ranked" value="ranked" hidden> Ranked
-                </label>
-              </div>
-            </div>
-          </div>
-      
-          <div class="form-group mt-4" >
-            <h5>Topic</h5>
-            <div class="list-group scrollable-list2">
-              <a href="javascript:void(0);" 
-                 class="list-group-item list-group-item-action" 
-                 [class.active]="selectedOption === card.topic" 
-                 (click)="selectedOption = card.topic" 
-                 *ngFor="let card of cards">
-                {{ card.topic }}
-              </a>
-            </div>
-          </div>
-          <div class="form-group mt-4 text-center">
-            <button type="submit" class="btn btn-primary" >Find a group</button>
-          </div>
-        </form>
-    
-      </div>
+   
