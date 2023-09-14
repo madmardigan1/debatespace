@@ -85,13 +85,15 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     }
   
     toggleChat () {
-      this.toggleChats = !this.toggleChats;
+
       if (this.toggleChats) {
         this.toggleChatsText = "Type in chat";
       }
       else {
         this.toggleChatsText = "Respond to speaker";
+        console.log("test");
       }
+      this.toggleChats = !this.toggleChats;
     }
     receiveValue(value: boolean) {
       
