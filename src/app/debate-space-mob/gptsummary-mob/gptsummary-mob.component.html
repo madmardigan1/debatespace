@@ -1,2 +1,7 @@
-<h1 style="padding-left:10px;">Summary</h1>
-<div class="summary" [innerHTML]="nodeText"></div>
+<div *ngFor="let line of lines">
+    <button class="btn btn-success rounded-circle"  type="submit" id="button-addon2" (click)="logNodeId(line.id)">
+        <i class="fas fa-arrow-left" style="transform: rotate(180);"></i>
+    </button> <!-- This is a rightward arrow, replace with your desired symbol or button style -->
+    {{ line.text }}
+  </div>
+  

@@ -8,13 +8,19 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./gpt-summary.component.css']
 })
 export class GptSummaryComponent implements OnDestroy {
-  public nodeText!: string;
+  public lines: { text: string, id: number }[] = [];
   private subscription!: Subscription;
 
   constructor(private sharedService: SharedserviceService) {
-    this.subscription = this.sharedService.currentText.subscribe(text => this.nodeText = text);
+    this.subscription = this.sharedService.changeNodeText$.subscribe(messages => {
+      this.lines = messages;
+    });
   }
   
+  logNodeId(nodeId: number) {
+    console.log(nodeId);
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

@@ -1,12 +1,22 @@
 <div class="chat-area">
-    <h1 style="margin:0;padding:0;">Chat</h1>
-    <div *ngFor="let item of scrollChat">
-      <ng-container *ngIf="item.id; else textTemplate">
-        <button (click)="buttonClicked(item.id)" class="button bg-primary">{{ item.text }}</button><br/>
-      </ng-container>
-      <ng-template #textTemplate>
-        <span><strong [style.color]="item.color">{{ item.sender }}:</strong> {{ item.text }}</span><br>
+  <h1 style="margin:0;padding:0;">Chat</h1>
+
+  <div *ngFor="let item of scrollChat">
+      <div *ngIf="item.id; else noIdBlock" class="bg-white rounded">
+        <div style="display: flex;align-items: center; text-wrap:wrap; flex-wrap: wrap;">
+          <p style="margin:0;"[style.color]="item.color"><b> {{item.sender}}</b> </p>
+          <p style="margin:0; white-space: normal;word-wrap: break-word;" class="text-black"><b>&nbsp;{{item.text}}&nbsp;</b></p>
+
+          <a href="javascript:void(0)" (click)="buttonClicked(item.id)" style="color:purple"><b>this node!</b></a>
+        </div>
+      </div>
+      <ng-template #noIdBlock>
+          <div>
+            <span class="d-flex" style="text-wrap:wrap;">
+              <p [style.color]="item.color"><b>{{item.sender}} </b> </p>
+              <p style="margin:0; white-space: normal;word-wrap: break-word;"> : {{item.text}}</p>
+            </span>
+          </div>
       </ng-template>
-    </div>
   </div>
-  
+</div>

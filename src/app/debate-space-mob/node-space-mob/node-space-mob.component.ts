@@ -95,10 +95,13 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       this.addEventListeners();
       this.nodeLink.getNodeLink().subscribe(data => {
         const input = Number(data);
+        this.network.selectNodes([input]);
         this.handleNodeClick({
           nodes: [input],
           
-      });});
+      });
+      
+    });
   
     }
     
@@ -398,6 +401,7 @@ setTimeout(() => {
         });
         this.network.selectNodes([this.globalnode]);
         this.nodeClicked.emit(this.globalnode);
+        this.nodeShare.emitEvent(this.globalnode);
         this.selectedNodeIndex=this.globalnode;
      setTimeout(() => {
         this.ngZone.runOutsideAngular(() => {
@@ -484,19 +488,20 @@ setTimeout(() => {
       
 
       this.nodeShare.emitEvent(this.selectedNodeIndex);
-      console.log(this.selectedNodeIndex);
+    
 
       if (this.selectedNodeIndex !== null) {
         this.nodeClicked.emit(clickedNodeId);
-  
-        // Ensure this.selectedNodeIndex is not null before using it as an argument
+      
         const node = this.nodes.get(this.selectedNodeIndex);
-        if (node !== null) {
-          const combinedText: string[] = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
-          const combinedString = combinedText.join('<br>');
+        if (node !== null && this.selectedNodeIndex !== null) {
+          this.nodeClicked.emit(clickedNodeId);
+      
+          const combinedObjects = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
+          const combinedString = combinedObjects.map(obj => obj.text).join('<br>');
           
           this.notify.emit(combinedString);
-          this.sharedService.changeNodeText(combinedString);
+          this.sharedService.changeNodeText(combinedObjects);
       }
       
       }
@@ -528,34 +533,35 @@ setTimeout(() => {
     }
   }
 
-  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): string[] {
+  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; id: number; }[] {
     let nodeData = nodes.get(nodeId);
-    let text = `${nodeData.user}: ${nodeData.text}`;
-  
+    let textObj = { text: `${nodeData.user}: ${nodeData.text}`, id: nodeId };  // <-- Updated to be an object
+
     // Base condition: if we reach the original node, stop
     if (nodeId === originalNodeId) {
-      return [text];
+        return [textObj];
     }
-  
+
     // Get connected edges to the current node
     const connectedEdges = edges.get({
-      filter: (edge: any) => edge.to === nodeId
+        filter: (edge: any) => edge.to === nodeId
     });
-  
+
     // If we have a predecessor, move to it and continue traversal
     if (connectedEdges.length > 0) {
-      const predecessorNodeId = connectedEdges[0].from;
-      this.highlightedEdges.push(connectedEdges[0].id); // Storing the edge ID
-      const previousTexts = this.traverseToOriginal(predecessorNodeId, originalNodeId, nodes, edges);
-  
-      // Highlight the edge (this could be done in a different function if preferred)
-      this.edges.update([{ id: connectedEdges[0].id, color: "rgba(0,100,255,0.7)" }]);
-  
-      return [...previousTexts, text]; // appending current node's text to the result from predecessors
+        const predecessorNodeId = connectedEdges[0].from;
+        this.highlightedEdges.push(connectedEdges[0].id); // Storing the edge ID
+        const previousTexts = this.traverseToOriginal(predecessorNodeId, originalNodeId, nodes, edges);
+
+        // Highlight the edge (this could be done in a different function if preferred)
+        this.edges.update([{ id: connectedEdges[0].id, color: "rgba(0,100,255,0.7)" }]);
+
+        return [...previousTexts, textObj]; // appending current node's text to the result from predecessors
     }
-  
-    return [text];
-  }
+
+    return [textObj];
+}
+
   }
   
   
