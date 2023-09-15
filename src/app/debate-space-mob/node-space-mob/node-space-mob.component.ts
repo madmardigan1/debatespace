@@ -401,7 +401,8 @@ setTimeout(() => {
         });
         this.network.selectNodes([this.globalnode]);
         this.nodeClicked.emit(this.globalnode);
-        this.nodeShare.emitEvent(this.globalnode);
+        this.selectedNodeIndex=this.globalnode;
+        this.nodeShare.emitEvent(this.selectedNodeIndex);
         this.selectedNodeIndex=this.globalnode;
      setTimeout(() => {
         this.ngZone.runOutsideAngular(() => {
