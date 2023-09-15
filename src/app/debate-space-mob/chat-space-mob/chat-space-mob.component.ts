@@ -51,7 +51,7 @@ export class ChatSpaceMobComponent implements AfterViewInit, OnChanges {
     this.nodeShare.getEvent().subscribe(data => {
       this.nodeSelected = data;
     });
-
+/*
     let counter = 0;
     const intervalId = setInterval(() => {
       const randomMessage = this.getRandomMessage();
@@ -60,7 +60,7 @@ export class ChatSpaceMobComponent implements AfterViewInit, OnChanges {
       if (counter >= 40) {
         clearInterval(intervalId);
       }
-    }, 10000);
+    }, 10000);*/
   }
 
   ngOnChanges(changes: SimpleChanges): void { }

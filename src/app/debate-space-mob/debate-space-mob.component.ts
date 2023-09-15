@@ -91,7 +91,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       }
       else {
         this.toggleChatsText = "Respond to speaker";
-        console.log("test");
+      
       }
       this.toggleChats = !this.toggleChats;
     }
@@ -117,7 +117,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       try {
         this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
       } catch (err) {
-        console.error("Error auto-scrolling the chat", err);
+        
       }
     }
 

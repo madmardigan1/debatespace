@@ -1,23 +1,52 @@
 <div class="container">
-  <div #visNetwork id="mynetwork" class="nodes" style="height:100%; width:100%"> 
-  </div>
+    <div #visNetwork id="mynetwork" class="nodes" style="height:100%; width:100%"> 
+    </div>
+  
+    <div *ngIf="selectedNodeIndex" class="d-flex" style="position:absolute; bottom: 10px; width:100%;justify-content: space-between; z-index:1000;">
+        <div class="d-flex" >
+            <div style="display:flex;position:absolute; bottom:0;">
+        <div id="likeButton" class="floating-buttons small-button" style="z-index: 100000;">
+            <button class="btn btn-success" (click)="thumbup()">
+                <i class="fas fa-thumbs-up"></i>
+            </button>
+        </div>
+        <div id="dislikeButton" class="floating-buttons small-button" style=" z-index: 100000;" >
+            <button class="btn btn-danger" (click)="thumbdown()">
+                <i class="fas fa-thumbs-down"></i>
+            </button>
+        </div> 
+    </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div  class="d-flex">
+              <button [disabled]="!siblingChecker"class="btn btn-outline-white rounded-circle" style="margin-left:2px; margin-right:2px;"  type="submit"  (click)="previousId()">
+                  <i class="fas fa-chevron-left" style="color:white"></i>
+              </button>
+            </div>
+            <div style="display:flex; flex-direction: column;">
+              <button class="btn btn-outline-white rounded-circle" style="margin-left:1px; margin-right:1px;"  type="submit"  (click)="up()">
+                  <i class="fas fa-chevron-up" style="color:white"></i>
+              </button>    
+              <button  class="btn btn-outline-white rounded-circle" style="margin-left:1px; margin-right:1px; color:white;"  type="submit" (click)="goBack()">
+                  <i class="fas fa-undo" style="color:white"></i>
+              </button>
+              <button class="btn btn-outline-white rounded-circle" style="margin-left:1px; margin-right:1px;"  type="submit"  (click)="down()">
+                  <i class="fas fa-chevron-down" style="color:white"></i>
+              </button>
+            </div>
+            <div class="d-flex">
+              <button [disabled]="!siblingChecker"class="btn btn-outline-white rounded-circle" style="margin-left:2px; margin-right:2px;"  type="submit" (click)="nextId()">
+                  <i class="fas fa-chevron-right" style="color:white"></i>
+              </button>
+            </div>
+          </div>
 
-  <div *ngIf="selectedNodeIndex" class="buttons" style="opacity:.7">
-      <div id="likeButton" class="floating-buttons small-button" style="position:absolute; bottom:10px; left:10px;">
-          <button mat-fab class="thumb-up" (click)="thumbup()" style="background-color:green;">
-              <mat-icon class="small-icon">thumb_up</mat-icon>
-          </button>
-          
+
+       
+    </div>
+    <i class="fas fa-arrow-up" *ngIf="animationState === 'up'" [@arrowAnimation]="animationState"></i>
+    <i class="fas fa-arrow-down" *ngIf="animationState === 'down'" [@arrowAnimation]="animationState"></i>
+  
    
-      </div>
-
-      <div id="dislikeButton" class="floating-buttons small-button" style="position:absolute;bottom:10px;right:10px;">
-          <button mat-fab class="thumb-down" (click)="thumbdown()" style="background-color:red;">
-              <mat-icon>thumb_down</mat-icon>
-          </button>
-         
-      </div> 
   </div>
-  <i class="fas fa-arrow-up" *ngIf="animationState === 'up'" [@arrowAnimation]="animationState"></i>
-  <i class="fas fa-arrow-down" *ngIf="animationState === 'down'" [@arrowAnimation]="animationState"></i>
-</div>
+  

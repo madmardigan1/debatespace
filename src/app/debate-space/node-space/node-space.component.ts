@@ -248,6 +248,7 @@ this.network.on('click', params => {
           const combinedString = combinedObjects.map(obj => obj.text).join('<br>');
           
           this.notify.emit(combinedString);
+        
           this.sharedService.changeNodeText(combinedObjects);
       }
       

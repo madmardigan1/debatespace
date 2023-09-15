@@ -50,13 +50,17 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     @Input() userType: string = '';
     @Input() buttonType: string = '';
     @Input() buttonTypeSubject!: Subject<string>;
-  
+    currentNode: any;
+    previousNode: any;
+    siblingChecker: any;
     isRecording = false;
     network!: Network;
    
     selectedNodeIndex: number | null = null;
     positions: any;
     globalnode: any;
+    nodeLeft: any;
+    nodeRight: any;
     public selectedPicture = 0;
     private highlightedEdges: any[] = [];
     isPanelExpanded = false;
@@ -266,7 +270,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     }
   
     thumbup(): void {
-      
+      console.log("itworked");
       // Check if a node is selected
       if (this.selectedNodeIndex !== null) {
         
@@ -479,8 +483,12 @@ setTimeout(() => {
      
       this.nodeSelected.emit(true);
       this.isPanelExpanded = true;
+     
       const clickedNodeId = params.nodes[0];
-    
+      this.siblingChecker = this.getAdjacentSiblingNodeIds(clickedNodeId);
+      
+      this.previousNode = this.currentNode;
+      this.currentNode = clickedNodeId;
    
      
     
@@ -503,6 +511,9 @@ setTimeout(() => {
           
           this.notify.emit(combinedString);
           this.sharedService.changeNodeText(combinedObjects);
+          this.nodeShare.emitEvent2(this.getAdjacentSiblingNodeIds(this.selectedNodeIndex));
+          this.nodeShare.emitEvent(clickedNodeId);
+
       }
       
       }
@@ -563,6 +574,145 @@ setTimeout(() => {
     return [textObj];
 }
 
+getParentNodeId(nodeId: number): string | null {
+  // Find the edge where the node is the 'to' (child) node.
+  const edgeToGivenNode = this.edges.get({
+    filter: edge => edge.to === nodeId
+  })[0];
+
+  // If no such edge exists, the node doesn't have a parent.
+  if (!edgeToGivenNode) return null;
+
+  // Return the ID of the parent node.
+  return edgeToGivenNode.from;
+}
+
+getSiblingNodeId(nodeId: number): string | null {
+  // Find the edges where the node is the 'from' (parent) node.
+  const edgesFromGivenNode = this.edges.get({
+    filter: edge => edge.from === nodeId
+  });
+
+  // If no such edges exist, the node doesn't have child nodes.
+  if (edgesFromGivenNode.length === 0) return null;
+
+  // Return the ID of the first child node.
+  return edgesFromGivenNode[0].to;
+}
+
+getAdjacentSiblingNodeIds(nodeId: number): { previous: string, next: string } | null {
+  // Find the edge where the node is the 'to' (child) node.
+  const edgeToGivenNode = this.edges.get({
+    filter: edge => edge.to === nodeId
+  })[0];
+
+  // If no such edge exists, the node doesn't have a parent and thus no siblings.
+  if (!edgeToGivenNode) return null;
+
+  // Get all child nodes of the parent node.
+  const siblingsEdges = this.edges.get({
+    
+    filter: edge => edge.from === edgeToGivenNode.from
+  });
+  
+  if (siblingsEdges.length === 1) return null;
+  
+
+  // Find the index of the given node within the siblings.
+  const givenNodeIndex = siblingsEdges.findIndex(edge => edge.to === nodeId);
+ 
+  // Determine the previous sibling's node ID.
+  let previousNodeId;
+  if (givenNodeIndex === 0) {
+    // If the given node is the first child, wrap to the last child.
+    previousNodeId = siblingsEdges[siblingsEdges.length - 1].to;
+  } else {
+    previousNodeId = siblingsEdges[givenNodeIndex - 1].to;
+  }
+
+  // Determine the next sibling's node ID.
+  let nextNodeId;
+  if (givenNodeIndex === siblingsEdges.length - 1) {
+    // If the given node is the last child, wrap to the first child.
+    nextNodeId = siblingsEdges[0].to;
+  } else {
+    nextNodeId = siblingsEdges[givenNodeIndex + 1].to;
+  }
+
+  return {
+    previous: previousNodeId,
+    next: nextNodeId
+  };
+}
+
+up() {
+  if (this.selectedNodeIndex){
+    const adjacentSiblingIds = this.getParentNodeId(this.selectedNodeIndex);
+  
+    if (adjacentSiblingIds) {
+      this.network.selectNodes([adjacentSiblingIds]);
+      this.handleNodeClick({
+        nodes: [adjacentSiblingIds]
+      });
+    } else {
+      // Handle the scenario when there is no sibling or an error.
+      console.warn('No previous sibling found or an error occurred.');
+    }
+  }
+}
+
+down() {
+  if (this.selectedNodeIndex){
+    const adjacentSiblingIds = this.getSiblingNodeId(this.selectedNodeIndex);
+  
+    if (adjacentSiblingIds) {
+      this.network.selectNodes([adjacentSiblingIds]);
+      this.handleNodeClick({
+        nodes: [adjacentSiblingIds]
+      });
+    } else {
+      // Handle the scenario when there is no sibling or an error.
+      console.warn('No previous sibling found or an error occurred.');
+    }
+  }
+}
+previousId() {
+  if (this.selectedNodeIndex){
+  const adjacentSiblingIds = this.getAdjacentSiblingNodeIds(this.selectedNodeIndex);
+
+  if (adjacentSiblingIds) {
+    this.network.selectNodes([adjacentSiblingIds.previous]);
+    this.handleNodeClick({
+      nodes: [adjacentSiblingIds.previous]
+    });
+  } else {
+    // Handle the scenario when there is no sibling or an error.
+    console.warn('No previous sibling found or an error occurred.');
+  }
+}
+} 
+nextId () {
+  if (this.selectedNodeIndex){
+    const adjacentSiblingIds = this.getAdjacentSiblingNodeIds(this.selectedNodeIndex);
+  
+    if (adjacentSiblingIds) {
+      this.network.selectNodes([adjacentSiblingIds.next]);
+      this.handleNodeClick({
+        nodes: [adjacentSiblingIds.next]
+      });
+    } else {
+      // Handle the scenario when there is no sibling or an error.
+      console.warn('No previous sibling found or an error occurred.');
+    }
+  }
+}
+goBack(){
+  this.network.selectNodes([this.previousNode]);
+  this.handleNodeClick({
+    nodes: [this.previousNode],
+    
+});
+}
   }
   
   
