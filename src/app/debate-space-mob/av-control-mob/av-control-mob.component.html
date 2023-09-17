@@ -3,7 +3,15 @@
     <!-- Zoom Level Slider -->
     <label for="zoomSlider">Zoom Level:</label>
     <input type="range" class="custom-range" id="zoomSlider" (change)="updateValue($event)">
-
+    
+    
+    <div class="mb-3">
+        <label for="viewType" class="form-label">View Type</label>
+        <select class="form-select w-auto" id="viewType" formControlName="view" (change)="updateView()">
+          <option value="detailed">Detailed</option>
+          <option value="curtailed">Curtailed</option>
+        </select>
+    </div>
     <div class="mb-3">
         <label for="povSelect" class="form-label">POV</label>
         <select class="form-select w-auto" id="povSelect" formControlName="pov" (change)="updatePOV()">
@@ -20,3 +28,4 @@
         </select>
     </div>
 </div>
+

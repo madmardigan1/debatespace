@@ -32,11 +32,18 @@
                         [ngClass]="{'btn-primary': selectedButton === 4, 'btn-dark': selectedButton !== 4}" 
                         (click)="selectButton(4)"><i class="fas fa-cogs"></i></button>
 
-                        <button 
-                        type="button" 
-                        class="btn" 
-                        [ngClass]="{'btn-primary': selectedButton === 5, 'btn-dark': selectedButton !== 5}" 
-                        (click)="selectButton(5)"><i class="fas fa-ellipsis-h"></i></button>
+                  <!-- Trigger element for the dropdown -->
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <i class="fas fa-ellipsis-h"></i>
+</button>
+
+<!-- Dropdown definition -->
+<mat-menu #menu="matMenu" xPosition="before">
+<button mat-menu-item>About</button>
+<button mat-menu-item>Share Space</button>
+<button mat-menu-item>Adjust Settings</button>
+<button mat-menu-item>Report this space</button>
+</mat-menu>
                 </div>
             </div>   
         </div>
@@ -66,10 +73,7 @@
             
           <app-av-control-mob></app-av-control-mob>
         </div>
-        <div *ngIf="selectedButton===5" class="output-area bg-dark text-white" style="overflow-y:scroll;flex:auto;" >
-             Nothing here
         
-        </div>
 
         <button *ngIf="userType=='host'||'speaker'"class="btn btn-outline-light bg-primary" style="opacity:.8;position:absolute; bottom:60px;right:60px;border-radius:50%; width:40px;height:40px;z-index:1000;" (click)="toggle('toggle')">
             <i *ngIf="1==1" class="fa fa-microphone" style="font-size: 20px;"></i>

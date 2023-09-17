@@ -11,9 +11,15 @@ export class AvControlMobComponent {
 
   constructor(private settingsService: AvServiceService, private fb: FormBuilder) {
     this.form = this.fb.group({
+      view: ['curtailed'],
       pov: ['host'],
       audio: ['hearSelected']
     });
+  }
+  
+  updateView(): void {
+    const povValue = this.form.get('view')?.value;
+    this.settingsService.setPOV(povValue);
   }
 
   updateValue(event: Event): void {

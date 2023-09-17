@@ -38,6 +38,7 @@ import { GptsummaryMobComponent } from './debate-space-mob/gptsummary-mob/gptsum
 import { MatTabsModule } from '@angular/material/tabs';
 import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-control-mob.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatMenuModule } from '@angular/material/menu';
 //node
 
 
@@ -70,6 +71,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
   ],
   imports: [
+    MatMenuModule,
     MatSlideToggleModule,
     MatTabsModule,
     FontAwesomeModule,
