@@ -1,433 +1,418 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, Input,  OnInit, NgZone, OnChanges, SimpleChanges} from '@angular/core';
-  import { DataSet, Network } from 'vis-network/standalone';
-  import { RtcService } from '../../rtcservice.service';
-  import { SpeechService } from '../../speech-service.service';
-  import { SharedserviceService } from '../../sharedservice.service';
-  import { NodeshareService } from 'src/app/nodeshare.service';
-  import { NodeLinkService } from 'src/app/node-link.service';
-  import { DebateAuthService } from 'src/app/debate-auth.service';
-  import { Subject } from 'rxjs';
-  import { trigger, state, style, transition, animate } from '@angular/animations';
-  import { ChatToNodeService } from 'src/app/chat-to-node.service';
-  import { Subscription } from 'rxjs';
+// Angular Core imports
+import {
+  Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter,
+  Input, OnInit, NgZone, OnChanges, SimpleChanges, 
+} from '@angular/core';
+import { trigger, state, style, transition, animate} from '@angular/animations';
+
+// External library imports
+import { DataSet, Network } from 'vis-network/standalone';
+import { Subject, Subscription } from 'rxjs';
+
+// Service imports
+import { RtcService } from '../../rtcservice.service';
+import { SpeechService } from '../../speech-service.service';
+import { SharedserviceService } from '../../sharedservice.service';
+import { NodeshareService } from 'src/app/nodeshare.service';
+import { NodeLinkService } from 'src/app/node-link.service';
+import { DebateAuthService } from 'src/app/debate-auth.service';
 import { ChatsubmitToNodeService } from 'src/app/chatsubmit-to-node.service';
 import { AvServiceService } from '../av-control-mob/av-service.service';
+
 @Component({
   selector: 'app-node-space-mob',
   templateUrl: './node-space-mob.component.html',
   styleUrls: ['./node-space-mob.component.css'],
-    animations: [
+  animations: [
       trigger('arrowAnimation', [
-        state('void', style({
-          opacity: 1
-        })),
-        state('up', style({
-          transform: 'translateY(-100px)',
-          opacity: 0
-        })),
-        state('down', style({
-          transform: 'translateY(100px)',
-          opacity: 0
-        })),
-        transition('* => up', [
-          animate('0.5s')
-        ]),
-        transition('* => down', [
-          animate('0.5s')
-        ])
+          state('void', style({ opacity: 1 })),
+          state('up', style({ transform: 'translateY(-100px)', opacity: 0 })),
+          state('down', style({ transform: 'translateY(100px)', opacity: 0 })),
+          transition('* => up', [animate('0.5s')]),
+          transition('* => down', [animate('0.5s')])
       ])
-    ]
-
+  ]
 })
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
-  animationState: 'up' | 'down' | 'void' = 'void';
+  // View references
   @ViewChild('visNetwork', { static: false }) container!: ElementRef;
-    submitText = '';
-    @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
-    @Output() nodeClicked = new EventEmitter<number>();
-    @Output() nodeSelected = new EventEmitter<boolean>();
-    @Output() notify: EventEmitter<string> = new EventEmitter<string>();
-    @Input() inputdata: any;
-    @Input() userType: string = '';
-    @Input() buttonType: string = '';
-    @Input() buttonTypeSubject!: Subject<string>;
-    currentNode: any;
-    previousNode: any;
-    siblingChecker: any;
-    isRecording = false;
-    network!: Network;
-    zoomscale = 1.0;
-    private subscriptions: Subscription[] = [];
-    selectedNodeIndex: number | null = null;
-    positions: any;
-    globalnode: any;
-    nodeLeft: any;
-    nodeRight: any;
-    public selectedPicture = 0;
-    private highlightedEdges: any[] = [];
-    isPanelExpanded = false;
-  
-    // Initial arrays for nodes and edges upon load
-    public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', shape: "circularImage", image: "assets/Steve.jpeg", user: "Steve", Moment: 0,soundClip: null},
-    ]);
-    private edges = new DataSet<any>([]);
-   private subscription?: Subscription;
-    constructor(private settingsService: AvServiceService, private nodeLink: NodeLinkService, private rtcService: RtcService, private chattoNode: ChatsubmitToNodeService,private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService, private ngZone: NgZone) {}
-  
-    ngOnInit(): void {
-      this.subscriptions.push(
-        this.settingsService.getZoomLevel().subscribe(zoom => {
-         if (this.zoomscale !==null) {
-          this.zoomscale = zoom;}
-          else {this.zoomscale = 1;}
-         this.network.focus(this.selectedNodeIndex!, {
-          scale: this.zoomscale,
-          animation: {
-            duration: 500,
-            easingFunction: 'easeInOutQuad'
-          }  
-        });
-         
-        }),
-        this.settingsService.getPOV().subscribe(pov => {
-          // Do something with the updated POV
-        }),
-        this.settingsService.getAudio().subscribe(audio => {
-          // Do something with the updated audio setting
-        }),
-        this.settingsService.getView().subscribe(view =>{
-          if (view=="detailed"){
-          this.nodes.forEach((node) => {
-            node.shape = 'box';  
-            this.nodes.update(node);  
-          
-        });
-     
-        
-            this.network.redraw();  // redraw the network
-          }
-          if (view=="curtailed"){
-            this.nodes.forEach((node) => {
-              node.shape = 'circularImage';  
-              this.nodes.update(node);  
-            
-          });
-       
-          
-              this.network.redraw();  // redraw the network
-            }
-        
-        })
-      );
-      this.userType=this.debateAuth.getUser();
-      
-      if (this.buttonTypeSubject) {
-      this.buttonTypeSubject.subscribe(type => {
-        if (type === "play") {
-          this.play();
-        } 
-        else if (type === "toggle") {
-          this.toggleRecording();
-        }
-      });}
-      this.subscription = this.chattoNode.getResponse().subscribe(text => {
-        this.submitText = text;
-        if (this.submitText !== '') {
-          this.submitNode(this.submitText);
-        }
-      });
-    }
- 
-    ngAfterViewInit() {
-      this.initNetwork();
-      
-      this.addEventListeners();
-      this.nodeLink.getNodeLink().subscribe(data => {
-        const input = Number(data);
-        this.network.selectNodes([input]);
-        this.handleNodeClick({
-          nodes: [input],
-          
-      });
-      
-    });
-  
-    }
-    
-    private initNetwork() {
-  
-      const data = {
-        nodes: this.nodes,
-        edges: this.edges
-      };
-  
-      const options = {
-        layout: {
-          hierarchical: {direction: "UD", sortMethod: "directed"}
-        },
-        nodes: {
-          physics: true,
-          shadow: true,
-          shape: 'circularImage',
-          borderWidth: 2,  
-          labelHighlightBold: true,
-          font: { color: 'white' }, 
-          color: {
-            border: '#000000',
-            background: '#FFFFFF',
-            text: '#000000'
-          }
-        },
-  
-      
-  
-  
-        manipulation: {
-          enabled: false,
-        },
-        interaction: {
-          hover: true,
-          hoverConnectedEdges: true,
-          dragNodes: false,
-          keyboard: true,
-        },
-        edges: {
-          color: {
-            color: "rgba(255,255,255,0.3)", // white color with 0.1 opacity
-            highlight: "rgba(255,255,255,0.3)", // white color with 0.5 opacity when highlighted
-            hover: "rgba(255,255,255,0.5)" 
-          },
-          width: 2,
-          shadow: true,
-          smooth: false,
-        }
-      };
-  
-      this.network = new Network(this.visNetwork.nativeElement, data, options);
-      const node: any = this.nodes.get(1);
-      node.label = this.inputdata;
-      node.text = this.inputdata;
-      this.nodes.update(node);
-      this.network.selectNodes([1]); // Select the node
-      this.handleNodeClick({
-        nodes: [1],
-        
-    });
+  @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
 
-      //autoselect Node 1
-    
-  
-  
+  // Inputs & Outputs
+  @Input() inputdata: any;
+  @Input() userType: string = '';
+  @Input() buttonType: string = '';
+  @Input() buttonTypeSubject!: Subject<string>;
+  @Output() nodeClicked = new EventEmitter<number>();
+  @Output() nodeSelected = new EventEmitter<boolean>();
+  @Output() notify: EventEmitter<string> = new EventEmitter<string>();
 
-    
+  // Class properties
+  animationState: 'up' | 'down' | 'void' = 'void';
+  currentNode: any;
+  previousNode: any;
+  siblingChecker: any;
+  isRecording = false;
+  network!: Network;
+  zoomscale = 1.0;
+  positions: any;
+  globalnode: any;
+  nodeLeft: any;
+  nodeRight: any;
+  public selectedPicture = 0;
+  nodeShape = "circularImage";
+  private highlightedEdges: any[] = [];
+  isPanelExpanded = false;
+
+  // Arrays for nodes and edges
+  public nodes = new DataSet<any>([
+      { id: 1, label: '', text: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Moment: 0, soundClip: null },
+  ]);
+  private edges = new DataSet<any>([]);
+  private subscriptions: Subscription[] = [];
+  selectedNodeIndex: number | null = null;
+  private subscription?: Subscription;
+  submitText = '';
+
+  constructor(
+      private settingsService: AvServiceService, 
+      private nodeLink: NodeLinkService, 
+      private rtcService: RtcService, 
+      private chattoNode: ChatsubmitToNodeService,
+      private nodeShare: NodeshareService, 
+      private speechService: SpeechService, 
+      private sharedService: SharedserviceService, 
+      private debateAuth: DebateAuthService, 
+      private ngZone: NgZone
+  ) {}
+
+  // Lifecycle hooks and main component functions
+
+ngOnInit(): void {
+  // Initialize component-level subscriptions and configurations
+  
+  this.initializeSubscriptions();
+  
+  this.userType = this.debateAuth.getUser();
+  
+  if (this.buttonTypeSubject) {
+    this.buttonTypeSubject.subscribe(type => {
+      if (type === "play") {
+        this.play();
+      } else if (type === "toggle") {
+        this.toggleRecording();
+      }
+    });
   }
-  private addEventListeners() {
-  
-  
-    this.network.on('hoverNode', params => {
-      
-        const nodeId = params.node;
-        const node: any = this.nodes.get(nodeId);
-        
-        
-        
-       if (node && node.shape === "circularImage") {
-            // Save the original image to restore it later.
-            node.originalImage = node.image;
-    
-            // Replace the image with the desired text.
-            //node.label = node.text || 'Default Text';  // You can adjust this based on what text you want.
-            node.shape = 'circle';  // Change the shape to text.
-            node.image = undefined;  // Remove the image property.
-            node.borderWidth = 2;  // Set a border.
-            node.color = {
-                border: '#000000', // Color of the border.
-                background: '#FFFFFF' };// Color of the circle.
-            // Update the node in the dataset.
-            this.nodes.update(node);
-        }
-    });
-  
-    this.network.on('blurNode', params => {
-      this.network.setOptions({ physics: false });
-        const nodeId = params.node;
-        const node: any = this.nodes.get(nodeId);
-        node.size = 20; // Restore to original size
-       
-        if (node && node.originalImage) {
-            // Restore the original image.
-            node.image = node.originalImage;
-            node.shape = 'circularImage';
-            //node.label = '';  // Remove the text label.
-            node.originalImage = undefined;  // Cleanup the property we added.
-            node.borderWidth = 2;  // Set a border.
-            node.color = {
-                border: '#000000', // Color of the border.
-                background: '#FFFFFF' };// Color of the circle.
-            // Update the node in the dataset.
-            
-  this.nodes.update(node);
-  this.network.stopSimulation();
-        }
-    });
-  
 
-  
-  
-  this.network.on('click', params => {
-    this.handleNodeClick(params);
-  
+  this.subscription = this.chattoNode.getResponse().subscribe(text => {
+    this.submitText = text;
+    if (this.submitText !== '') {
+      this.submitNode(this.submitText);
+    }
   });
 }
+
+ngAfterViewInit() {
+  this.initNetwork();
+  this.addEventListeners();
+  this.nodeLink.getNodeLink().subscribe(data => {
+    const input = Number(data);
+    this.network.selectNodes([input]);
+    this.handleNodeClick({
+      nodes: [input]
+    });
+  });
+}
+
+private initializeSubscriptions() {
+  // Group all the settingsService subscriptions
+
+  this.subscriptions.push(
+    this.settingsService.getZoomLevel().subscribe(zoom => {
+      if (this.zoomscale !== null) {
+        this.zoomscale = zoom;
+      } else {
+        this.zoomscale = 1;
+      }
+      this.network.focus(this.selectedNodeIndex!, {
+        scale: this.zoomscale,
+        animation: {
+          duration: 500,
+          easingFunction: 'easeInOutQuad'
+        }
+      });
+    }),
+    this.settingsService.getPOV().subscribe(pov => {
+      // Do something with the updated POV
+    }),
+    this.settingsService.getAudio().subscribe(audio => {
+      // Do something with the updated audio setting
+    }),
+    this.settingsService.getView().subscribe(view => {
+      if (view == "detailed") {
+        this.nodeShape = "box";
+        this.updateNodesShape('box');
+      } else if (view == "curtailed") {
+        this.nodeShape = "circularImage";
+        this.updateNodesShape('circularImage');
+      }
+    })
+  );
+}
+
+private updateNodesShape(shape: string) {
+  // Utility function to update the shape of all nodes
   
+  this.nodes.forEach((node) => {
+    node.shape = shape;
+    this.nodes.update(node);
+  });
+  this.network.redraw();
+}
+
+private initNetwork() {
+  // Network configuration and setup
+
+  const data = {
+    nodes: this.nodes,
+    edges: this.edges
+  };
+
+  const options = {
+    layout: {
+      hierarchical: { direction: "UD", sortMethod: "directed" }
+    },
+    nodes: {
+      autoResize: false,
+      physics: true,
+      shadow: true,
+      shape: this.nodeShape,
+      borderWidth: 2,
+      labelHighlightBold: true,
+      font: { color: 'white' },
+      color: {
+        border: 'white',
+        background: 'black',
+        highlight: {
+          background: 'black',
+        },
+        hover: {
+          background: 'black',
+          border: 'white'
+        }
+      }
+    },
+    manipulation: {
+      enabled: false,
+    },
+    interaction: {
+      hover: true,
+      hoverConnectedEdges: true,
+      dragNodes: false,
+      keyboard: true,
+    },
+    edges: {
+      color: {
+        color: "rgba(255,255,255,0.3)",
+        highlight: "rgba(255,255,255,0.3)",
+        hover: "rgba(255,255,255,0.5)"
+      },
+      width: 2,
+      shadow: true,
+      smooth: false,
+    }
+  };
+
+  this.network = new Network(this.visNetwork.nativeElement, data, options);
+  const node: any = this.nodes.get(1);
+  node.label = this.inputdata;
+  node.text = this.inputdata;
+  this.nodes.update(node);
+  this.network.selectNodes([1]);
+  this.handleNodeClick({
+    nodes: [1]
+  });
+}
+
+private addEventListeners() {
+  // Event listeners for the network
+
+  this.network.on('hoverNode', params => {
+    const nodeId = params.node;
+    const node: any = this.nodes.get(nodeId);
+    if (node && node.shape === "circularImage") {
+      node.originalImage = node.image;
+      node.shape = 'circle';
+      node.image = undefined;
+      node.borderWidth = 2;
+      node.color = {
+        border: 'white',
+        background: 'black',
+        highlight: {
+          background: 'black',
+        }
+      };
+      this.nodes.update(node);
+      this.network.redraw();
+    }
+  });
+
+  this.network.on('blurNode', params => {
+    this.network.setOptions({ physics: false });
+    const nodeId = params.node;
+    const node: any = this.nodes.get(nodeId);
+    if (node && node.originalImage) {
+      node.image = node.originalImage;
+      node.shape = 'circularImage';
+      node.borderWidth = 2;
+      node.color = {
+        border: 'white',
+        background: 'black'
+      };
+      this.nodes.update(node);
+      this.network.stopSimulation();
+    }
+  });
+
+  this.network.on('click', params => {
+    this.handleNodeClick(params);
+  });
+}
+
   
-  
-    thumbdown(): void {
-     // Check if a node is selected
-     if (this.selectedNodeIndex !== null) {
-        
-      // Get the node data
-      const nodeData = this.nodes.get(this.selectedNodeIndex);
-      
-      if (nodeData) {
-        // Increment the likes count
-        nodeData.Moment = (nodeData.Moment) - 1;
-        this.animationState = 'down';
-          // Check if likes reach 50
+ // Component interaction methods
+thumbdown(): void {
+  if (this.selectedNodeIndex !== null) {
+    const nodeData = this.nodes.get(this.selectedNodeIndex);
+    if (nodeData) {
+      nodeData.Moment -= 1;
+      this.animationState = 'down';
       if (nodeData.Moment <= 0) {
-        nodeData.color = { border: 'red', background: nodeData.color?.background || '#FFFFFF' };
+        nodeData.color = {
+          border: 'red',
+          background: nodeData.color?.background || '#FFFFFF'
+        };
         nodeData.shadow = {
           enabled: true,
           color: 'red',
-          size: 20,  // adjust the size as needed
-          x: 0,     // adjust the x-offset as needed
-          y: 0      // adjust the y-offset as needed
+          size: 20,
+          x: 0,
+          y: 0
         };
       }
-        // Update the node data in the DataSet
-        this.nodes.update(nodeData);
-        
-       
-       
+      this.nodes.update(nodeData);
+    }
+  }
+}
 
+thumbup(): void {
+  console.log("itworked");
+  if (this.selectedNodeIndex !== null) {
+    const nodeData = this.nodes.get(this.selectedNodeIndex);
+    if (nodeData) {
+      nodeData.Moment += 1;
+      this.animationState = 'up';
+      setTimeout(() => {
+        this.animationState = 'void';
+      }, 500);
+      if (nodeData.Moment >= 5) {
+        nodeData.color = {
+          border: 'green',
+          background: nodeData.color?.background || '#FFFFFF'
+        };
+        nodeData.shadow = {
+          enabled: true,
+          color: 'green',
+          size: 20,
+          x: 0,
+          y: 0
+        };
       }
+      this.nodes.update(nodeData);
     }
-    
-    }
-  
-    thumbup(): void {
-      console.log("itworked");
-      // Check if a node is selected
-      if (this.selectedNodeIndex !== null) {
-        
-        // Get the node data
-        const nodeData = this.nodes.get(this.selectedNodeIndex);
-        
-        if (nodeData) {
-          // Increment the likes count
-          nodeData.Moment = (nodeData.Moment) + 1;
-          this.animationState = 'up';
+  }
+}
+
+
+submitNode(submitText: string): void {
+  if (this.selectedNodeIndex !== null) {
+      let selectedImage: string;
+      let selectedName: string;
+
+      if (this.selectedPicture == 0) {
+          selectedImage = "assets/Jared.jpeg";
+          this.selectedPicture += 1;
+          selectedName = 'Jared';
+      } else {
+          selectedImage = "assets/Steve.jpeg";
+          this.selectedPicture -= 1;
+          selectedName = 'Steve';
+      }
+
+      const newNodeId = this.nodes.length + 1;
+      this.globalnode = newNodeId;
+      this.nodes.add({
+          id: newNodeId,
+          label: this.wrapText(submitText, 20),
+          text: this.wrapText(submitText, 200),
+          shape: this.nodeShape,
+          image: selectedImage,
+          user: selectedName,
+          Moment: 0,
+          soundClip: null
+      });
+      this.edges.add({
+          from: this.selectedNodeIndex,
+          to: newNodeId,
+          opacity: 0.1
+      });
+
+      this.network.once("initRedraw", () => {
+          this.network.storePositions();
+          this.network.setData({
+              nodes: this.nodes,
+              edges: this.edges,
+          });
+          this.network.selectNodes([this.globalnode]);
+          this.nodeClicked.emit(this.globalnode);
+          this.selectedNodeIndex = this.globalnode;
+
           setTimeout(() => {
-            this.animationState = 'void';
-          }, 500);
-         
-            // Check if likes reach 50
-        if (nodeData.Moment >= 5) {
-          nodeData.color = { border: 'green', background: nodeData.color?.background || '#FFFFFF' };
-          nodeData.shadow = {
-            enabled: true,
-            color: 'green',
-            size: 20,  // adjust the size as needed
-            x: 0,     // adjust the x-offset as needed
-            y: 0      // adjust the y-offset as needed
-          };
-        }
-          // Update the node data in the DataSet
-          this.nodes.update(nodeData);
-          
-          // Optionally, emit an event or do something else
-          // ...  
-        }
-      }
-    }
-    submitNode(submitText:string) {
-      if (this.selectedNodeIndex !== null) {
-             
-        let selectedImage;
-        let selectedName;
+              this.ngZone.runOutsideAngular(() => {
+                  this.centerOnNode(this.globalnode);
+              });
+          }, 1);
+      });
+  }
+}
 
-        if (this.selectedPicture == 0) {
-            selectedImage = "assets/Jared.jpeg";
-            this.selectedPicture += 1;
-            selectedName = 'Jared';
-        } else {
-            selectedImage = "assets/Steve.jpeg";
-            this.selectedPicture -= 1;
-            selectedName= 'Steve'
-        }
+toggleRecording(): void {
+  if (this.selectedNodeIndex) {
+      if (this.isRecording) {
+          this.speechService.phrases.subscribe(transcript => {
+              const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string; label?: string; soundClip: Blob | null };
 
-        const newNodeId = this.nodes.length + 1;
-        this.globalnode = newNodeId;
-        this.nodes.add({ id: newNodeId,label: this.wrapText(submitText, 20), text: this.wrapText(submitText, 200), shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
-        this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
-       
-         this.network.once("initRedraw", () => {
-  this.network.storePositions();
-  this.network.setData({
-    nodes: this.nodes,
-    edges: this.edges,
-  });
-  this.network.selectNodes([this.globalnode]);
-  this.nodeClicked.emit(this.globalnode);
-  this.selectedNodeIndex=this.globalnode;
-setTimeout(() => {
-  this.ngZone.runOutsideAngular(() => {
-    this.centerOnNode(this.globalnode);
-  });
-}, 1);
-
-  
-});
-
-      }
-    }
-    toggleRecording() {
-      
-      if (this.selectedNodeIndex){
-        if (this.isRecording) {
-         
-            this.speechService.phrases.subscribe(transcript => {
-            const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string; label?: string; soundClip: Blob | null };
-    
-            if (nodeToUpdate) {
-              nodeToUpdate.text = this.wrapText(transcript, 20);
-              nodeToUpdate.label = this.wrapText(transcript, 20);
-              this.speechService.stopRecordingAudio();
-              nodeToUpdate.soundClip = this.speechService.returnAudio();
-              this.nodes.update(nodeToUpdate);
+              if (nodeToUpdate) {
+                  nodeToUpdate.text = this.wrapText(transcript, 20);
+                  nodeToUpdate.label = this.wrapText(transcript, 20);
+                  this.speechService.stopRecordingAudio();
+                  nodeToUpdate.soundClip = this.speechService.returnAudio();
+                  this.nodes.update(nodeToUpdate);
               }
-            });
-  
-            const nodeData = this.nodes.get(this.selectedNodeIndex);  
-            this.speechService.stopListening();
-            this.speechService.phrases.unsubscribe;
-            
-            
-        
-        } 
-        
-        else {
-          
+          });
+
+          this.speechService.stopListening();
+          this.speechService.phrases.unsubscribe();
+
+      } else {
           this.speechService.startListening();
           this.speechService.startRecordingAudio();
-         
-            // If a node is selected, add the transcript to the node's text
-            if (this.selectedNodeIndex !== null) {
-             
-              let selectedImage;
-              let selectedName;
-      
+
+          if (this.selectedNodeIndex !== null) {
+              let selectedImage: string;
+              let selectedName: string;
+
               if (this.selectedPicture == 0) {
                   selectedImage = "assets/Jared.jpeg";
                   this.selectedPicture += 1;
@@ -435,54 +420,64 @@ setTimeout(() => {
               } else {
                   selectedImage = "assets/Steve.jpeg";
                   this.selectedPicture -= 1;
-                  selectedName= 'Steve'
+                  selectedName = 'Steve';
               }
-      
+
               const newNodeId = this.nodes.length + 1;
               this.globalnode = newNodeId;
-              
-              this.nodes.add({ id: newNodeId, label: '', text: '', shape: "circularImage", image: selectedImage, user: selectedName, Moment: 0, soundClip: null });
-              this.edges.add({ from: this.selectedNodeIndex, to: newNodeId, opacity: 0.1 });
-             
-               this.network.once("initRedraw", () => {
-        this.network.storePositions();
-        this.network.setData({
-          nodes: this.nodes,
-          edges: this.edges,
-        });
-        this.network.selectNodes([this.globalnode]);
-        this.nodeClicked.emit(this.globalnode);
-        this.selectedNodeIndex=this.globalnode;
-        this.nodeShare.emitEvent(this.selectedNodeIndex);
-        this.selectedNodeIndex=this.globalnode;
-     setTimeout(() => {
-        this.ngZone.runOutsideAngular(() => {
-          this.centerOnNode(this.globalnode);
-        });
-      }, 1);
-     
-        
-    });
-  
-            }
-         
-        }
-      
-        this.isRecording = !this.isRecording;  // toggle the recording state
-      }
-      };
-  
-      centerOnNode(nodeId: any) {
-        const position = this.getNodePosition(nodeId);
-        this.network.moveTo({
-          scale: this.zoomscale,
-          position: position,
-          animation: {
-            duration: 500,
-            easingFunction: 'easeInOutQuad'
+
+              this.nodes.add({
+                  id: newNodeId,
+                  label: '',
+                  text: '',
+                  shape: this.nodeShape,
+                  image: selectedImage,
+                  user: selectedName,
+                  Moment: 0,
+                  soundClip: null
+              });
+              this.edges.add({
+                  from: this.selectedNodeIndex,
+                  to: newNodeId,
+                  opacity: 0.1
+              });
+
+              this.network.once("initRedraw", () => {
+                  this.network.storePositions();
+                  this.network.setData({
+                      nodes: this.nodes,
+                      edges: this.edges,
+                  });
+                  this.network.selectNodes([this.globalnode]);
+                  this.nodeClicked.emit(this.globalnode);
+                  this.selectedNodeIndex = this.globalnode;
+                  this.nodeShare.emitEvent(this.selectedNodeIndex);
+                  this.selectedNodeIndex = this.globalnode;
+
+                  setTimeout(() => {
+                      this.ngZone.runOutsideAngular(() => {
+                          this.centerOnNode(this.globalnode);
+                      });
+                  }, 1);
+              });
           }
-        });
       }
+
+      this.isRecording = !this.isRecording;  // toggle the recording state
+  }
+}
+
+centerOnNode(nodeId: any): void {
+  const position = this.getNodePosition(nodeId);
+  this.network.moveTo({
+      scale: this.zoomscale,
+      position: position,
+      animation: {
+          duration: 500,
+          easingFunction: 'easeInOutQuad'
+      }
+  });
+}
       
       getNodePosition(nodeId: any): { x: number, y: number } {
         const nodePosition = this.network.getPositions([nodeId]);
@@ -509,15 +504,14 @@ setTimeout(() => {
   }
   
   play(): void {
-    if (this.selectedNodeIndex){
+    if (this.selectedNodeIndex) {
       const nodeData = this.nodes.get(this.selectedNodeIndex);
-    if (nodeData.soundClip) {
-      const audioUrl = URL.createObjectURL(nodeData.soundClip);
-      const audio = new Audio(audioUrl);
-      audio.play();
+      if (nodeData.soundClip) {
+        const audioUrl = URL.createObjectURL(nodeData.soundClip);
+        const audio = new Audio(audioUrl);
+        audio.play();
+      }
     }
-  }
-   
   }
   
   handleNodeClick(params: any): void {
