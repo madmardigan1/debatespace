@@ -1,1 +1,22 @@
-<h1 style="padding-left:10px;">Audio & Video Control</h1>>
+<h1 style="padding-left:10px; margin-bottom:0;">Audio & Video Control</h1>
+<div class="container mt-2" [formGroup]="form">
+    <!-- Zoom Level Slider -->
+    <label for="zoomSlider">Zoom Level:</label>
+    <input type="range" class="custom-range" id="zoomSlider" (change)="updateValue($event)">
+
+    <div class="mb-3">
+        <label for="povSelect" class="form-label">POV</label>
+        <select class="form-select w-auto" id="povSelect" formControlName="pov" (change)="updatePOV()">
+          <option value="host">Host</option>
+          <option value="user">User</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="audioSelect" class="form-label">Audio</label>
+        <select class="form-select w-auto" id="audioSelect" formControlName="audio" (change)="updateAudio()">
+          <option value="hearSelected">Hear Selected</option>
+          <option value="hearAll">Hear All</option>
+        </select>
+    </div>
+</div>

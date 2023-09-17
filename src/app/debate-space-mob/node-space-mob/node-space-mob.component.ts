@@ -11,6 +11,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, 
   import { ChatToNodeService } from 'src/app/chat-to-node.service';
   import { Subscription } from 'rxjs';
 import { ChatsubmitToNodeService } from 'src/app/chatsubmit-to-node.service';
+import { AvServiceService } from '../av-control-mob/av-service.service';
 @Component({
   selector: 'app-node-space-mob',
   templateUrl: './node-space-mob.component.html',
@@ -55,7 +56,8 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     siblingChecker: any;
     isRecording = false;
     network!: Network;
-   
+    zoomscale = 1.0;
+    private subscriptions: Subscription[] = [];
     selectedNodeIndex: number | null = null;
     positions: any;
     globalnode: any;
@@ -71,9 +73,28 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     ]);
     private edges = new DataSet<any>([]);
    private subscription?: Subscription;
-    constructor(private nodeLink: NodeLinkService, private rtcService: RtcService, private chattoNode: ChatsubmitToNodeService,private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService, private ngZone: NgZone) {}
+    constructor(private settingsService: AvServiceService, private nodeLink: NodeLinkService, private rtcService: RtcService, private chattoNode: ChatsubmitToNodeService,private nodeShare: NodeshareService, private speechService: SpeechService, private sharedService: SharedserviceService, private debateAuth:DebateAuthService, private ngZone: NgZone) {}
   
     ngOnInit(): void {
+      this.subscriptions.push(
+        this.settingsService.getZoomLevel().subscribe(zoom => {
+         this.zoomscale = zoom;
+         this.network.focus(this.selectedNodeIndex!, {
+          scale: this.zoomscale,
+          animation: {
+            duration: 500,
+            easingFunction: 'easeInOutQuad'
+          }  
+        });
+         
+        }),
+        this.settingsService.getPOV().subscribe(pov => {
+          // Do something with the updated POV
+        }),
+        this.settingsService.getAudio().subscribe(audio => {
+          // Do something with the updated audio setting
+        })
+      );
       this.userType=this.debateAuth.getUser();
       
       if (this.buttonTypeSubject) {
@@ -428,7 +449,7 @@ setTimeout(() => {
       centerOnNode(nodeId: any) {
         const position = this.getNodePosition(nodeId);
         this.network.moveTo({
-          scale: 1.0,
+          scale: this.zoomscale,
           position: position,
           animation: {
             duration: 500,
@@ -522,7 +543,7 @@ setTimeout(() => {
       
       // zoom to the clicked node
       this.network.focus(clickedNodeId, {
-        scale: 1.0,
+        scale: this.zoomscale,
         animation: {
           duration: 500,
           easingFunction: 'easeInOutQuad'
