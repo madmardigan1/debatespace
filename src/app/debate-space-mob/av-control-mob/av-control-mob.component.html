@@ -2,7 +2,7 @@
 <div class="container mt-2" [formGroup]="form">
     <!-- Zoom Level Slider -->
     <label for="zoomSlider">Zoom Level:</label>
-    <input type="range" class="custom-range" id="zoomSlider" (change)="updateValue($event)">
+    <input type="range" class="custom-range" id="zoomSlider" formControlName="slider" (change)="updateValue($event)">
     
     
     <div class="mb-3">

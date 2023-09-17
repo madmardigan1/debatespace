@@ -6,20 +6,24 @@ import { AvServiceService } from './av-service.service';
   templateUrl: './av-control-mob.component.html',
   styleUrls: ['./av-control-mob.component.css']
 })
-export class AvControlMobComponent {
+export class AvControlMobComponent implements OnInit {
   form: FormGroup;
 
   constructor(private settingsService: AvServiceService, private fb: FormBuilder) {
     this.form = this.fb.group({
+      slider: [50],
       view: ['curtailed'],
       pov: ['host'],
       audio: ['hearSelected']
     });
   }
   
+  ngOnInit(): void {
+    this.settingsService.setZoomLevel(1.0);
+  }
   updateView(): void {
     const povValue = this.form.get('view')?.value;
-    this.settingsService.setPOV(povValue);
+    this.settingsService.setView(povValue);
   }
 
   updateValue(event: Event): void {

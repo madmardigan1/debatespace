@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AvServiceService {
-  private zoomLevel = new BehaviorSubject<number>(0);  // default value
+  private zoomLevel = new BehaviorSubject<number>(1);  // default value
   private view = new BehaviorSubject<string>('curtailed');  // default value
   private pov = new BehaviorSubject<string>('host');  // default value
   private audio = new BehaviorSubject<string>('hearSelected');  // default value
@@ -32,7 +32,7 @@ export class AvServiceService {
     return this.pov.asObservable();
   }
   // POV
-  setPOV(povValue: string): void {
+  setPOV(povValue: any): void {
     if (['host', 'user'].includes(povValue)) {
       this.pov.next(povValue);
       console.log(this.pov.value);

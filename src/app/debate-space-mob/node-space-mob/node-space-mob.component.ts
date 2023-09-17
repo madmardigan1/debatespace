@@ -78,7 +78,9 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     ngOnInit(): void {
       this.subscriptions.push(
         this.settingsService.getZoomLevel().subscribe(zoom => {
-         this.zoomscale = zoom;
+         if (this.zoomscale !==null) {
+          this.zoomscale = zoom;}
+          else {this.zoomscale = 1;}
          this.network.focus(this.selectedNodeIndex!, {
           scale: this.zoomscale,
           animation: {
@@ -93,6 +95,29 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         }),
         this.settingsService.getAudio().subscribe(audio => {
           // Do something with the updated audio setting
+        }),
+        this.settingsService.getView().subscribe(view =>{
+          if (view=="detailed"){
+          this.nodes.forEach((node) => {
+            node.shape = 'box';  
+            this.nodes.update(node);  
+          
+        });
+     
+        
+            this.network.redraw();  // redraw the network
+          }
+          if (view=="curtailed"){
+            this.nodes.forEach((node) => {
+              node.shape = 'circularImage';  
+              this.nodes.update(node);  
+            
+          });
+       
+          
+              this.network.redraw();  // redraw the network
+            }
+        
         })
       );
       this.userType=this.debateAuth.getUser();
@@ -150,7 +175,8 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
           font: { color: 'white' }, 
           color: {
             border: '#000000',
-            background: '#FFFFFF'
+            background: '#FFFFFF',
+            text: '#000000'
           }
         },
   
