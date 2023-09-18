@@ -24,7 +24,7 @@ export class AvServiceService {
   setView(povValue: string): void {
     if (['curtailed', 'detailed'].includes(povValue)) {
       this.pov.next(povValue);
-      console.log(this.pov.value);
+     
     }
   }
 
@@ -35,7 +35,7 @@ export class AvServiceService {
   setPOV(povValue: any): void {
     if (['host', 'user'].includes(povValue)) {
       this.pov.next(povValue);
-      console.log(this.pov.value);
+    
     }
   }
 

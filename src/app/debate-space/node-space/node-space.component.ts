@@ -5,7 +5,7 @@ import { SpeechService } from '../../speech-service.service';
 import { SharedserviceService } from '../../sharedservice.service';
 import { NodeshareService } from 'src/app/nodeshare.service';
 import { NodeLinkService } from 'src/app/node-link.service';
-import { DebateAuthService } from 'src/app/debate-auth.service';
+import { DebateAuthService } from 'src/app/home/debate-auth.service';
 @Component({
   selector: 'app-node-space',
   templateUrl: './node-space.component.html',

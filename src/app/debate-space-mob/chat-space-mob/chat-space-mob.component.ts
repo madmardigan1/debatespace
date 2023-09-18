@@ -1,56 +1,46 @@
-import { Component, AfterViewInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { NodeshareService } from 'src/app/nodeshare.service';
-import { NodeLinkService } from 'src/app/node-link.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Subject, Subscription } from 'rxjs';
-import { ChatsubmitToChatspaceService } from 'src/app/chatsubmit-to-chatspace.service';
+  import { Component, Input } from '@angular/core';
+  import { SafeUrl } from '@angular/platform-browser';
+  import { Subscription } from 'rxjs';
+  import { ChatspaceService } from './chatspace.service';
+  import { ChatSubmitService } from '../chat-submit-mob/chat-submit.service';
 
-@Component({
-  selector: 'app-chat-space-mob',
-  templateUrl: './chat-space-mob.component.html',
-  styleUrls: ['./chat-space-mob.component.css']
-})
-export class ChatSpaceMobComponent implements AfterViewInit, OnChanges {
-  scrollChat: Array<{ sender: string, text: string, color: string, id?: number }> = [];
+  @Component({
+    selector: 'app-chat-space-mob',
+    templateUrl: './chat-space-mob.component.html',
+    styleUrls: ['./chat-space-mob.component.css']
+  })
+  export class ChatSpaceMobComponent {
+    scrollChat: Array<{ sender: string, text: string, color: string, id?: number }> = [];
+    private idSubscription: Subscription; 
+    @Input() displayText: string = '';
+    private subscription: Subscription;
 
-  private nodeSelected: number = 0;
-  private isButton: boolean = false;
-
-  sanitizedLinks: Array<SafeUrl> = [];
-  private idSubscription: Subscription;
-  
-  @Input() displayText: string = '';
-  private subscription: Subscription;
-
-  constructor(
-    private chatToSpace: ChatsubmitToChatspaceService,
-    private nodeShare: NodeshareService,
-    private nodeLink: NodeLinkService,
-    private sanitizer: DomSanitizer
-  ) {
-    this.idSubscription = this.chatToSpace.id$.subscribe((receivedId) => {
-      this.updateChat({
-        sender: "Steve",
-        text: ' wants you to check out the action at ',
-        color: this.getRandomColor(),
-        id: receivedId
+    constructor(
+      private chatSpace: ChatspaceService,
+      private chatSubmit: ChatSubmitService
+    ) {
+      this.idSubscription = this.chatSubmit.getLinkId().subscribe(receivedId => {
+        if (receivedId !==0){
+        this.updateChat({
+          sender: "Steve",
+          text: ' wants you to check out the action at ',
+          color: this.getRandomColor(),
+          id: receivedId
+        });
+      }
       });
-    });
 
-    this.subscription = this.chatToSpace.message$.subscribe(message => {
-      this.updateChat({
-        sender: "Steve", // or any logic to determine the sender
-        text: `${message.text} [Link here](${message.link})`,
-        color: this.getRandomColor(),
-        id: message.id
+      this.subscription = this.chatSubmit.getChat().subscribe(message => {
+        if (message !== '') {
+        this.updateChat({
+          sender: "Steve", // or any logic to determine the sender
+          text: message,
+          color: this.getRandomColor(),
+        });
+      }
       });
-    });
-  }
+    }
 
-  ngAfterViewInit(): void {
-    this.nodeShare.getEvent().subscribe(data => {
-      this.nodeSelected = data;
-    });
 /*
     let counter = 0;
     const intervalId = setInterval(() => {
@@ -61,17 +51,14 @@ export class ChatSpaceMobComponent implements AfterViewInit, OnChanges {
         clearInterval(intervalId);
       }
     }, 10000);*/
-  }
-
-  ngOnChanges(changes: SimpleChanges): void { }
+  
 
   updateChat(message: { sender: string, text: string, color: string, id?: number }): void {
     this.scrollChat.push(message);
   }
 
   buttonClicked(id: number): void {
-    console.log(id);
-    this.nodeLink.goToNode(id.toString());
+    this.chatSpace.sendLink(id);
   }
 
   getRandomMessage() {

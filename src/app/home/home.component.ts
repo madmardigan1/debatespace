@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
 import { CardDataService, Card } from '../space-service.service';
-import { DebateAuthService } from '../debate-auth.service';
+import { DebateAuthService } from './debate-auth.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 

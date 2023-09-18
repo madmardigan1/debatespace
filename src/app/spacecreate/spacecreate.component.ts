@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { CardDataService, Card } from '../space-service.service';
 import { Router } from '@angular/router';
-import { DebateAuthService } from '../debate-auth.service';
+import { DebateAuthService } from '../home/debate-auth.service';
 
 @Component({
   selector: 'app-spacecreate',

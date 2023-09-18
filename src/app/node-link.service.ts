@@ -11,7 +11,7 @@ export class NodeLinkService {
   }
 
   getNodeLink(): EventEmitter<any> {
-    console.log(this.eventEmitter)
+   
     return this.eventEmitter;
   }
 }

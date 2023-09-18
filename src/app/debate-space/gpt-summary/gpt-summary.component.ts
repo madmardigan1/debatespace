@@ -12,13 +12,13 @@ export class GptSummaryComponent implements OnDestroy {
   private subscription!: Subscription;
 
   constructor(private sharedService: SharedserviceService) {
-    this.subscription = this.sharedService.changeNodeText$.subscribe(messages => {
+    this.subscription = this.sharedService.getNodeText().subscribe((messages: { text: string, id: number }[]) => {
       this.lines = messages;
-    });
+  });
   }
   
   logNodeId(nodeId: number) {
-    console.log(nodeId);
+   
   }
 
   ngOnDestroy() {

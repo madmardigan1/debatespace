@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardDataService, Card } from '../space-service.service';
-import { DebateAuthService } from '../debate-auth.service';
-import { ChatToNodeService } from '../chat-to-node.service';
-import { Subject } from 'rxjs';
+import { DebateAuthService } from '../home/debate-auth.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ChatSpaceMobComponent } from './chat-space-mob/chat-space-mob.component';
+import { DebateSpaceService } from './debate-space.service';
 
 @Component({
   animations: [
@@ -49,12 +48,12 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     cards!: any[];
     selectedNode: boolean = false;
     userType: string = '';
-    buttonType: string = '';
+    isRecording = false;
     nodeState: string = 'shrunk';
     theRestState: string = 'expanded';
     expandShrink=false;
-    buttonTypeSubject = new Subject<string>();
-    constructor (private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatN:ChatToNodeService ){
+   
+    constructor (private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService){
       this.userType=this.debateAuth.getUser();
     }
   
@@ -80,7 +79,6 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     
     updateText(newText: string) {
       this.text = newText;
-      this.secondChild.updateChat({sender:'Steve',text:this.text,color:this.secondChild.getRandomColor()});
       this.scrollToBottom();
     }
   
@@ -129,8 +127,13 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
 
   
     toggle(buttonType: string): void {
-      this.buttonTypeSubject.next(buttonType);
+      this.debateSpace.Toggle(buttonType);
     }
+
+    changeIcon(recordType : boolean) {
+      this.isRecording = !recordType;
+    }
+
   }
   
 

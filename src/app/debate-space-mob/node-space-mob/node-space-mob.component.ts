@@ -1,23 +1,23 @@
 // Angular Core imports
 import {
   Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter,
-  Input, OnInit, NgZone, OnChanges, SimpleChanges, 
+  Input, OnInit, NgZone, 
 } from '@angular/core';
 import { trigger, state, style, transition, animate} from '@angular/animations';
 
 // External library imports
 import { DataSet, Network } from 'vis-network/standalone';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 // Service imports
 import { RtcService } from '../../rtcservice.service';
 import { SpeechService } from '../../speech-service.service';
-import { SharedserviceService } from '../../sharedservice.service';
-import { NodeshareService } from 'src/app/nodeshare.service';
-import { NodeLinkService } from 'src/app/node-link.service';
-import { DebateAuthService } from 'src/app/debate-auth.service';
-import { ChatsubmitToNodeService } from 'src/app/chatsubmit-to-node.service';
+import { DebateAuthService } from 'src/app/home/debate-auth.service';
 import { AvServiceService } from '../av-control-mob/av-service.service';
+import { NodespaceServiceService } from './nodespace-service.service';
+import { DebateSpaceService } from '../debate-space.service';
+import { ChatspaceService } from '../chat-space-mob/chatspace.service';
+import { ChatSubmitService } from '../chat-submit-mob/chat-submit.service';
 
 @Component({
   selector: 'app-node-space-mob',
@@ -35,17 +35,16 @@ import { AvServiceService } from '../av-control-mob/av-service.service';
 })
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   // View references
-  @ViewChild('visNetwork', { static: false }) container!: ElementRef;
+  //@ViewChild('visNetwork', { static: false }) container!: ElementRef;
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
 
   // Inputs & Outputs
   @Input() inputdata: any;
   @Input() userType: string = '';
-  @Input() buttonType: string = '';
-  @Input() buttonTypeSubject!: Subject<string>;
   @Output() nodeClicked = new EventEmitter<number>();
   @Output() nodeSelected = new EventEmitter<boolean>();
   @Output() notify: EventEmitter<string> = new EventEmitter<string>();
+  @Output() isRecordingType = new EventEmitter<boolean>();
 
   // Class properties
   animationState: 'up' | 'down' | 'void' = 'void';
@@ -57,12 +56,14 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   zoomscale = 1.0;
   positions: any;
   globalnode: any;
+  isRotated = false;
   nodeLeft: any;
   nodeRight: any;
   public selectedPicture = 0;
   nodeShape = "circularImage";
   private highlightedEdges: any[] = [];
   isPanelExpanded = false;
+  nodetoUpdate = 1;
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
@@ -70,20 +71,24 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
+  private subscription2?: Subscription;
   selectedNodeIndex: number | null = null;
   private subscription?: Subscription;
   submitText = '';
+  lastSelectedNode = 1;
+  private phrasesSubscription: Subscription | null = null;
+
 
   constructor(
+      private debateSpace: DebateSpaceService,
       private settingsService: AvServiceService, 
-      private nodeLink: NodeLinkService, 
       private rtcService: RtcService, 
-      private chattoNode: ChatsubmitToNodeService,
-      private nodeShare: NodeshareService, 
       private speechService: SpeechService, 
-      private sharedService: SharedserviceService, 
       private debateAuth: DebateAuthService, 
-      private ngZone: NgZone
+      private ngZone: NgZone,
+      private nodeService : NodespaceServiceService,
+      private chatSpace: ChatspaceService,
+      private chatSubmit: ChatSubmitService
   ) {}
 
   // Lifecycle hooks and main component functions
@@ -91,21 +96,22 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 ngOnInit(): void {
   // Initialize component-level subscriptions and configurations
   
-  this.initializeSubscriptions();
+ 
   
   this.userType = this.debateAuth.getUser();
   
-  if (this.buttonTypeSubject) {
-    this.buttonTypeSubject.subscribe(type => {
-      if (type === "play") {
-        this.play();
-      } else if (type === "toggle") {
-        this.toggleRecording();
-      }
-    });
-  }
+ 
+  this.subscription2 = this.debateSpace.getToggle().subscribe(type => {
+    if (type === "play") {
+      this.play();
+    } else if (type === "toggle") {
+      this.toggleRecording();
+    }
+  });
 
-  this.subscription = this.chattoNode.getResponse().subscribe(text => {
+  
+
+  this.subscription = this.chatSubmit.getNodeText().subscribe(text => {
     this.submitText = text;
     if (this.submitText !== '') {
       this.submitNode(this.submitText);
@@ -115,14 +121,9 @@ ngOnInit(): void {
 
 ngAfterViewInit() {
   this.initNetwork();
+  this.initializeSubscriptions();
   this.addEventListeners();
-  this.nodeLink.getNodeLink().subscribe(data => {
-    const input = Number(data);
-    this.network.selectNodes([input]);
-    this.handleNodeClick({
-      nodes: [input]
-    });
-  });
+  
 }
 
 private initializeSubscriptions() {
@@ -135,20 +136,18 @@ private initializeSubscriptions() {
       } else {
         this.zoomscale = 1;
       }
-      this.network.focus(this.selectedNodeIndex!, {
+      
+    /*  this.network.focus(this.lastSelectedNode, {
         scale: this.zoomscale,
-        animation: {
-          duration: 500,
-          easingFunction: 'easeInOutQuad'
-        }
-      });
+        animation: false
+      });*/
     }),
-    this.settingsService.getPOV().subscribe(pov => {
+    /*this.settingsService.getPOV().subscribe(pov => {
       // Do something with the updated POV
     }),
     this.settingsService.getAudio().subscribe(audio => {
       // Do something with the updated audio setting
-    }),
+    }),*/
     this.settingsService.getView().subscribe(view => {
       if (view == "detailed") {
         this.nodeShape = "box";
@@ -157,6 +156,9 @@ private initializeSubscriptions() {
         this.nodeShape = "circularImage";
         this.updateNodesShape('circularImage');
       }
+    }),
+    this.chatSpace.getLink().subscribe(link => {
+      this.handleNodeClick(link);
     })
   );
 }
@@ -181,10 +183,9 @@ private initNetwork() {
 
   const options = {
     layout: {
-      hierarchical: { direction: "UD", sortMethod: "directed" }
+      hierarchical: { direction: "UD", sortMethod: "directed", shakeTowards: "roots" }
     },
     nodes: {
-      autoResize: false,
       physics: true,
       shadow: true,
       shape: this.nodeShape,
@@ -208,9 +209,11 @@ private initNetwork() {
     },
     interaction: {
       hover: true,
-      hoverConnectedEdges: true,
+      hoverConnectedEdges: false,
       dragNodes: false,
       keyboard: true,
+        dragView: true
+      
     },
     edges: {
       color: {
@@ -230,20 +233,20 @@ private initNetwork() {
   node.text = this.inputdata;
   this.nodes.update(node);
   this.network.selectNodes([1]);
-  this.handleNodeClick({
-    nodes: [1]
-  });
+  this.handleNodeClick(1);
+
 }
 
 private addEventListeners() {
   // Event listeners for the network
-
+  
   this.network.on('hoverNode', params => {
     const nodeId = params.node;
     const node: any = this.nodes.get(nodeId);
     if (node && node.shape === "circularImage") {
       node.originalImage = node.image;
       node.shape = 'circle';
+      node.size = 20;
       node.image = undefined;
       node.borderWidth = 2;
       node.color = {
@@ -262,7 +265,7 @@ private addEventListeners() {
     this.network.setOptions({ physics: false });
     const nodeId = params.node;
     const node: any = this.nodes.get(nodeId);
-    if (node && node.originalImage) {
+    if (node && node.originalImage && node.shape=='circle') {
       node.image = node.originalImage;
       node.shape = 'circularImage';
       node.borderWidth = 2;
@@ -271,12 +274,21 @@ private addEventListeners() {
         background: 'black'
       };
       this.nodes.update(node);
-      this.network.stopSimulation();
+      
     }
   });
 
   this.network.on('click', params => {
-    this.handleNodeClick(params);
+    this.nodeService.setNodeId(params.nodes[0]);
+    if (params.nodes[0] !== undefined) {
+    this.handleNodeClick(params.nodes[0]);
+    
+    }
+    else {
+      this.isPanelExpanded = !this.isPanelExpanded;
+      this.selectedNodeIndex = null;
+      this.nodeSelected.emit(false);
+    }
   });
 }
 
@@ -307,7 +319,7 @@ thumbdown(): void {
 }
 
 thumbup(): void {
-  console.log("itworked");
+
   if (this.selectedNodeIndex !== null) {
     const nodeData = this.nodes.get(this.selectedNodeIndex);
     if (nodeData) {
@@ -336,255 +348,214 @@ thumbup(): void {
 
 
 submitNode(submitText: string): void {
-  if (this.selectedNodeIndex !== null) {
-      let selectedImage: string;
-      let selectedName: string;
+ this.stopRecording();
+ this.addNode(submitText);
+}
 
-      if (this.selectedPicture == 0) {
-          selectedImage = "assets/Jared.jpeg";
-          this.selectedPicture += 1;
-          selectedName = 'Jared';
-      } else {
-          selectedImage = "assets/Steve.jpeg";
-          this.selectedPicture -= 1;
-          selectedName = 'Steve';
-      }
+startRecording () : void {
+  this.speechService.startListening();
+  this.phrasesSubscription = this.speechService.phrases.subscribe(transcript => {
+    const nodeToUpdate = this.nodes.get(this.nodetoUpdate) as unknown as { text: string; label?: string; soundClip: Blob | null };
 
-      const newNodeId = this.nodes.length + 1;
-      this.globalnode = newNodeId;
-      this.nodes.add({
-          id: newNodeId,
-          label: this.wrapText(submitText, 20),
-          text: this.wrapText(submitText, 200),
-          shape: this.nodeShape,
-          image: selectedImage,
-          user: selectedName,
-          Moment: 0,
-          soundClip: null
-      });
-      this.edges.add({
-          from: this.selectedNodeIndex,
-          to: newNodeId,
-          opacity: 0.1
-      });
-
-      this.network.once("initRedraw", () => {
-          this.network.storePositions();
-          this.network.setData({
-              nodes: this.nodes,
-              edges: this.edges,
-          });
-          this.network.selectNodes([this.globalnode]);
-          this.nodeClicked.emit(this.globalnode);
-          this.selectedNodeIndex = this.globalnode;
-
-          setTimeout(() => {
-              this.ngZone.runOutsideAngular(() => {
-                  this.centerOnNode(this.globalnode);
-              });
-          }, 1);
-      });
+    if (nodeToUpdate) {
+      nodeToUpdate.text = this.wrapText(transcript, 20);
+      nodeToUpdate.label = this.wrapText(transcript, 20);
+      this.speechService.stopRecordingAudio();
+      nodeToUpdate.soundClip = this.speechService.returnAudio();
+      this.nodes.update(nodeToUpdate);
   }
+  });
+  this.speechService.startRecordingAudio();
+  this.isRecordingType.emit(false);
+  this.isRecording=true;
+}
+
+stopRecording(): void {
+  this.speechService.stopListening();
+  this.isRecording=false;
+  this.isRecordingType.emit(true);
+  if (this.phrasesSubscription) {
+      this.phrasesSubscription.unsubscribe();
+      this.phrasesSubscription = null;
+  }
+}
+
+
+addNode(submitText: string): void {
+  if (this.selectedNodeIndex !== null) {
+    let selectedImage: string;
+    let selectedName: string;
+
+    if (this.selectedPicture == 0) {
+        selectedImage = "assets/Jared.jpeg";
+        this.selectedPicture += 1;
+        selectedName = 'Jared';
+    } else {
+        selectedImage = "assets/Steve.jpeg";
+        this.selectedPicture -= 1;
+        selectedName = 'Steve';
+    }
+
+    const newNodeId = this.nodes.length + 1
+    this.nodetoUpdate = newNodeId;
+    this.nodes.add({
+        id: newNodeId,
+        label: this.wrapText(submitText, 20),
+        text: this.wrapText(submitText, 200),
+        shape: this.nodeShape,
+        image: selectedImage,
+        user: selectedName,
+        Moment: 0,
+        soundClip: null
+    });
+    this.edges.add({
+        from: this.selectedNodeIndex,
+        to: newNodeId,
+        opacity: 0.1
+    });
+
+    this.network.once("initRedraw", () => {
+        this.network.storePositions();
+        this.network.setData({
+            nodes: this.nodes,
+            edges: this.edges,
+        });
+        
+        this.selectedNodeIndex = newNodeId;
+        this.handleNodeClick(newNodeId);
+        this.nodeClicked.emit(newNodeId);
+        this.nodeService.setNodeId(newNodeId);
+
+      
+        setTimeout(() => {
+            this.ngZone.runOutsideAngular(() => {
+                this.centerOnNode(newNodeId);
+            });
+        }, 1);
+    });
+}
+
 }
 
 toggleRecording(): void {
-  if (this.selectedNodeIndex) {
+  if (this.selectedNodeIndex !==null) {
       if (this.isRecording) {
-          this.speechService.phrases.subscribe(transcript => {
-              const nodeToUpdate = this.nodes.get(this.globalnode) as unknown as { text: string; label?: string; soundClip: Blob | null };
+          this.stopRecording();
+      } else  {
+          this.startRecording();
+          this.addNode('');    
+      }
+          
+    }
+}
+  
+handleNodeClick(params: any): void {
+  
+  this.network.selectNodes([params]);
+  this.selectedNodeIndex = params;
+  this.lastSelectedNode = params;
 
-              if (nodeToUpdate) {
-                  nodeToUpdate.text = this.wrapText(transcript, 20);
-                  nodeToUpdate.label = this.wrapText(transcript, 20);
-                  this.speechService.stopRecordingAudio();
-                  nodeToUpdate.soundClip = this.speechService.returnAudio();
-                  this.nodes.update(nodeToUpdate);
-              }
-          });
 
-          this.speechService.stopListening();
-          this.speechService.phrases.unsubscribe();
+  // If a node was clicked
 
-      } else {
-          this.speechService.startListening();
-          this.speechService.startRecordingAudio();
+  this.handleNodeSelected(params);
 
-          if (this.selectedNodeIndex !== null) {
-              let selectedImage: string;
-              let selectedName: string;
 
-              if (this.selectedPicture == 0) {
-                  selectedImage = "assets/Jared.jpeg";
-                  this.selectedPicture += 1;
-                  selectedName = 'Jared';
-              } else {
-                  selectedImage = "assets/Steve.jpeg";
-                  this.selectedPicture -= 1;
-                  selectedName = 'Steve';
-              }
+  // Reset highlighted edges
+  this.resetHighlightedEdges();
 
-              const newNodeId = this.nodes.length + 1;
-              this.globalnode = newNodeId;
+  // Highlight the path from the initial node to the clicked node
 
-              this.nodes.add({
-                  id: newNodeId,
-                  label: '',
-                  text: '',
-                  shape: this.nodeShape,
-                  image: selectedImage,
-                  user: selectedName,
-                  Moment: 0,
-                  soundClip: null
-              });
-              this.edges.add({
-                  from: this.selectedNodeIndex,
-                  to: newNodeId,
-                  opacity: 0.1
-              });
+      this.traverseToOriginal(params, 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
+  
+}
 
-              this.network.once("initRedraw", () => {
-                  this.network.storePositions();
-                  this.network.setData({
-                      nodes: this.nodes,
-                      edges: this.edges,
-                  });
-                  this.network.selectNodes([this.globalnode]);
-                  this.nodeClicked.emit(this.globalnode);
-                  this.selectedNodeIndex = this.globalnode;
-                  this.nodeShare.emitEvent(this.selectedNodeIndex);
-                  this.selectedNodeIndex = this.globalnode;
+private handleNodeSelected(params: any): void {
+  
+  this.nodeSelected.emit(true);
+  this.isPanelExpanded = true;
+  const clickedNodeId = params;
+  this.siblingChecker = this.getAdjacentSiblingNodeIds(clickedNodeId);
+  this.previousNode = this.currentNode;
+  this.currentNode = clickedNodeId;
+  this.nodeService.setNodeId(this.selectedNodeIndex!);
 
-                  setTimeout(() => {
-                      this.ngZone.runOutsideAngular(() => {
-                          this.centerOnNode(this.globalnode);
-                      });
-                  }, 1);
-              });
-          }
+  if (this.selectedNodeIndex !== null) {
+      this.nodeClicked.emit(clickedNodeId);
+      const node = this.nodes.get(this.selectedNodeIndex);
+
+      if (node !== null && this.selectedNodeIndex !== null) {
+          this.emitNodeInformation(clickedNodeId);
       }
 
-      this.isRecording = !this.isRecording;  // toggle the recording state
+      // Zoom to the clicked node
+      this.zoomToNode(clickedNodeId);
   }
 }
 
-centerOnNode(nodeId: any): void {
-  const position = this.getNodePosition(nodeId);
-  this.network.moveTo({
+private emitNodeInformation(nodeId: any): void {
+  this.nodeClicked.emit(nodeId);
+  const combinedObjects = this.traverseToOriginal(nodeId, 1, this.nodes, this.edges);
+  const combinedString = combinedObjects.map(obj => obj.text).join('<br>');
+
+  this.notify.emit(combinedString);
+  this.nodeService.changeNodeText(combinedObjects);
+  this.nodeService.setNodeId(nodeId);
+  this.nodeService.SetSiblingData(this.getAdjacentSiblingNodeIds(nodeId));
+}
+
+private zoomToNode(nodeId: any): void {
+  this.network.focus(nodeId, {
       scale: this.zoomscale,
-      position: position,
-      animation: {
-          duration: 500,
-          easingFunction: 'easeInOutQuad'
-      }
+      animation: false  
   });
 }
+
+
+centerOnNode(nodeId: any): void {
+  const position = this.network.getPositions([nodeId])[nodeId];
+  this.network.fit({
+      nodes: [this.previousNode,nodeId],
+      animation: {duration: 100, easingFunction: "linear"}
       
-      getNodePosition(nodeId: any): { x: number, y: number } {
-        const nodePosition = this.network.getPositions([nodeId]);
-        return nodePosition[nodeId];
+  });
+}
+
+wrapText(text: string, maxCharsPerLine: number): string {
+  let wrappedText = '';
+  let words = text.split(' ');
+
+  let currentLine = '';
+  for (let word of words) {
+      if ((currentLine + word).length <= maxCharsPerLine) {
+          currentLine += ' ' + word;
+      } else {
+          wrappedText += currentLine.trim() + '\n';
+          currentLine = word;
       }
-  
-    wrapText(text: string, maxCharsPerLine: number): string {
-      let wrappedText = '';
-      let words = text.split(' ');
-  
-      let currentLine = '';
-      for (let word of words) {
-          if ((currentLine + word).length <= maxCharsPerLine) {
-              currentLine += ' ' + word;
-          } else {
-              wrappedText += currentLine.trim() + '\n';
-              currentLine = word;
-          }
-      }
-      wrappedText += currentLine;  // Append the last line
-      console.log(wrappedText);
-      return wrappedText.trim();
-     
   }
+  wrappedText += currentLine;  // Append the last line
+  return wrappedText.trim();  
+}
   
-  play(): void {
-    if (this.selectedNodeIndex) {
-      const nodeData = this.nodes.get(this.selectedNodeIndex);
-      if (nodeData.soundClip) {
-        const audioUrl = URL.createObjectURL(nodeData.soundClip);
-        const audio = new Audio(audioUrl);
-        audio.play();
-      }
+play(): void {
+  if (this.selectedNodeIndex !==null) {
+    const nodeData = this.nodes.get(this.selectedNodeIndex);
+    if (nodeData.soundClip) {
+      const audioUrl = URL.createObjectURL(nodeData.soundClip);
+      const audio = new Audio(audioUrl);
+      audio.play();
     }
   }
-  
-  handleNodeClick(params: any): void {
-    
-    if (this.isRecording) {
-      this.toggleRecording();
-    }
-    
-    if (params.nodes.length > 0) {
-     
-      this.nodeSelected.emit(true);
-      this.isPanelExpanded = true;
-     
-      const clickedNodeId = params.nodes[0];
-      this.siblingChecker = this.getAdjacentSiblingNodeIds(clickedNodeId);
-      
-      this.previousNode = this.currentNode;
-      this.currentNode = clickedNodeId;
-   
-     
-    
-  
-      this.selectedNodeIndex = clickedNodeId;
-      
-
-      this.nodeShare.emitEvent(this.selectedNodeIndex);
-    
-
-      if (this.selectedNodeIndex !== null) {
-        this.nodeClicked.emit(clickedNodeId);
-      
-        const node = this.nodes.get(this.selectedNodeIndex);
-        if (node !== null && this.selectedNodeIndex !== null) {
-          this.nodeClicked.emit(clickedNodeId);
-      
-          const combinedObjects = this.traverseToOriginal(clickedNodeId, 1, this.nodes, this.edges);
-          const combinedString = combinedObjects.map(obj => obj.text).join('<br>');
-          
-          this.notify.emit(combinedString);
-          this.sharedService.changeNodeText(combinedObjects);
-          this.nodeShare.emitEvent2(this.getAdjacentSiblingNodeIds(this.selectedNodeIndex));
-          this.nodeShare.emitEvent(clickedNodeId);
-
-      }
-      
-      }
-    
-      //this.rtcService.startStream();
-      
-      // zoom to the clicked node
-      this.network.focus(clickedNodeId, {
-        scale: this.zoomscale,
-        animation: {
-          duration: 500,
-          easingFunction: 'easeInOutQuad'
-        }  
-      });
-    }
-    else  {
-      this.isPanelExpanded = !this.isPanelExpanded;
-      this.nodeSelected.emit(false);
-    }
-    const resetEdges = this.highlightedEdges.map(edgeId => {
+}
+private resetHighlightedEdges(): void {
+  const resetEdges = this.highlightedEdges.map(edgeId => {
       return { id: edgeId, color: "rgba(255,255,255, 0.1"}; // Assuming '000000' is the original color
-    });
-    this.edges.update(resetEdges);
-    this.highlightedEdges = [];
+  });
+  this.edges.update(resetEdges);
+  this.highlightedEdges = [];
+}
 
-    // Highlight the path from the initial node to the clicked node
-    if (params.nodes.length > 0) {
-      this.traverseToOriginal(params.nodes[0], 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
-    }
-  }
 
   traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; id: number; }[] {
     let nodeData = nodes.get(nodeId);
@@ -692,12 +663,12 @@ up() {
   
     if (adjacentSiblingIds) {
       this.network.selectNodes([adjacentSiblingIds]);
-      this.handleNodeClick({
-        nodes: [adjacentSiblingIds]
-      });
+      this.handleNodeClick(
+    adjacentSiblingIds
+      );
     } else {
       // Handle the scenario when there is no sibling or an error.
-      console.warn('No previous sibling found or an error occurred.');
+
     }
   }
 }
@@ -708,12 +679,12 @@ down() {
   
     if (adjacentSiblingIds) {
       this.network.selectNodes([adjacentSiblingIds]);
-      this.handleNodeClick({
-        nodes: [adjacentSiblingIds]
-      });
+      this.handleNodeClick(
+        adjacentSiblingIds
+      );
     } else {
       // Handle the scenario when there is no sibling or an error.
-      console.warn('No previous sibling found or an error occurred.');
+    
     }
   }
 }
@@ -723,12 +694,12 @@ previousId() {
 
   if (adjacentSiblingIds) {
     this.network.selectNodes([adjacentSiblingIds.previous]);
-    this.handleNodeClick({
-      nodes: [adjacentSiblingIds.previous]
-    });
+    this.handleNodeClick(
+      adjacentSiblingIds.previous
+    );
   } else {
     // Handle the scenario when there is no sibling or an error.
-    console.warn('No previous sibling found or an error occurred.');
+   
   }
 }
 } 
@@ -738,21 +709,19 @@ nextId () {
   
     if (adjacentSiblingIds) {
       this.network.selectNodes([adjacentSiblingIds.next]);
-      this.handleNodeClick({
-        nodes: [adjacentSiblingIds.next]
-      });
+      this.handleNodeClick(
+        adjacentSiblingIds.next
+      );
     } else {
       // Handle the scenario when there is no sibling or an error.
-      console.warn('No previous sibling found or an error occurred.');
     }
   }
 }
 goBack(){
   this.network.selectNodes([this.previousNode]);
-  this.handleNodeClick({
-    nodes: [this.previousNode],
-    
-});
+  this.handleNodeClick(
+    this.previousNode
+  );
 }
   }
   

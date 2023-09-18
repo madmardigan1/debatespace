@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardDataService, Card } from '../space-service.service';
-import { DebateAuthService } from '../debate-auth.service';
+import { DebateAuthService } from '../home/debate-auth.service';
 @Component({
   selector: 'app-debate-space',
   templateUrl: './debate-space.component.html',
