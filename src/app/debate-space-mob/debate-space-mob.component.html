@@ -176,10 +176,10 @@
               <button mat-menu-item (click)="togglePanel(5)">Adjust Settings</button>
               <button mat-menu-item>Report this space</button>
             </mat-menu>
-          <button class="btn btn-outline-white text-white" (click)="togglePanel(3)" style="border-color:black; opacity:.8;position:absolute; bottom:10px;left:8px;border-radius:50%; width:50px;height:50px;z-index:1000;">
+          <button class="btn btn-outline-white text-white" (click)="togglePanel(3)" style="border-color:black;position:absolute; bottom:10px;left:8px;border-radius:50%; width:50px;height:50px;z-index:1000;">
             <i class="fas fa-users"></i>
           </button>
-          <button mat-icon-button [matMenuTriggerFor]="emoji" class="btn btn-outline-white text-white text-center mt-0 p-0" style="position:absolute;align-items:center; border-radius:50%; opacity:.8;bottom:10px;right:10px; width:50px;height:50px;z-index:1000;">
+          <button mat-icon-button [matMenuTriggerFor]="emoji" class="btn btn-outline-white text-white text-center mt-0 p-0" style="position:absolute;align-items:center; border-radius:50%;bottom:10px;right:10px; width:50px;height:50px;z-index:1000;">
             <i class="far fa-smile"></i>
           </button>
           <mat-menu #emoji="matMenu" xPosition="before">
