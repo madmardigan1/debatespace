@@ -243,11 +243,23 @@ private initNetwork() {
 
 private addEventListeners() {
   // Event listeners for the network
-  
+  /*
   this.network.on('hoverNode', params => {
+    this.network.setOptions({ physics: false });
+    
     const nodeId = params.node;
     const node: any = this.nodes.get(nodeId);
+
+    
+    
+ 
+  
+    
     if (node && node.shape === "circularImage") {
+      // Store the current position of the node
+      node.storedX = node.x;
+      node.storedY = node.y;
+
       node.originalImage = node.image;
       node.shape = 'circle';
       node.size = 20;
@@ -263,13 +275,13 @@ private addEventListeners() {
       this.nodes.update(node);
       this.network.redraw();
     }
-  });
+});
 
-  this.network.on('blurNode', params => {
-    this.network.setOptions({ physics: false });
+this.network.on('blurNode', params => {
     const nodeId = params.node;
     const node: any = this.nodes.get(nodeId);
-    if (node && node.originalImage && node.shape=='circle') {
+
+    if (node && node.originalImage && node.shape == 'circle') {
       node.image = node.originalImage;
       node.shape = 'circularImage';
       node.borderWidth = 2;
@@ -277,10 +289,23 @@ private addEventListeners() {
         border: 'white',
         background: 'black'
       };
+
+      // Restore the original position of the node
+      if (node.storedX !== undefined && node.storedY !== undefined) {
+        node.x = node.storedX;
+        node.y = node.storedY;
+
+        // Remove the stored coordinates to clean up
+        delete node.storedX;
+        delete node.storedY;
+      }
+
       this.nodes.update(node);
-      
     }
-  });
+    
+    this.network.setOptions({ physics: true });
+});*/
+
 
   this.network.on('click', params => {
     this.nodeService.setNodeId(params.nodes[0]);
@@ -291,7 +316,6 @@ private addEventListeners() {
     else {
       this.network.selectNodes([this.selectedNodeIndex!]);
       this.isPanelExpanded = !this.isPanelExpanded;
-      //this.selectedNodeIndex = null;
       this.nodeSelected.emit(false);
     }
   });
@@ -409,7 +433,7 @@ addNode(submitText: string): void {
     this.nodes.add({
         id: newNodeId,
         label: this.wrapText(submitText, 20),
-        text: this.wrapText(submitText, 200),
+        text: this.wrapText(submitText , 20),
         shape: this.nodeShape,
         image: selectedImage,
         user: selectedName,
@@ -526,22 +550,58 @@ centerOnNode(nodeId: any): void {
   });
 }
 
-wrapText(text: string, maxCharsPerLine: number): string {
+wrapText(text: string, maxCharsPerLine: number = 25): string {
+  // If the text is shorter than 122 characters, pad it
+  if (text.length < 122) {
+      text = text.padEnd(122, ' ');
+  } else {
+      // If text is longer than 122 characters, truncate it to the last 122 characters
+      text = text.slice(-122);
+  }
+
   let wrappedText = '';
   let words = text.split(' ');
 
   let currentLine = '';
+  let lineCount = 0;
+
   for (let word of words) {
       if ((currentLine + word).length <= maxCharsPerLine) {
           currentLine += ' ' + word;
       } else {
-          wrappedText += currentLine.trim() + '\n';
+          wrappedText += currentLine.trim().padEnd(maxCharsPerLine, ' ') + '\n';
           currentLine = word;
+          lineCount++;
       }
   }
-  wrappedText += currentLine;  // Append the last line
-  return wrappedText.trim();  
+
+  if (currentLine) {
+      wrappedText += currentLine.trim().padEnd(maxCharsPerLine, ' ') + '\n';
+      lineCount++;
+  }
+
+  // If after processing the string we don't have 5 lines, we add more lines
+  while (lineCount < 5) {
+      wrappedText += ''.padEnd(maxCharsPerLine, ' ') + '\n';
+      lineCount++;
+  }
+
+  // Take only the first 5 lines, then join them
+  wrappedText = wrappedText.split('\n').slice(0, 5).join('\n');
+
+  // Ensure the output is at least 122 characters before appending ellipsis
+  wrappedText = wrappedText.padEnd(122, ' ');
+
+  return wrappedText + '...';
 }
+
+
+
+
+
+
+
+
   
 play(): void {
   if (this.selectedNodeIndex !==null) {

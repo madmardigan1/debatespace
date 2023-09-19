@@ -17,7 +17,7 @@ import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
         height: '40%',
       })),
       transition('expanded <=> shrunk', [
-        animate('0.3s')
+        animate('0.2s')
       ]),
     ]),
     trigger('expandShrinkrest', [
@@ -28,7 +28,7 @@ import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
         height: '0%',
       })),
       transition('expanded <=> shrunk', [
-        animate('0.3s')
+        animate('0.2s')
       ]),
     ]),
     [
