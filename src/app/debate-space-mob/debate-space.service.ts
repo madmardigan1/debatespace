@@ -8,6 +8,7 @@ export class DebateSpaceService {
 
   private buttonType = new BehaviorSubject<string>(''); 
   private emojiType = new BehaviorSubject<string>(''); 
+ 
   constructor() { }
 
 
@@ -26,4 +27,6 @@ export class DebateSpaceService {
   getEmoji(): Observable<string> {
     return this.emojiType.asObservable();
   }
+
+
 }

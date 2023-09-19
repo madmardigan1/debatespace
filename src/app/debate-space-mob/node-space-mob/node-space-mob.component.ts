@@ -66,7 +66,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Moment: 0, soundClip: null },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Moment: 0, soundClip: null },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -234,7 +234,8 @@ private initNetwork() {
   this.network = new Network(this.visNetwork.nativeElement, data, options);
   const node: any = this.nodes.get(1);
   node.label = this.inputdata;
-  node.text = this.inputdata;
+  node.text = this.wrapText(this.inputdata);
+  node.fullText = this.inputdata;
   this.nodes.update(node);
   this.network.selectNodes([1]);
   this.handleNodeClick(1);
@@ -387,13 +388,12 @@ submitNode(submitText: string): void {
 startRecording () : void {
   this.speechService.startListening();
   this.phrasesSubscription = this.speechService.phrases.subscribe(transcript => {
-    const nodeToUpdate = this.nodes.get(this.nodetoUpdate) as unknown as { text: string; label?: string; soundClip: Blob | null };
+    const nodeToUpdate = this.nodes.get(this.nodetoUpdate) as unknown as { text: string; fullText: string, label?: string; soundClip: Blob | null };
 
     if (nodeToUpdate) {
+      nodeToUpdate.fullText = transcript;
       nodeToUpdate.text = this.wrapText(transcript, 20);
       nodeToUpdate.label = this.wrapText(transcript, 20);
-      this.speechService.stopRecordingAudio();
-      nodeToUpdate.soundClip = this.speechService.returnAudio();
       this.nodes.update(nodeToUpdate);
   }
   });
@@ -404,6 +404,8 @@ startRecording () : void {
 
 stopRecording(): void {
   this.speechService.stopListening();
+  this.speechService.stopRecordingAudio();
+  this.nodes.get(this.nodetoUpdate).soundClip = this.speechService.returnAudio();
   this.isRecording=false;
   this.isRecordingType.emit(true);
   if (this.phrasesSubscription) {
@@ -434,6 +436,7 @@ addNode(submitText: string): void {
         id: newNodeId,
         label: this.wrapText(submitText, 20),
         text: this.wrapText(submitText , 20),
+        fullText: submitText,
         shape: this.nodeShape,
         image: selectedImage,
         user: selectedName,
@@ -622,9 +625,9 @@ private resetHighlightedEdges(): void {
 }
 
 
-  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; id: number; }[] {
+  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; fullText: string, id: number; soundClip?: any }[] {
     let nodeData = nodes.get(nodeId);
-    let textObj = { text: `${nodeData.user}: ${nodeData.text}`, id: nodeId };  // <-- Updated to be an object
+    let textObj = { text: `${nodeData.user}: ${nodeData.text}`, fullText: `${nodeData.user}: ${nodeData.fullText}`, id: nodeId, soundClip: nodeData.soundClip };  // <-- Updated to be an object
 
     // Base condition: if we reach the original node, stop
     if (nodeId === originalNodeId) {

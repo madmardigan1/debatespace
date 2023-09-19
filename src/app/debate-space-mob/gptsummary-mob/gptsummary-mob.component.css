@@ -21,3 +21,17 @@ button:focus {
 button:hover {
     color: #007BFF; /* Change color on hover */
 }
+
+.summary-container:hover {
+    background-color: rgb(175, 175, 175);
+    color:black;
+
+}
+
+.sumButton:hover {
+    color:inherit
+}
+
+.fas fa-angle-down{
+    color:white;
+}

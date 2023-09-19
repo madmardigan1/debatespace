@@ -8,7 +8,9 @@ export class NodespaceServiceService {
 
   private nodeId = new BehaviorSubject<number | undefined>(1); 
   private SiblingData = new BehaviorSubject<{ previous: string, next: string } | null>({ previous: '1', next: '1' });
-  private nodeTextSource = new BehaviorSubject<{ text: string, id: number}[]>([{text:'',id:1}]); // Added initial value as an empty array
+  private nodeTextSource = new BehaviorSubject<{ text: string, fullText: string, id: number, soundClip?: any}[]>([{text:'', fullText: '', id:1, soundClip: null}]); // Added initial value as an empty array
+  private soundClip = new BehaviorSubject<any>([]); 
+  private soundArray:any = [];
   constructor() { }
 
 
@@ -25,11 +27,11 @@ export class NodespaceServiceService {
 
 
 
-  changeNodeText(textArray: { text: string, id: number}[]): void {
+  changeNodeText(textArray: { text: string, fullText:string, id: number, soundClip?: any}[]): void {
     this.nodeTextSource.next(textArray);
   }
 
-  getNodeText(): Observable<{ text: string, id: number}[]> {  // Fixed return type to match what nodeTextSource emits
+  getNodeText(): Observable<{ text: string, fullText:string, id: number, soundClip?:any}[]> {  // Fixed return type to match what nodeTextSource emits
     return this.nodeTextSource.asObservable();
   }
 
@@ -42,4 +44,12 @@ export class NodespaceServiceService {
     return this.SiblingData.asObservable();
 }
 
+sendSoundClip(level: any): void {
+  this.soundArray.push(level);
+  this.soundClip.next(this.soundArray);
+}
+
+getsoundClip(): Observable<string> {
+  return this.soundClip.asObservable();
+}
 }

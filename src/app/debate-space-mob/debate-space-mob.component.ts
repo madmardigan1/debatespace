@@ -6,6 +6,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { ChatSpaceMobComponent } from './chat-space-mob/chat-space-mob.component';
 import { DebateSpaceService } from './debate-space.service';
 import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
+import { GPTsummaryService } from './gptsummary-mob/gptsummary.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   animations: [
@@ -15,6 +17,9 @@ import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
       })),
       state('shrunk', style({
         height: '40%',
+      })),
+      state('minimized', style({
+        height: '0%',
       })),
       transition('expanded <=> shrunk', [
         animate('0.2s')
@@ -26,6 +31,9 @@ import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
       })),
       state('shrunk', style({
         height: '0%',
+      })),
+      state('fully-expanded', style({
+        height: '100%',
       })),
       transition('expanded <=> shrunk', [
         animate('0.2s')
@@ -56,12 +64,14 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   toggleChats:boolean = false;
   toggleChatsText:string = "Type in chat";
   selectedButton: number = 1;
+  private subscription! : Subscription;
   @ViewChild('chatView') private chatContainer!: ElementRef;
     text: string = '';
     card!: Card;
     cards!: any[];
     panelType = "chat";
     receiveType = true;
+    receiveType2 = false;
     selectedNode: boolean = false;
     userType: string = '';
     isRecording = false;
@@ -69,7 +79,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     theRestState: string = 'expanded';
     expandShrink=false;
     value = '';
-    constructor (private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService){
+    constructor (private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService){
       this.userType=this.debateAuth.getUser();
     }
   
@@ -88,6 +98,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
           // Handle case when card is not found, e.g., redirect or show a message
         }
       });
+
+
     }
     generateRoute(card: any) {
       return ['/debate', card.id];
@@ -171,6 +183,24 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       if (this.startY && event.clientY - this.startY > 50) { // Drag down by 50 pixels to close
         this.panelState = 'hidden';
         this.stopDrag();
+      }
+    }
+
+    fullScreen(value: boolean) {
+      this.receiveType2 = !this.receiveType2;
+      if (value) {
+        if (!this.expandShrink) {
+          this.nodeState = 'minimized';
+          this.theRestState = 'fullly-expanded';
+        }
+        else {
+          this.nodeState = 'shrunk';
+          this.theRestState = 'expanded';
+        }
+        this.expandShrink = !this.expandShrink;
+       
+      } else {
+        
       }
     }
 
