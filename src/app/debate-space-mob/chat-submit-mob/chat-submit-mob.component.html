@@ -1,6 +1,7 @@
 <div class="container">
+    <div class="input-group d-flex justify-content-center">
     <form (submit)="onSubmitit($event)">
-        <div class="input-group d-flex">
+      
             
             <!-- This div acts as a container for the input and the link icon -->
             <div style="position: relative; flex-grow: 1;padding-right:10px;">
@@ -18,7 +19,7 @@
                 >
                 
                 <!-- Link icon inside the input on the right -->
-                <button *ngIf="toggleChatsText == 'Type in chat'"
+                <button *ngIf="value.length==0"
                     class="btn btn-link text-secondary" 
                     type="button" 
                     style="color: lightgray; position: absolute; top: 50%; transform: translateY(-50%); right: 10px; background: none; border: none;"
@@ -26,13 +27,16 @@
                 >
                     <i class="fas fa-link"></i>
                 </button>
+                 <!-- Submit button (will be hidden if `value` is empty) -->
+        <button *ngIf="value.length > 0" class="btn btn-black bg-white rounded-circle" style="position: absolute; top: 50%; transform: translateY(-50%); right: 10px; background: none; border: none;" type="submit" id="button-addon2">
+            <i class="fas fa-arrow-right"></i>
+        </button>
             </div>
 
-            <!-- Submit button (will be hidden if `value` is empty) -->
-            <button *ngIf="value.length > 0" class="btn btn-success rounded-circle" type="submit" id="button-addon2">
-                <i class="fas fa-arrow-right"></i>
-            </button>
+        
             
-        </div>
+       
     </form>
+</div>
+       
 </div>

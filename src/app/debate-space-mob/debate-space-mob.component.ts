@@ -5,12 +5,13 @@ import { DebateAuthService } from '../home/debate-auth.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ChatSpaceMobComponent } from './chat-space-mob/chat-space-mob.component';
 import { DebateSpaceService } from './debate-space.service';
+import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
 
 @Component({
   animations: [
     trigger('expandShrink', [
       state('expanded', style({
-        height: '75%',
+        height: '100%',
       })),
       state('shrunk', style({
         height: '40%',
@@ -24,12 +25,25 @@ import { DebateSpaceService } from './debate-space.service';
         height: '60%',
       })),
       state('shrunk', style({
-        height: '25%',
+        height: '0%',
       })),
       transition('expanded <=> shrunk', [
         animate('0.3s')
       ]),
-    ])
+    ]),
+    [
+      trigger('slideUpDown', [
+        state('hidden', style({
+          transform: 'translateY(100%)'
+        })),
+        state('visible', style({
+          transform: 'translateY(0%)'
+        })),
+        transition('hidden <=> visible', [
+          animate('0.3s')
+        ])
+      ])
+    ]
     
   ],
   
@@ -46,14 +60,16 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     text: string = '';
     card!: Card;
     cards!: any[];
+    panelType = "chat";
+    receiveType = true;
     selectedNode: boolean = false;
     userType: string = '';
     isRecording = false;
     nodeState: string = 'shrunk';
     theRestState: string = 'expanded';
     expandShrink=false;
-   
-    constructor (private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService){
+    value = '';
+    constructor (private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService){
       this.userType=this.debateAuth.getUser();
     }
   
@@ -94,7 +110,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.toggleChats = !this.toggleChats;
     }
     receiveValue(value: boolean) {
-      
+      this.receiveType = !this.receiveType;
       if (!value) {
         if (!this.expandShrink) {
           this.nodeState = 'expanded';
@@ -119,7 +135,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       }
     }
 
- 
+    toggleFirstPanel (panelType:string): void {
+      this.panelType = panelType;
+    }
 
     selectButton(buttonNumber: number): void {
       this.selectedButton = buttonNumber;
@@ -134,6 +152,47 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.isRecording = !recordType;
     }
 
+
+    panelState: 'hidden' | 'visible' = 'hidden';
+    startY: number | null = null;
+  
+    togglePanel(togglenumber: number): void {
+      this.selectedButton=togglenumber;
+      this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
+    }
+  
+    startDrag(event: MouseEvent): void {
+      this.startY = event.clientY;
+      document.addEventListener('mousemove', this.handleDrag);
+      document.addEventListener('mouseup', this.stopDrag);
+    }
+  
+    handleDrag = (event: MouseEvent) => {
+      if (this.startY && event.clientY - this.startY > 50) { // Drag down by 50 pixels to close
+        this.panelState = 'hidden';
+        this.stopDrag();
+      }
+    }
+
+    stopDrag = () => {
+      this.startY = null;
+      document.removeEventListener('mousemove', this.handleDrag);
+      document.removeEventListener('mouseup', this.stopDrag);
+    }
+
+    onSubmitit(event: Event) {
+     
+      event.preventDefault(); 
+     
+       if (this.value) {
+        this.chatSubmit.sendNodeText(this.value);
+        this.value = '';
+      }
+    }
+
+    sendEmoji(emoji: string): void {
+      this.debateSpace.sendEmoji(emoji);
+    }
   }
   
 

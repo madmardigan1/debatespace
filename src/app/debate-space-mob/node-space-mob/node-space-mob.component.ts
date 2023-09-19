@@ -35,7 +35,6 @@ import { ChatSubmitService } from '../chat-submit-mob/chat-submit.service';
 })
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   // View references
-  //@ViewChild('visNetwork', { static: false }) container!: ElementRef;
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
 
   // Inputs & Outputs
@@ -99,15 +98,6 @@ ngOnInit(): void {
  
   
   this.userType = this.debateAuth.getUser();
-  
- 
-  this.subscription2 = this.debateSpace.getToggle().subscribe(type => {
-    if (type === "play") {
-      this.play();
-    } else if (type === "toggle") {
-      this.toggleRecording();
-    }
-  });
 
   
 
@@ -130,6 +120,20 @@ private initializeSubscriptions() {
   // Group all the settingsService subscriptions
 
   this.subscriptions.push(
+  this.debateSpace.getToggle().subscribe(type => {
+    if (type === "play") {
+      this.play();
+    } else if (type === "toggle") {
+      this.toggleRecording();
+    }
+  }),
+  this.debateSpace.getEmoji().subscribe(type => {
+    if (type === "positive") {
+      this.thumbup();
+    } else if (type === "negative") {
+      this.thumbdown();
+    }
+  }),
     this.settingsService.getZoomLevel().subscribe(zoom => {
       if (this.zoomscale !== null) {
         this.zoomscale = zoom;
@@ -285,8 +289,9 @@ private addEventListeners() {
     
     }
     else {
+      this.network.selectNodes([this.selectedNodeIndex!]);
       this.isPanelExpanded = !this.isPanelExpanded;
-      this.selectedNodeIndex = null;
+      //this.selectedNodeIndex = null;
       this.nodeSelected.emit(false);
     }
   });
@@ -295,6 +300,7 @@ private addEventListeners() {
   
  // Component interaction methods
 thumbdown(): void {
+ 
   if (this.selectedNodeIndex !== null) {
     const nodeData = this.nodes.get(this.selectedNodeIndex);
     if (nodeData) {
@@ -314,12 +320,13 @@ thumbdown(): void {
         };
       }
       this.nodes.update(nodeData);
+      
     }
   }
 }
 
 thumbup(): void {
-
+ 
   if (this.selectedNodeIndex !== null) {
     const nodeData = this.nodes.get(this.selectedNodeIndex);
     if (nodeData) {
@@ -342,6 +349,7 @@ thumbup(): void {
         };
       }
       this.nodes.update(nodeData);
+     
     }
   }
 }
@@ -496,9 +504,6 @@ private handleNodeSelected(params: any): void {
 private emitNodeInformation(nodeId: any): void {
   this.nodeClicked.emit(nodeId);
   const combinedObjects = this.traverseToOriginal(nodeId, 1, this.nodes, this.edges);
-  const combinedString = combinedObjects.map(obj => obj.text).join('<br>');
-
-  this.notify.emit(combinedString);
   this.nodeService.changeNodeText(combinedObjects);
   this.nodeService.setNodeId(nodeId);
   this.nodeService.SetSiblingData(this.getAdjacentSiblingNodeIds(nodeId));
@@ -515,7 +520,7 @@ private zoomToNode(nodeId: any): void {
 centerOnNode(nodeId: any): void {
   const position = this.network.getPositions([nodeId])[nodeId];
   this.network.fit({
-      nodes: [this.previousNode,nodeId],
+      nodes: [this.getParentNodeId(nodeId),nodeId],
       animation: {duration: 100, easingFunction: "linear"}
       
   });

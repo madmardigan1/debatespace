@@ -11,7 +11,7 @@
     height: 100%;
     width: 390px;
     position:absolute;
-    overflow-y:scroll;
+    overflow-y:hidden;
   }
   
   .nodeArea {
@@ -51,4 +51,53 @@
     position:relative;
     top:0;
     height:auto;
+}
+
+.slide-panel {
+  border: 1px solid white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  overflow: hidden;
+  opacity: 1;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  z-index: 9999999;
+}
+
+.drag-handle {
+  height: 5px;
+  width: 40px;
+  background-color: #cccccc;
+  cursor: pointer;
+}
+
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-rows: repeat(2, 1fr);    /* 2 rows */
+}
+
+.emoji-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+}
+
+.emoji-button {
+  background: transparent;
+  border: none;
+  font-size: 24px; /* Adjust size as needed */
+}
+
+.text-green {
+  color: green;
+}
+
+.text-red {
+  color: red;
 }

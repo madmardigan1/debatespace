@@ -39,6 +39,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-control-mob.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
+
 //node
 
 
@@ -65,6 +66,7 @@ import { MatMenuModule } from '@angular/material/menu';
     NodeSpaceMobComponent,
     GptsummaryMobComponent,
     AvControlMobComponent,
+
 
     
     

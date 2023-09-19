@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class DebateSpaceService {
 
   private buttonType = new BehaviorSubject<string>(''); 
- 
+  private emojiType = new BehaviorSubject<string>(''); 
   constructor() { }
 
 
@@ -17,5 +17,13 @@ export class DebateSpaceService {
 
   getToggle(): Observable<string> {
     return this.buttonType.asObservable();
+  }
+
+  sendEmoji(level: string): void {
+    this.emojiType.next(level);
+  }
+
+  getEmoji(): Observable<string> {
+    return this.emojiType.asObservable();
   }
 }
