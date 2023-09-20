@@ -15,6 +15,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   private subscription!: Subscription;
   private subscription1!: Subscription;
   private subscription2!: Subscription;
+  expandedLines: Set<number> = new Set();
    nextNode: any;
    previousNode: any;
    goBackone: any;
@@ -88,10 +89,19 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   }
 
 
-  expand(line: any): void {
-  console.log(line.soundClip);
+  expand(line: any, index: number): void {
   line.expand = true;
+  if (this.expandedLines.has(index)) {
+    this.expandedLines.delete(index);
+  } else {
+    this.expandedLines.add(index);
   }
+  }
+
+  isExpanded(index: number): boolean {
+    return this.expandedLines.has(index);
+  }
+  
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

@@ -15,16 +15,16 @@
 
 </div>
 <div *ngIf="lines" class="mt-2">
-<div *ngFor="let line of lines">
-    <div class="summary-container d-flex" style="position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
-        <div class="justify-content:left">
-        <button class="btn rounded-circle d-flex align-items-center justify-content-center"
-        style="width:30px; height:30px; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;" 
-        type="submit" 
-        (click)="expand(line)">
-    <i class="fas fa-angle-right" style="color: white; margin: 0;"></i>
-</button>
-</div>
+    <div *ngFor="let line of lines; let i = index">
+        <div class="summary-container d-flex" style="position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
+          <div class="justify-content:left">
+            <button class="btn rounded-circle d-flex align-items-center justify-content-center"
+              style="width:30px; height:30px; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;" 
+              type="submit" 
+              (click)="expand(line, i)">
+              <i [class.rotated]="isExpanded(i)" class="fas fa-angle-right" style="color: white; margin: 0;"></i>
+            </button>
+          </div>
 
     <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)" *ngIf="!line.expand">{{ line.text }}</button>
     <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)" *ngIf="line.expand">{{ line.fullText }}</button>

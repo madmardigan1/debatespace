@@ -35,3 +35,7 @@ button:hover {
 .fas fa-angle-down{
     color:white;
 }
+.rotated {
+    transform: rotate(90deg);
+  }
+  
