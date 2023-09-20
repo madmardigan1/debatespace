@@ -1,35 +1,36 @@
-<div class="d-flex justify-content-between mx-3">
-   <div class="d-flex">
+<div class="d-flex justify-content-center mx-3" style="position:absolute; bottom:10px; width:100%;">
+  
         <div *ngIf="nextNode">
-    <button class="btn btn-outline-success rounded-circle" style="border:1px solid white; margin-left:2px; margin-right:2px;"  type="submit"  (click)="previousId()">
+    <button class="btn btn-white text-white rounded-circle" style="border:1px solid white; margin-left:2px; margin-right:2px;"  type="submit"  (click)="previousId()">
         <i class="fas fa-chevron-left" style="transform: rotate(180);"></i>
     </button>
-    <button class="btn btn-outline-success rounded-circle" style="border:1px solid white; margin-left:2px; margin-right:2px;"  type="submit" (click)="nextId()">
+    <button class="btn btn-white text-white rounded-circle" style="border:1px solid white; margin-left:2px; margin-right:2px;"  type="submit" (click)="nextId()">
         <i class="fas fa-chevron-right" style="transform: rotate(180);"></i>
     </button>
 </div>
-    <button *ngIf="traveled" class="btn btn-outline-success rounded-circle" style="color:white; margin-left:2px; margin-right:2px;"  type="submit" (click)="goBack()">
+    <button *ngIf="traveled" class="btn btn-white text-white rounded-circle" style="color:white; margin-left:2px; margin-right:2px;"  type="submit" (click)="goBack()">
         <i class="fas fa-undo"></i>
     </button>
    
-</div>
+
 </div>
 <div *ngIf="lines" class="mt-2">
 <div *ngFor="let line of lines">
     <div class="summary-container d-flex" style="position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
+        <div class="justify-content:left">
         <button class="btn rounded-circle d-flex align-items-center justify-content-center"
         style="width:30px; height:30px; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;" 
         type="submit" 
         (click)="expand(line)">
     <i class="fas fa-angle-right" style="color: white; margin: 0;"></i>
 </button>
-
+</div>
 
     <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)" *ngIf="!line.expand">{{ line.text }}</button>
     <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)" *ngIf="line.expand">{{ line.fullText }}</button>
     <div class="d-flex" style="position:relative; right:0;">
     
-      <button class="btn rounded-circle d-flex align-items-center justify-content-center"
+      <button *ngIf="line.soundClip" class="btn rounded-circle d-flex align-items-center justify-content-center"
       style="width:30px; height:30px; border-radius:50%; background-color: rgb(152, 5, 152); border: none; padding: 0; margin-left:2px; margin-right:2px;" 
       type="submit" 
       (click)="playRecording(line.soundClip)">

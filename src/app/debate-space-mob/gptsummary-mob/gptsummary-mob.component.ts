@@ -23,6 +23,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
 
   constructor(private gptSum: GPTsummaryService,private nodeService: NodespaceServiceService, private chatSpace:ChatspaceService, private speechService: SpeechService) {
   this.subscription1 = this.nodeService.getSiblingData().subscribe((message: { previous: string, next: string }|null) => {
+    
       if (message) {
         this.previousNode = message.previous;
         this.nextNode = message.next;
@@ -43,7 +44,9 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    
     this.subscription = this.nodeService.getNodeText().subscribe((messages: { text: string, fullText: string, id: number, soundClip?: any }[]) => {
+      console.log([messages[messages.length-1]]);
       this.lines = messages;
     
   });
@@ -86,6 +89,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
 
 
   expand(line: any): void {
+  console.log(line.soundClip);
   line.expand = true;
   }
   ngOnDestroy() {

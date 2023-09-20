@@ -362,8 +362,16 @@ sharenode(): void {
           if (nodeToUpdate) {
             nodeToUpdate.text = this.wrapText(transcript, 20);
             nodeToUpdate.label = this.wrapText(transcript, 20);
-            this.speechService.stopRecordingAudio();
-            nodeToUpdate.soundClip = this.speechService.returnAudio();
+            this.speechService.stopAndReturnAudio()
+            .then(audioBlob => {
+              nodeToUpdate.soundClip = audioBlob;
+            })
+            .catch(error => {
+              console.error('Error stopping and retrieving audio:', error);
+            });
+          
+  
+           
             this.nodes.update(nodeToUpdate);
             }
           });

@@ -89,16 +89,38 @@ export class SpeechService {
     });
   }
 
+  stopAndReturnAudio(): Promise<Blob | null> {
+    return new Promise((resolve, reject) => {
+      if (!this.mediaRecorder) {
+        resolve(null);
+        return;
+      }
+  
+      this.mediaRecorder.onstop = () => {
+        this.audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+        resolve(this.audioBlob);
+      };
+  
+      this.mediaRecorder.onerror = (e: Event) => {
+        reject(e);
+      };
+      
+  
+      this.mediaRecorder.stop();
+    });
+  }
+  
+/*
   stopRecordingAudio() {
     // Stop recording audio
     if (this.mediaRecorder) {
       this.mediaRecorder.stop();
     }
-  }
-
+  }*/
+/*
   returnAudio(): Blob | null {
     return this.audioBlob;
-  }
+  }*/
   
   playRecordedAudio() {
     if (this.audioBlob) {

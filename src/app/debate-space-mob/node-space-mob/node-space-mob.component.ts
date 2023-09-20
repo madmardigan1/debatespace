@@ -404,14 +404,28 @@ startRecording () : void {
 
 stopRecording(): void {
   this.speechService.stopListening();
-  this.speechService.stopRecordingAudio();
-  this.nodes.get(this.nodetoUpdate).soundClip = this.speechService.returnAudio();
+
+
+  
   this.isRecording=false;
   this.isRecordingType.emit(true);
   if (this.phrasesSubscription) {
       this.phrasesSubscription.unsubscribe();
       this.phrasesSubscription = null;
   }
+  this.speechService.stopAndReturnAudio()
+  .then(audioBlob => {
+    
+  this.nodes.get(this.nodetoUpdate).soundClip = audioBlob;
+
+  this.handleNodeClick(this.nodetoUpdate);
+  })
+  .catch(error => {
+    console.error('Error stopping and retrieving audio:', error);
+  });
+
+
+ 
 }
 
 
@@ -501,7 +515,7 @@ handleNodeClick(params: any): void {
 
   // Highlight the path from the initial node to the clicked node
 
-      this.traverseToOriginal(params, 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
+  this.traverseToOriginal(params, 1, this.nodes, this.edges); // Assuming 1 is your initial node ID
   
 }
 
