@@ -73,7 +73,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     receiveType = true;
     receiveType2 = false;
     selectedNode: boolean = false;
-    userType: string = '';
+    userType: string = 'host';
     isRecording = false;
     nodeState: string = 'shrunk';
     theRestState: string = 'expanded';
@@ -222,6 +222,11 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
 
     sendEmoji(emoji: string): void {
       this.debateSpace.sendEmoji(emoji);
+    }
+
+    simulate(type:string):void {
+      this.userType=type;
+      console.log(this.userType);
     }
   }
   

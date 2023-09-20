@@ -130,5 +130,71 @@ export class SpeechService {
     }
   }
 
+
+  //combine audio blobs.  future plan to allow a replay of a branch
+  async concatenateAudioBlobs(blobs: Blob[]): Promise<Blob> {
+    const AudioContextConstructor = window.AudioContext || (window as any).webkitAudioContext;
+    const audioContext = new AudioContextConstructor();
+
+    // Decode each blob into an audio buffer
+    const audioBuffers = await Promise.all(
+      blobs.map(async blob => {
+        const arrayBuffer = await blob.arrayBuffer();  // Use await here to resolve the promise
+        return audioContext.decodeAudioData(arrayBuffer);
+      })
+    );
+  
+    // Compute the total length for the new audio buffer
+    let totalLength = 0;
+    for (const buffer of audioBuffers) {
+      totalLength += buffer.length;
+    }
+  
+    // Create a new buffer of the total length
+    const concatenatedBuffer = audioContext.createBuffer(
+      audioBuffers[0].numberOfChannels,
+      totalLength,
+      audioBuffers[0].sampleRate
+    );
+  
+    // Copy the samples from the individual buffers to the concatenated buffer
+    for (let channel = 0; channel < audioBuffers[0].numberOfChannels; channel++) {
+      let position = 0;
+      for (const buffer of audioBuffers) {
+        concatenatedBuffer.copyToChannel(buffer.getChannelData(channel), channel, position);
+        position += buffer.length;
+      }
+    }
+  
+    // Convert the audio buffer back to a blob
+    return this.bufferToBlob(concatenatedBuffer);
+  }
+  
+  async bufferToBlob(buffer: AudioBuffer): Promise<Blob> {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+
+    const mediaStreamDestination = audioContext.createMediaStreamDestination(); // Create a MediaStreamAudioDestinationNode
+    const recorder = new MediaRecorder(mediaStreamDestination.stream); // Use the stream property from MediaStreamAudioDestinationNode
+    const chunks: Blob[] = [];
+
+    return new Promise<Blob>((resolve, reject) => {
+        recorder.ondataavailable = e => chunks.push(e.data);
+        recorder.onstop = () => resolve(new Blob(chunks, { type: 'audio/wav' }));
+        recorder.onerror = reject;
+
+        source.connect(mediaStreamDestination); // Connect source to mediaStreamDestination
+        source.start(0);
+        recorder.start();
+
+        source.onended = () => {
+            recorder.stop();
+            audioContext.close();
+        };
+    });
+}
+
+  
 }
 

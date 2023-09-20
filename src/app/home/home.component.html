@@ -1,26 +1,30 @@
-<div class="homePage"   >
-  <div class="pageContents"[class.blur-content]="matchWindow"[class.unblur-content]="!matchWindow">
-<div class="left">
 
+<!--
+<div class="left">
 </div>
-<div class="center">
-<div class="entrance justify-content-center align-items-center text-center">
-  <div class="jumbotron jumbotron-fluid ">
-    <div class="container">
-      <h1 class="display-4">Welcome to Debate Spaces</h1>
-      <p class="lead">Create a new space or join one that has already been started and enjoy!</p>
+-->
+<div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
+  <div style="position:absolute; width:390px; height:100%; display: flex;
+  flex-direction: column;
+  position:absolute;
+  overflow-y:hidden;">
+    <div>
+    <button class="btn btn-danger" [routerLink]="['/create']" style="border-radius:50%;position:absolute;bottom:10px;right:10px;z-index:2; width:70px;height:70px;">
+     <i style="font-size:40px;"class="fas fa-eye"></i>
+    </button>
     </div>
-  </div>
-</div>
+    <div class="center" style="position:relative; overflow-y: scroll;">
+
 <div class="carot">
 <ngb-carousel >
-  <ng-template ngbSlide *ngFor="let card of cards">
-    <div class="slide-bg" style="background-image: url('assets/Steve.jpeg')"></div>
+  <ng-template ngbSlide *ngFor="let data of dataArray">
+    <div class="slide-bg" style="background-image: url('assets/LandingPage.jpeg');"></div>
     <div class="card bg-dark text-white text-center" style="height: 20rem;">
       <div class="card-body">
-        <h1 class="card-title">{{ card.topic }}</h1>
-        <p class="card-text">{{ card.description }}</p>
-        <button [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
+        <h1 class="card-title">{{ data.title }}</h1>
+        <p class="card-text">{{ data.description }}</p>
+        <button *ngIf="data.link" [routerLink]="[data.link]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
+        <button *ngIf="data.button" (click)="togglePanel(data.button)" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
       </div>
     </div>
   </ng-template>
@@ -53,7 +57,7 @@
           </div>
           <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
             <span>100 spectating</span>
-            <button [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
+            <button [routerLink]="['/debateMob', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
         </div>
         </div>
      </div>
@@ -84,7 +88,7 @@
           </div>
           <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
             <span>100 spectating</span>
-            <button [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
+            <button [routerLink]="['/debateMob', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
         </div>
         </div>
      </div>
@@ -100,7 +104,7 @@
         <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
         <div class="d-flex justify-content-between align-items-center">
             <span>1000 Debates</span>
-            <button [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">View</button>
+            <button [routerLink]="['/debateMob', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">View</button>
         </div>
      </div>
     </div>
@@ -110,6 +114,21 @@
 </div>
 
 </div>
+<div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+  <div class="d-flex justify-content-center mt-3"> 
+    <div class="drag-handle centered"></div>
+  </div>
+    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
+      <app-tournament-bulletin></app-tournament-bulletin>
+    </div>
+    <div *ngIf="selectedButton===2" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
+      <app-leaderboard></app-leaderboard>>
+    </div>
+ 
+</div>
+</div>
+</div>
+<!--
 <div class="right">
   <div class="linklist">
      <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['/create']" style="font-size: 1.5rem; text-align:left;" (click)="authorize('host')"><i class="fas fas fa-plus-circle"></i> Create</button>
@@ -127,8 +146,8 @@
      <button class="btn btn-warning" [routerLink]="['debateMob', 1]"><b>Mobile Link</b></button>
     </div>
   
-</div>
-</div>
+</div>-->
+<!--
 <div class="groupForm bg-dark" style="border-radius: 15px;"*ngIf="matchWindow">
   <div class="popUpForm">
   <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
@@ -136,7 +155,7 @@
     <h3 class="text-center mb-4 text-white">Find a Debate</h3>
 
   
-      <!-- Role Selection -->
+   
       
     
         <div class="d-flex text-white" style="justify-content: space-between; align-items: center;">
@@ -182,7 +201,7 @@
     
 
       
-      <!-- Number of Speakers Selection -->
+      
      
 
       
@@ -194,9 +213,7 @@
   </form>
 </div>
 </div>
-</div>
-
-
+-->
 
 
    

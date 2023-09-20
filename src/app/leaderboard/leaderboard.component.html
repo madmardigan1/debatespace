@@ -1,0 +1,33 @@
+<div class="main text-white" style="display:flex; flex-direction: column; height:60vh; width:100%;">
+    <div class="header mx-2 justify-content:left">
+        <h1>Leaderboards</h1>
+    </div>
+
+    <div class="d-flex mx-2 mb-2 pb-2" style="border-bottom: 2px solid white;">
+        <button class="btn btn-dark btn-sm  mr-2" style="border-radius:20px;" (click)="sortLeaderboardBy('totalPoints')">All Time</button>
+        <button class="btn btn-dark btn-sm  mr-2" style="border-radius:20px;" (click)="sortLeaderboardBy('seasonPoints')">Current Season</button>
+        <button class="btn btn-dark btn-sm  mr-2" style="border-radius:20px;" (click)="sortLeaderboardBy('weeklyPoints')">This Week</button>
+    </div>
+    <div class="mx-10 mt-2">
+        <div class="d-flex justify-content-between">
+            <h2>User</h2>
+            <h2>Points</h2>
+        </div>
+        <div *ngFor="let item of leader">
+            <div class="d-flex justify-content-between">
+                <div>
+                    {{item.user}}
+                </div>
+                <div *ngIf="points=='totalPoints'">
+                    {{item.totalPoints}}
+                </div>
+                <div *ngIf="points=='seasonPoints'">
+                    {{item.seasonPoints}}
+                </div>
+                <div *ngIf="points=='weeklyPoints'">
+                    {{item.weeklyPoints}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

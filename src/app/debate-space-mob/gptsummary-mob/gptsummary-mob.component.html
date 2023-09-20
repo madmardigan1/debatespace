@@ -1,16 +1,19 @@
-<div class="d-flex justify-content-center mx-3" style="position:absolute; bottom:10px; width:100%;">
+<div class="d-flex justify-content-center" style="position:absolute; bottom:10px; width:100%;">
   
-        <div *ngIf="nextNode">
-    <button class="btn btn-white text-white rounded-circle" style="border:1px solid white; margin-left:2px; margin-right:2px;"  type="submit"  (click)="previousId()">
+        <div>
+    <button [disabled]="!nextNode" class="btn btn-white text-white rounded-circle" style=" margin-left:2px; margin-right:2px;"  type="submit"  (click)="previousId()">
         <i class="fas fa-chevron-left" style="transform: rotate(180);"></i>
     </button>
-    <button class="btn btn-white text-white rounded-circle" style="border:1px solid white; margin-left:2px; margin-right:2px;"  type="submit" (click)="nextId()">
-        <i class="fas fa-chevron-right" style="transform: rotate(180);"></i>
-    </button>
-</div>
-    <button *ngIf="traveled" class="btn btn-white text-white rounded-circle" style="color:white; margin-left:2px; margin-right:2px;"  type="submit" (click)="goBack()">
+    <button [disabled]="!traveled" class="btn btn-white text-white rounded-circle" style="color:white; margin-left:2px; margin-right:2px;"  type="submit" (click)="goBack()">
         <i class="fas fa-undo"></i>
     </button>
+    <button [disabled]="!nextNode" class="btn btn-white text-white rounded-circle" style=" margin-left:2px; margin-right:2px;"  type="submit" (click)="nextId()">
+        <i class="fas fa-chevron-right" style="transform: rotate(180);"></i>
+    </button>
+   
+   
+</div>
+   
    
 
 </div>

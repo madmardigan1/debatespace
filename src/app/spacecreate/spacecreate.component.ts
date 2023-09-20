@@ -53,7 +53,7 @@ onToggleChange() {
     const id = Date.now().toString();
     this.cardService.addCard({ ...formData, id });
     this.debateAuth.setUser('host');
-    this.router.navigate(['/debate', id]);
+    this.router.navigate(['/debateMob', id]);
   }
 }
 
