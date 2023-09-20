@@ -9,13 +9,18 @@
   position:absolute;
   overflow-y:hidden;">
     <div>
-    <button class="btn btn-danger" (click)="togglePanel(3)" style="border:1px solid black; border-radius:50%;position:absolute;bottom:10px;right:10px;z-index:2; width:70px;height:70px;">
-     <i style="font-size:40px;"class="fas fa-eye"></i>
+    <button class="btn btn-danger" (click)="togglePanel(3)" style="    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);opacity:.8; border:2px solid black; border-radius:50%;position:absolute;bottom:10px;right:10px;z-index:2; width:70px;height:70px; z-index:10000;">
+      <div *ngIf="!spinner">
+      <i style="font-size:40px;"class="fas fa-eye"></i>
+     </div>
+    <div *ngIf="spinner" style="display:flex;">
+    <div id="loader" class="spinner" *ngIf="spinner"></div>
+    </div>
     </button>
     </div>
     <div class="center" style="position:relative; overflow-y: scroll;">
 
-<div class="carot">
+<div class="carot" style="border:1px solid white; padding-left:5px;padding-right:5px;">
 <ngb-carousel >
   <ng-template ngbSlide *ngFor="let data of dataArray">
     <div class="slide-bg" style="background-image: url('assets/LandingPage.jpeg');"></div>
@@ -127,18 +132,89 @@
     <div *ngIf="selectedButton===2" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
       <app-leaderboard></app-leaderboard>>
     </div>
-    <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
+    <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:auto;">
+      <div *ngIf="!joinState" style="height:30vh;">
       <div class="d-flex justify-content-center align-items-center bg-dark text-white" style="flex-direction:column; width:100%; height:100%;">
         <div style="position:relative;">
             <h1>Choose</h1>
         </div>
         <div class="d-flex mx-3" style="position:relative">
         <button class="btn btn-white bg-white text-black mx-2" [routerLink]="['create']">Host</button>
-        <button class="btn btn-white bg-white text-black mx-2" [routerLink]="['join']">Join</button>
+        <button class="btn btn-white bg-white text-black mx-2" (click)="joinToggle()">Join</button>
         </div>
-    </div>
-    </div>
 
+    </div>
+    </div>
+    <div *ngIf="joinState" style="height:70vh;">
+      <div class="groupForm bg-dark" style="border-radius: 15px;">
+        <div class="popUpForm">
+        <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
+      
+          <h3 class="text-center mb-4 text-white">Find a Debate</h3>
+      
+        
+         
+            
+          
+              <div class="d-flex text-white" style="justify-content: space-between; align-items: center;">
+                <div style="align-items: center;">
+                  <div style="align-items:center;">
+              <span style="margin-right:5px;">Casual</span>
+              <div class="custom-toggle">
+                  <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled">
+      
+                  <label for="customToggle" class="custom-toggle-label"></label>
+              </div>
+              <span style="margin-left:5px;">Ranked</span>
+            </div>
+            </div>
+            <div>
+              <div class="text-white mt-3">
+                <label for="numSpeakers" style="text-wrap: nowrap; text-align:center;">Group Size</label>
+                <select class="form-control" id="numSpeakers" name="numSpeakers" style="width:auto;">
+                  <option>2</option>
+                  <option>4</option>
+                  <option>8</option>
+                </select>
+              </div>
+            </div>
+            </div>
+          
+          
+          <div class="form-group mt-4 text-white"  style="width:auto;" >
+            <h5>Topic</h5>
+            <div class="list-group scrollable-list2"> 
+              <a href="javascript:void(0);" 
+                 class="list-group-item list-group-item-action" 
+                 [class.active]="selectedOption === card.topic" 
+                 (click)="selectedOption = card.topic" 
+                 *ngFor="let card of cards">
+                {{ card.topic }}
+              </a>
+            </div>
+          </div>
+          
+      
+         
+          
+      
+            
+            
+           
+      
+            
+      
+      
+          <div class="form-group mt-4 text-center">
+            <button type="submit" class="btn btn-primary" >Find a group</button>
+          </div>
+        </form>
+      </div>
+      </div>
+
+    </div>
+    </div>
+    
    
 </div>
 </div>
@@ -162,73 +238,9 @@
     </div>
   
 </div>-->
-<!--
-<div class="groupForm bg-dark" style="border-radius: 15px;"*ngIf="matchWindow">
-  <div class="popUpForm">
-  <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
-
-    <h3 class="text-center mb-4 text-white">Find a Debate</h3>
-
-  
-   
-      
-    
-        <div class="d-flex text-white" style="justify-content: space-between; align-items: center;">
-          <div style="align-items: center;">
-            <div style="align-items:center;">
-        <span style="margin-right:5px;">Casual</span>
-        <div class="custom-toggle">
-            <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled">
-
-            <label for="customToggle" class="custom-toggle-label"></label>
-        </div>
-        <span style="margin-left:5px;">Ranked</span>
-      </div>
-      </div>
-      <div>
-        <div class="text-white mt-3">
-          <label for="numSpeakers" style="text-wrap: nowrap; text-align:center;">Group Size</label>
-          <select class="form-control" id="numSpeakers" name="numSpeakers" style="width:auto;">
-            <option>2</option>
-            <option>4</option>
-            <option>8</option>
-          </select>
-        </div>
-      </div>
-      </div>
-    
-    
-    <div class="form-group mt-4 text-white"  style="width:auto;" >
-      <h5>Topic</h5>
-      <div class="list-group scrollable-list2"> 
-        <a href="javascript:void(0);" 
-           class="list-group-item list-group-item-action" 
-           [class.active]="selectedOption === card.topic" 
-           (click)="selectedOption = card.topic" 
-           *ngFor="let card of cards">
-          {{ card.topic }}
-        </a>
-      </div>
-    </div>
-    
-
-   
-    
-
-      
-      
-     
-
-      
 
 
-    <div class="form-group mt-4 text-center">
-      <button type="submit" class="btn btn-primary" >Find a group</button>
-    </div>
-  </form>
-</div>
-</div>
--->
+
 
 
    

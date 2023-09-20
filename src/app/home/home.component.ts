@@ -28,6 +28,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ],
 })
 export class HomeComponent{
+  joinState=false;
   userForm: FormGroup;
   matchWindow = false;
   items: string[] = [];
@@ -74,13 +75,12 @@ authorize(typeofUser: string) {
   this.debateAuth.setUser(typeofUser);
 }
  
-findMatch() : void {
-  this.matchWindow = true;
-}
 
 submitForm(): void {
-  this.matchWindow = false;
+  this.selectedButton = 0;
   this.spinner=true;
+  this.joinState=false;
+ this.panelState='hidden';
 }
 
 get topics(): FormArray {
@@ -118,5 +118,7 @@ stopDrag = () => {
   document.removeEventListener('mouseup', this.stopDrag);
 }
 
-
+joinToggle () : void {
+  this.joinState = !this.joinState;
+  }
 }
