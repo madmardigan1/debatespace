@@ -4,12 +4,12 @@
 </div>
 -->
 <div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
-  <div style="position:absolute; width:390px; height:100%; display: flex;
+  <div class="bg-dark text-white" style="position:absolute; width:390px; height:100%; display: flex;
   flex-direction: column;
   position:absolute;
   overflow-y:hidden;">
     <div>
-    <button class="btn btn-danger" [routerLink]="['/create']" style="border-radius:50%;position:absolute;bottom:10px;right:10px;z-index:2; width:70px;height:70px;">
+    <button class="btn btn-danger" (click)="togglePanel(3)" style="border:1px solid black; border-radius:50%;position:absolute;bottom:10px;right:10px;z-index:2; width:70px;height:70px;">
      <i style="font-size:40px;"class="fas fa-eye"></i>
     </button>
     </div>
@@ -19,7 +19,7 @@
 <ngb-carousel >
   <ng-template ngbSlide *ngFor="let data of dataArray">
     <div class="slide-bg" style="background-image: url('assets/LandingPage.jpeg');"></div>
-    <div class="card bg-dark text-white text-center" style="height: 20rem;">
+    <div class="card bg-black text-white text-center" style="height: 20rem;">
       <div class="card-body">
         <h1 class="card-title">{{ data.title }}</h1>
         <p class="card-text">{{ data.description }}</p>
@@ -31,13 +31,14 @@
 </ngb-carousel>
 </div>
 
-<div class="exterior">
-<div class="container mt-2 p-0">
+<div class="exterior bg-black">
+<div class="container bg-black mt-2 p-0">
   <!-- First Header -->
   <h2 class="text-left mb-2">Live Now</h2>
   <div class="scroll-container mb-1">
     <div *ngFor="let card of cards" class="porp">
-      <div class="custom-card shadow-lg bg-dark text-white">
+      <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
+      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white;">
         <!-- Topic styled bold -->
         
         <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
@@ -57,7 +58,7 @@
           </div>
           <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
             <span>100 spectating</span>
-            <button [routerLink]="['/debateMob', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
+           
         </div>
         </div>
      </div>
@@ -65,10 +66,11 @@
   </div>
 
   <!-- Second Header -->
-  <h2 class="text-left mb-2">Top Channels We Think You'll Like</h2>
+  <h2 class="text-left mb-2 mt-3">Top Channels We Think You'll Like</h2>
   <div class="scroll-container mb-1">
-    <div *ngFor="let card of cards" class="porp">
-      <div class="custom-card shadow-lg bg-dark text-white">
+    <div *ngFor="let card of cards" class="porp bg-danger">
+      <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
+      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white;">
         <!-- Topic styled bold -->
         
         <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
@@ -88,7 +90,7 @@
           </div>
           <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
             <span>100 spectating</span>
-            <button [routerLink]="['/debateMob', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
+            
         </div>
         </div>
      </div>
@@ -96,15 +98,16 @@
   </div>
 
   <!-- Third Header -->
-  <h2 class="text-left mb-2">Topics We Think You'll Like</h2>
+  <h2 class="text-left mb-2 mt-3">Topics We Think You'll Like</h2>
   <div class="scroll-container">
     <div *ngFor="let card of cards" class="porp">
-      <div class="custom-card shadow-lg bg-dark text-white">
+      <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
+      <div class="custom-card shadow-lg bg-black text-white" style="border:1px solid white;">
         <!-- Topic styled bold -->
         <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
         <div class="d-flex justify-content-between align-items-center">
             <span>1000 Debates</span>
-            <button [routerLink]="['/debateMob', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">View</button>
+            
         </div>
      </div>
     </div>
@@ -124,7 +127,19 @@
     <div *ngIf="selectedButton===2" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
       <app-leaderboard></app-leaderboard>>
     </div>
- 
+    <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
+      <div class="d-flex justify-content-center align-items-center bg-dark text-white" style="flex-direction:column; width:100%; height:100%;">
+        <div style="position:relative;">
+            <h1>Choose</h1>
+        </div>
+        <div class="d-flex mx-3" style="position:relative">
+        <button class="btn btn-white bg-white text-black mx-2" [routerLink]="['create']">Host</button>
+        <button class="btn btn-white bg-white text-black mx-2" [routerLink]="['join']">Join</button>
+        </div>
+    </div>
+    </div>
+
+   
 </div>
 </div>
 </div>

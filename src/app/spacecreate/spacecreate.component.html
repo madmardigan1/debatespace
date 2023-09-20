@@ -1,5 +1,10 @@
-    <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded">
-        <h2 class="text-center text-white mb-4">Create a new space!</h2>
+    <div class="container justify-content-center" style="display:flex;position:absolute; left:0; top:0;width:100%; height:100%;">
+        <div class="inner container justify-content-center" style="position:absolute; bottom:0; top:0; display:flex; flex-direction: column; width:390px; height:100vh;">
+            
+
+         
+            <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded" style="height:100%;">
+             <h2 class="text-center text-white mb-4">Create a new space!</h2>
 
         <!-- Topic Input -->
         <div class="d-flex" style="justify-content: space-between;">
@@ -50,13 +55,8 @@
     
         </div>
         
-
-
-
-
-        <!-- Max Speakers -->
-        
-
-        <!-- Submit button -->
         <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-lg mt-3">Create Space</button>
     </form>
+    
+</div>
+</div>

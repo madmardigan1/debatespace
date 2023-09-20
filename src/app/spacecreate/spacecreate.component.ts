@@ -10,6 +10,8 @@ import { DebateAuthService } from '../home/debate-auth.service';
   styleUrls: ['./spacecreate.component.css']
 })
 export class SpacecreateComponent implements AfterViewInit {
+  selectionPane = true;
+  selectionPaneType = '';
   isToggled: boolean = false;
   additionalOptionValue: boolean = false;
   form: FormGroup;
@@ -54,6 +56,10 @@ onToggleChange() {
     this.cardService.addCard({ ...formData, id });
     this.debateAuth.setUser('host');
     this.router.navigate(['/debateMob', id]);
+  }
+  paneSelected(type:string) {
+    this.selectionPane=false;
+    this.selectionPaneType=type;
   }
 }
 
