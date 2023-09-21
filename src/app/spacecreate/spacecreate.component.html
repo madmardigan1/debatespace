@@ -1,57 +1,77 @@
 <div class="d-flex justify-content-center" style="width:100%;height:100%;">
     <div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
-    flex-direction: column;
-    position:absolute;
-    overflow-y:hidden;">
-            <div style="position:absolute; left:10px;top:10px;z-index: 3;">
-                <button class="btn btn-outline-white text-white" (click)="goBack()">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>  
-
-         
-            <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded" style="height:100%;">
-             <h2 class="text-center text-white mb-4">Create a Node!</h2>
-
+      flex-direction: column;
+      position:absolute;
+      overflow-y:hidden;">
+      <div style="position:absolute; left:10px;top:10px;z-index: 3;">
+        <button class="btn btn-outline-white text-white" (click)="goBack()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-black p-4 rounded"
+        style="height:100%;">
+        <h2 class="text-center text-white mb-4">Create a Node!</h2>
+  
         <!-- Topic Input -->
-        <div class="d-flex" style="justify-content: space-between; overflow-y: scroll;">
-        <div class="form-group">
-            <label for="topic" class="text-white">Add Topics</label>
-            <button type="button" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" [routerLink]="['/topicMenu']">
-                <i class="fa fa-plus"></i>
-              </button>
-           
-        </div>
-        <div *ngFor="let list of topic">
+        <div class="d-flex mb-3" style="justify-content: space-between; overflow-y: scroll;">
+          <div class="form-group">
+            <label for="topic" class="text-white mr-2">Add Topics</label> <!-- Separation between label and button -->
+            <button type="button" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;"
+              [routerLink]="['/topicMenu']">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <div *ngFor="let list of topic">
             <div class="d-flex bg-danger text-white" style="margin-left:3px;margin-right:3px;width:auto;border-radius:30%;">{{list}}</div>
+          </div>
         </div>
-    </div>
-    
+  
         <!-- Description -->
-        <div class="form-group">
-            <label for="description" class="text-white">Description</label>
-            <textarea class="form-control" formControlName="description" id="description" placeholder="Node conversation topic" rows="3" style="resize: none;"></textarea>
+        <div class="form-group mb-3"> <!-- More vertical spacing -->
+          <label for="description" class="text-white">Description</label>
+          <textarea class="form-control" formControlName="description" id="description"
+            placeholder="What do you want to talk about?" rows="3" style="resize: none;"></textarea>
         </div>
-
+  
         <!-- Conversation Type Toggle -->
-        <div class="d-flex align-items-center mb-2 mt-2 text-white" style="justify-content: space-between;">
-        <div class="d-flex align-items-center">
-            <span style="margin-right:5px;">Match me</span>
-            <div class="custom-toggle1" (click)="printToggleValue()">
-                <input type="checkbox" id="customToggle1" class="custom-toggle-checkbox1" formControlName="isToggled1" (change)="inviteToggle()">
-
+        <div class="d-flex align-items-center mb-3 text-white"> <!-- More vertical spacing -->
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <div class="d-flex align-items-center">
+              <span style="margin-right:5px;">Match me</span>
+              <div class="custom-toggle1" (click)="printToggleValue()">
+                <input type="checkbox" id="customToggle1" class="custom-toggle-checkbox1" formControlName="isToggled1"
+                  (change)="inviteToggle()">
                 <label for="customToggle1" class="custom-toggle-label1"></label>
+              </div>
+              <span style="margin-left:5px;">Invite</span>
             </div>
-            <span style="margin-left:5px;">Invite</span>
-            
+            <div *ngIf="isToggled1">
+                <div *ngIf="!inviteSent">
+              <button type="button" class="btn btn-outline-secondary" (click)="togglePanel()">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+                <div *ngIf="inviteSent">
+                    <b>invites sent!</b>
+                </div>
+            </div>
+          </div>
         </div>
-              
-            
-    
+  
+        <!-- Create Space Button -->
+        <div class="text-center mb-3"> <!-- Centered button -->
+          <button type="submit" [disabled]="form.invalid" class="btn btn-danger btn-lg mt-3">Create Node</button>
         </div>
-        
-        <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-lg mt-3">Create Space</button>
-    </form>
+      </form>
     
+
+    <div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+        <div class="d-flex justify-content-center mt-3"> 
+          <div class="drag-handle centered"></div>
+        </div>
+          <div class="content" style="display:flex; flex-direction:column; position:relative;height:70vh">
+            <app-user-search></app-user-search>
+         </div>
+    </div>
 </div>
 </div>

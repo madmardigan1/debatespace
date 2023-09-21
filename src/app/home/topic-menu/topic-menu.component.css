@@ -1,0 +1,7 @@
+.topics::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topics {
+    scrollbar-width: none;
+  }

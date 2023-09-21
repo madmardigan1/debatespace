@@ -1,0 +1,56 @@
+<div class="text-white"style="position:absolute; height:100%; width:100%; display:flex; flex-direction: column;">
+    <div class="top" style="height:80%; position:absolute;display:flex;flex-direction:column; width:100%; ">
+        <div style="display:flex;flex-direction:column;position:absolute;height:100%; width:100%;overflow-y: scroll; ">
+    <div class="d-flex text-center justify-content-center"style="width:100%; padding-left:10px;">
+        <h1>Invite others</h1>
+    </div>  
+    <div class="d-flex" style="padding-left: 10px; padding-right: 10px;">
+        <div *ngFor="let user of selectedUsers; let i = index" style="padding: 5px;"> <!-- Padding for each user button -->
+            <button class="bg-white text-black" style="border-radius: 30%;" (click)="removeUser(i)">{{user}}</button>
+        </div>
+    </div>
+    
+    <div class="d-flex align-items-center" style="padding: 10px 0; border-bottom:1px solid white;"> <!-- Padding for this div -->
+        <h4 class="mb-1" style="padding-right: 10px; padding-left:10px;">To:</h4> <!-- Padding to the right of the text -->
+        <input class="text-white bg-black" #inputRef type="text" (input)="onSearch($event)" placeholder="Search for a user...">
+ <!-- Padding for input field -->
+    </div>
+    
+    <div class="text-white" style="padding-left: 10px; padding-right: 10px;">
+        <div *ngFor="let user of filteredUsers" style="padding: 5px 0;">
+            <div class="d-flex justify-content-between align-items-center">
+                <button (click)="selectUser(user)">{{ user }}</button>
+                <i *ngIf="selectedUsers.includes(user)" class="fas fa-check-circle text-success"></i>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+    </div>  
+    <div class="bottom" style="display:flex;flex-direction:column;height:20%; width:100%;position:absolute; bottom:0; ">
+        <div class="d-flex justify-content-center align-items-stretch" style="width: 100%;">
+            <!-- Textarea container -->
+            <div class="bg-black text-white"style="width: 95%; position: relative;">
+                <form (submit)="onSubmitit($event)">
+                    <textarea
+
+                        class="textarea form-control bg-black text-white"
+                        placeholder="Hey come join my Node"
+                        aria-label="value"
+                        aria-describedby="button-addon2"
+                        [(ngModel)]="value"
+                        name="inputValue"
+                        rows="3"
+                        style="resize: none; width: 100%; border:1px solid rgba(12, 5, 221, 0.6)">
+                    </textarea>
+                    <button class="btn btn-black rounded-circle submit-button"style="background-color:transparent; color:white;"type="submit" id="button-addon2">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        
+        </div>
+</div>

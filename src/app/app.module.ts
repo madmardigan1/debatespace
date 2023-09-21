@@ -41,6 +41,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
+import { UserSearchComponent } from './user-search/user-search.component';
 
 //node
 
@@ -70,6 +71,7 @@ import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
     AvControlMobComponent,
     LeaderboardComponent,
     TopicMenuComponent,
+    UserSearchComponent,
 
 
     

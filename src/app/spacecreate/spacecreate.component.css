@@ -94,10 +94,31 @@
 }
 
 .custom-toggle-checkbox1:checked + .custom-toggle-label1 {
-    background-color: #007bff; /* Bootstrap primary color */
+    background-color: #dc3545; /* Bootstrap primary color */
 }
 
 .custom-toggle-checkbox1:checked + .custom-toggle-label1::before {
     left: 32px;
 }
+
+.slide-panel {
+    border: 1px solid white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    overflow: hidden;
+    opacity: 1;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    z-index: 9999999;
+  }
+  
+  .drag-handle {
+    height: 5px;
+    width: 40px;
+    background-color: #cccccc;
+    cursor: pointer;
+  }
 

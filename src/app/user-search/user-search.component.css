@@ -1,0 +1,35 @@
+.text-white.bg-black:focus {
+    outline: none;
+    color: white;  /* this ensures the caret is visible, adjust the color as per your requirement */
+}
+
+/* Optional: to give users some feedback, you can also add a subtle box-shadow or change the border */
+.text-white.bg-black:focus {
+   
+    /* OR */
+    border: 1px solid rgba(255, 255, 255, 0.0);  /* subtle white border */
+}
+
+.submit-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+}
+.textarea.placeholder {
+    color:white;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+    color: white;
+    opacity: 1; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+  }
