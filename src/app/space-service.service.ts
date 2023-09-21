@@ -31,6 +31,10 @@ export class CardDataService {
   addCard(card: Card) {
     const currentCards = this.cards.getValue();
     this.cards.next([...currentCards, card]);
-  }
+
+    // Here, operate on 'currentCards' directly after updating it
+
+}
+
 }
 

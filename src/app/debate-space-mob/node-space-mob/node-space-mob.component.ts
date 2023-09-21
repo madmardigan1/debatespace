@@ -50,6 +50,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   currentNode: any;
   previousNode: any;
   siblingChecker: any;
+  thumbsPosition: { x: number, y: number } = { x: 0, y: 0 };
   isRecording = false;
   network!: Network;
   zoomscale = 1.0;
@@ -141,10 +142,10 @@ private initializeSubscriptions() {
         this.zoomscale = 1;
       }
       
-    /*  this.network.focus(this.lastSelectedNode, {
+      this.network.focus(this.lastSelectedNode, {
         scale: this.zoomscale,
         animation: false
-      });*/
+      });
     }),
     /*this.settingsService.getPOV().subscribe(pov => {
       // Do something with the updated POV
@@ -329,6 +330,16 @@ thumbdown(): void {
   if (this.selectedNodeIndex !== null) {
     const nodeData = this.nodes.get(this.selectedNodeIndex);
     if (nodeData) {
+        // Get the position of the node in canvas space
+        const canvasPos = this.network.getPositions([this.selectedNodeIndex]);
+        if (canvasPos[this.selectedNodeIndex]) {
+          const { x, y } = canvasPos[this.selectedNodeIndex];
+  
+          // Convert canvas position to DOM position
+          const domPos = this.network.canvasToDOM({ x, y });
+          this.thumbsPosition.x = domPos.x + 40; 
+          this.thumbsPosition.y = domPos.y;
+        }
       nodeData.Moment -= 1;
       this.animationState = 'down';
       if (nodeData.Moment <= 0) {
@@ -355,6 +366,18 @@ thumbup(): void {
   if (this.selectedNodeIndex !== null) {
     const nodeData = this.nodes.get(this.selectedNodeIndex);
     if (nodeData) {
+   
+       // Get the position of the node in canvas space
+       const canvasPos = this.network.getPositions([this.selectedNodeIndex]);
+       if (canvasPos[this.selectedNodeIndex]) {
+         const { x, y } = canvasPos[this.selectedNodeIndex];
+ 
+         // Convert canvas position to DOM position
+         const domPos = this.network.canvasToDOM({ x, y });
+         this.thumbsPosition.x = domPos.x - 80; 
+         this.thumbsPosition.y = domPos.y;
+       }
+      
       nodeData.Moment += 1;
       this.animationState = 'up';
       setTimeout(() => {
@@ -568,12 +591,11 @@ centerOnNode(nodeId: any): void {
 }
 
 wrapText(text: string, maxCharsPerLine: number = 25): string {
-  // If the text is shorter than 122 characters, pad it
-  if (text.length < 122) {
-      text = text.padEnd(122, ' ');
-  } else {
-      // If text is longer than 122 characters, truncate it to the last 122 characters
+  // If text is longer than 122 characters, truncate it to the last 122 characters
+  let appendEllipsis = false;
+  if (text.length > 122) {
       text = text.slice(-122);
+      appendEllipsis = true;
   }
 
   let wrappedText = '';
@@ -606,11 +628,13 @@ wrapText(text: string, maxCharsPerLine: number = 25): string {
   // Take only the first 5 lines, then join them
   wrappedText = wrappedText.split('\n').slice(0, 5).join('\n');
 
-  // Ensure the output is at least 122 characters before appending ellipsis
-  wrappedText = wrappedText.padEnd(122, ' ');
-
-  return wrappedText + '...';
+  if (appendEllipsis) {
+      return wrappedText + '...';
+  } else {
+      return wrappedText.trimEnd(); // remove trailing spaces for shorter texts
+  }
 }
+
 
 
 

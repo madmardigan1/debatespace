@@ -1,5 +1,8 @@
-    <div class="container justify-content-center" style="display:flex;position:absolute; left:0; top:0;width:100%; height:100%;">
-        <div class="inner container justify-content-center" style="position:absolute; bottom:0; top:0; display:flex; flex-direction: column; width:390px; height:100%;">
+<div class="d-flex justify-content-center" style="width:100%;height:100%;">
+    <div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
+    flex-direction: column;
+    position:absolute;
+    overflow-y:hidden;">
             <div style="position:absolute; left:10px;top:10px;z-index: 3;">
                 <button class="btn btn-outline-white text-white" (click)="goBack()">
                   <i class="fas fa-times"></i>
@@ -14,7 +17,7 @@
         <div class="d-flex" style="justify-content: space-between; overflow-y: scroll;">
         <div class="form-group">
             <label for="topic" class="text-white">Add Topics</label>
-            <button type="button" formControlName="topic" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" [routerLink]="['/topicMenu']">
+            <button type="button" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" [routerLink]="['/topicMenu']">
                 <i class="fa fa-plus"></i>
               </button>
            

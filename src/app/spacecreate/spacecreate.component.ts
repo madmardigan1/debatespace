@@ -25,7 +25,6 @@ export class SpacecreateComponent implements AfterViewInit {
   constructor(private location:Location,private fb: FormBuilder, private topicMenu: TopicMenuService,private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService) {
    // Inside your component class constructor:
 this.form = this.fb.group({
-  topic: [['']],
   description: ['', Validators.required],
   isToggled: [false],
   isToggled1: [false],  // new form control for toggle
@@ -60,7 +59,9 @@ onToggleChange() {
   submit() {
     const formData = this.form.value;
     const id = Date.now().toString();
-    this.cardService.addCard({ ...formData, id });
+    const number = 3;
+    const topic=this.topic[1];
+    this.cardService.addCard({ ...formData,topic:this.topic[1],number:number, id: id });
     this.debateAuth.setUser('host');
     this.router.navigate(['/debateMob', id]);
   }

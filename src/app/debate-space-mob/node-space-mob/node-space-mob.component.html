@@ -28,8 +28,18 @@
 
        
    
-    <i class="fas fa-arrow-up" *ngIf="animationState === 'up'" [@arrowAnimation]="animationState"></i>
-    <i class="fas fa-arrow-down" *ngIf="animationState === 'down'" [@arrowAnimation]="animationState"></i>
+          <i class="fas fa-arrow-up" 
+          *ngIf="animationState === 'up'" 
+          [@arrowAnimation]="animationState" 
+          [style.left.px]="thumbsPosition.x" 
+          [style.top.px]="thumbsPosition.y">
+       </i>
+       <i class="fas fa-arrow-down" 
+       *ngIf="animationState === 'down'" 
+       [@arrowAnimation]="animationState" 
+       [style.left.px]="thumbsPosition.x" 
+       [style.top.px]="thumbsPosition.y">
+    </i>
   
    
   </div>
