@@ -40,6 +40,7 @@ import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-cont
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
 
 //node
 
@@ -68,6 +69,7 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
     GptsummaryMobComponent,
     AvControlMobComponent,
     LeaderboardComponent,
+    TopicMenuComponent,
 
 
     

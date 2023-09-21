@@ -1,45 +1,37 @@
     <div class="container justify-content-center" style="display:flex;position:absolute; left:0; top:0;width:100%; height:100%;">
-        <div class="inner container justify-content-center" style="position:absolute; bottom:0; top:0; display:flex; flex-direction: column; width:390px; height:100vh;">
-            
+        <div class="inner container justify-content-center" style="position:absolute; bottom:0; top:0; display:flex; flex-direction: column; width:390px; height:100%;">
+            <div style="position:absolute; left:10px;top:10px;z-index: 3;">
+                <button class="btn btn-outline-white text-white" (click)="goBack()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>  
 
          
             <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-dark p-4 rounded" style="height:100%;">
-             <h2 class="text-center text-white mb-4">Create a new space!</h2>
+             <h2 class="text-center text-white mb-4">Create a Node!</h2>
 
         <!-- Topic Input -->
-        <div class="d-flex" style="justify-content: space-between;">
+        <div class="d-flex" style="justify-content: space-between; overflow-y: scroll;">
         <div class="form-group">
-            <label for="topic" class="text-white">Topic</label>
-            <input #topicInput formControlName="topic" type="text" class="form-control" id="topic" placeholder="Enter the topic">
+            <label for="topic" class="text-white">Add Topics</label>
+            <button type="button" formControlName="topic" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" [routerLink]="['/topicMenu']">
+                <i class="fa fa-plus"></i>
+              </button>
+           
         </div>
-        <div class="form-group mb-0 mr-2" style="width: auto;">
-            <label for="Max Speakers" class="text-white">Max Speakers</label>
-            <select formControlName="number" class="form-control mx-4" id="Max Speakers" style="width: auto;">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
+        <div *ngFor="let list of topic">
+            <div class="d-flex bg-danger text-white" style="margin-left:3px;margin-right:3px;width:auto;border-radius:30%;">{{list}}</div>
         </div>
     </div>
+    
         <!-- Description -->
         <div class="form-group">
             <label for="description" class="text-white">Description</label>
-            <textarea class="form-control" formControlName="description" id="description" placeholder="Describe the space" rows="3" style="resize: none;"></textarea>
+            <textarea class="form-control" formControlName="description" id="description" placeholder="Node conversation topic" rows="3" style="resize: none;"></textarea>
         </div>
 
         <!-- Conversation Type Toggle -->
         <div class="d-flex align-items-center mb-2 mt-2 text-white" style="justify-content: space-between;">
-            <div class="d-flex align-items-center">
-            <span style="margin-right:5px;">Casual</span>
-            <div class="custom-toggle" (click)="printToggleValue()">
-                <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled" (change)="onToggleChange()">
-
-                <label for="customToggle" class="custom-toggle-label"></label>
-            </div>
-            <span style="margin-left:5px;">Ranked</span>
-        </div>
         <div class="d-flex align-items-center">
             <span style="margin-right:5px;">Match me</span>
             <div class="custom-toggle1" (click)="printToggleValue()">

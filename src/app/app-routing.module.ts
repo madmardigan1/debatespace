@@ -7,6 +7,7 @@ import { DebateSpaceComponent } from './debate-space/debate-space.component';
 import { TournamentBulletinComponent } from './tournament-bulletin/tournament-bulletin.component';
 import { BrowsePageComponent } from './browse-page/browse-page.component';
 import { DebateSpaceMobComponent } from './debate-space-mob/debate-space-mob.component';
+import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'card-details/:id', component: CardDetailsComponent },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'debate/:id', component: DebateSpaceComponent},
   { path: 'tournament', component: TournamentBulletinComponent},
   { path: 'browse', component: BrowsePageComponent},
-  { path: 'debateMob/:id', component: DebateSpaceMobComponent}
+  { path: 'debateMob/:id', component: DebateSpaceMobComponent},
+  { path: 'topicMenu', component:TopicMenuComponent}
 ];
 
 @NgModule({

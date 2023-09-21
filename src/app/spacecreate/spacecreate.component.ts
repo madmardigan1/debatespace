@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { CardDataService, Card } from '../space-service.service';
 import { Router } from '@angular/router';
 import { DebateAuthService } from '../home/debate-auth.service';
-
+import { TopicMenuService } from '../home/topic-menu/topic-menu.service';
+import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-spacecreate',
   templateUrl: './spacecreate.component.html',
@@ -16,15 +18,15 @@ export class SpacecreateComponent implements AfterViewInit {
   additionalOptionValue: boolean = false;
   form: FormGroup;
   cards: Card[] = [];
+  topic: string[] = [];
+  private subscription!: Subscription;
   isRanked = false;
   @ViewChild('topicInput') topicInput!: ElementRef;
-  constructor(private fb: FormBuilder, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService) {
+  constructor(private location:Location,private fb: FormBuilder, private topicMenu: TopicMenuService,private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService) {
    // Inside your component class constructor:
 this.form = this.fb.group({
-  topic: ['', Validators.required],
+  topic: [['']],
   description: ['', Validators.required],
-  number: ['', Validators.required],
-  entrancefee: [],
   isToggled: [false],
   isToggled1: [false],  // new form control for toggle
   additionalOptionValue: [false]  // new form control for checkbox
@@ -33,6 +35,10 @@ this.form = this.fb.group({
 
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
+    });
+
+    this.subscription =this.topicMenu.getTopics().subscribe(topics => {
+      this.topic=topics;
     });
   }
   printToggleValue() {
@@ -49,6 +55,7 @@ onToggleChange() {
 
   ngAfterViewInit() {
     this.topicInput.nativeElement.focus();
+    
   }
   submit() {
     const formData = this.form.value;
@@ -60,6 +67,10 @@ onToggleChange() {
   paneSelected(type:string) {
     this.selectionPane=false;
     this.selectionPaneType=type;
+  }
+
+  goBack() {
+    this.location.back();
   }
 }
 

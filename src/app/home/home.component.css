@@ -68,7 +68,7 @@
   }
   
   .custom-toggle-checkbox:checked + .custom-toggle-label {
-    background-color: #007bff; /* Bootstrap primary color */
+    background-color: #dc3545/* Bootstrap primary color */
   }
   
   .custom-toggle-checkbox:checked + .custom-toggle-label::before {
@@ -189,17 +189,7 @@
   .scrollable-list:hover {
     background-color: #e6e6e6; /* light gray background on hover */
   }
-  
-  .groupForm {
-    
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    left:25%;
-    top:15%;
-    width: 50%;
-    height: auto;
-  }
+
   .spinner {
     border: 5px solid #f3f3f3; /* Light grey */
     border-top: 5px solid #3498db; /* Blue */
@@ -230,4 +220,27 @@
   padding: 0;
   }
   
-  
+  .scrollTopic {
+    max-height:200px; 
+    position:relative; 
+    overflow-x: scroll;
+
+  }
+  /* For Webkit browsers */
+.scrollTopic::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+.scrollTopic {
+  scrollbar-width: none;
+}
+
+/* For IE & Edge */
+.scrollTopic {
+  -ms-overflow-style: none;
+}
+
+.topicButton:hover {
+  background-color: grey;
+}

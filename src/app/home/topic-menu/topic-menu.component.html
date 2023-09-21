@@ -1,0 +1,54 @@
+
+<div class="d-flex justify-content-center" style="width:100%;height:100%;">
+<div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
+flex-direction: column;
+position:absolute;
+overflow-y:hidden;">
+<div class="top"style="position:relative;display:flex; flex-direction:column;height:80%; overflow-y: scroll;">
+<div  style="position:absolute; display:flex; flex-direction: column;flex:auto;width:100%; overflow-y:scroll;">
+  <div class="d-flex justify-content-center text-white" style="position:relative;">
+    <h1>Add Topics</h1>
+ 
+  <div style="position:absolute; left:5px;">
+    <button class="btn btn-outline-white text-white" (click)="goBack()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>
+<div class="d-flex" style="overflow-x:scroll; flex-grow:1; position:relative;">
+<div *ngFor="let list of savedTopics">
+  <div class="bg-danger" style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;">{{list}}</div>
+</div>
+</div>
+  <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
+   
+    <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(-1)">Popular Topics</button>
+    <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
+  </div>
+  <div *ngIf="expandPane==-1" class="scrollTopic d-flex mt-3 mb-3" style="position:relative;">
+    <div *ngFor="let card of cards">
+      <button class="btn btn-danger" style="margin-right:5px; margin-left:5px;border-radius:40%;"(click)="saveTopic(card.topic)">{{card.topic}}</button>
+    </div>
+  </div>
+  <div *ngFor="let card of cards let i = index" style="position:relative; display:flex; flex-direction:column;">
+    <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
+   
+      <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(i)">{{card.topic}}</button>
+      <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
+    </div>
+    <div *ngIf="expandPane==i" class="scrollTopic d-flex mt-3 mb-3">
+      <div *ngFor="let card of cards">
+        <button class="btn btn-danger" style="margin-right:5px; margin-left:5px;border-radius:40%;" (click)="saveTopic(card.topic)">{{card.topic}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+  <div class="bottom justify-content-center mt-5" style="justify-items:center;align-items:vertical; display:flex; position:relative;width:100%;height:20%;bottom:0;left:0;">
+     <div>
+      <button class="btn btn-danger" style="height:60px"(click)="addTopics()">Add Topics</button>
+    </div>
+  </div>
+</div>
+</div>

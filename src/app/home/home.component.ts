@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Carousel } from './carousel';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { TopicMenuService } from './topic-menu/topic-menu.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -28,10 +30,14 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ],
 })
 export class HomeComponent{
+  savedTopics: string[] = [];
+  expandPane = -2;
+  topicSelection = false;
   joinState=false;
   userForm: FormGroup;
   matchWindow = false;
   items: string[] = [];
+  private subscription!:Subscription;
   cards: Card[] = [];
   selectedOption: string = '';
   spinner = false;
@@ -40,7 +46,7 @@ export class HomeComponent{
     {
         title: 'Welcome to Sequitur Nodes',
         description: 'home for live multi-media discussions',
-        photo: 'path/to/first/photo.jpg',
+        photo: 'assets/LandingPage.jpeg',
         
     },
     {
@@ -57,7 +63,7 @@ export class HomeComponent{
      }
 ];
 
-  constructor(private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
     this.userForm = this.fb.group({
       roles: this.fb.group({
         speaker: [false],
@@ -68,6 +74,15 @@ export class HomeComponent{
     
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
+    });
+
+    this.subscription =this.topicMenu.getTopics().subscribe(topics => {
+      this.savedTopics=topics;
+      if (this.savedTopics.length>0) {
+        this.selectedButton=3;
+        this.joinState=true;
+        this.panelState='visible';
+      }
     });
   }
 
@@ -121,4 +136,27 @@ stopDrag = () => {
 joinToggle () : void {
   this.joinState = !this.joinState;
   }
+
+selectTopics () : void {
+  this.topicSelection = !this.topicSelection;
+}
+
+closeMenu () : void {
+  this.topicSelection = !this.topicSelection;
+  this.savedTopics = [];
+}
+
+expand (select:number) : void {
+  this.expandPane = select;
+}
+
+saveTopic (list:string) : void {
+  this.savedTopics.push(list);
+}
+
+addTopics ():void{
+  this.topicSelection = !this.topicSelection;
+  console.log(this.savedTopics)
+  this.joinState=true;
+}
 }
