@@ -9,7 +9,7 @@
     opacity: 1;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
-    z-index: 999999999;
+    z-index: 99999;
   }
   
   .drag-handle {

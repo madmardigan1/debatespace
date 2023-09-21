@@ -5,21 +5,17 @@
     color: white;
 }
 
-.outerbox {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 390px;
-    position:absolute;
 
-  }
-  
   .nodeArea {
     height: 40%;
     width:100%;
     position:relative;
     top:0px;
   }
+  .btn {
+    transition: background-color 0.3s;
+  }
+  
   
   .theRest {
     
@@ -64,7 +60,7 @@
   opacity: 1;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
-  z-index: 9999999;
+  z-index: 999999;
 }
 
 .drag-handle {

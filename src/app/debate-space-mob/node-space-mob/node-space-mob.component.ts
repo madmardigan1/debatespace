@@ -234,7 +234,7 @@ private initNetwork() {
 
   this.network = new Network(this.visNetwork.nativeElement, data, options);
   const node: any = this.nodes.get(1);
-  node.label = this.inputdata;
+  node.label = this.wrapText(this.inputdata);
   node.text = this.wrapText(this.inputdata);
   node.fullText = this.inputdata;
   this.nodes.update(node);

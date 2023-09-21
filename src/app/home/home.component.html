@@ -20,7 +20,7 @@
     </div>
     <div class="center" style="position:relative; overflow-y: scroll;">
 
-<div class="carot" style="border:1px solid white; padding-left:5px;padding-right:5px;">
+<div class="carot text-white" style="border:1px solid white; padding-left:5px;padding-right:5px;">
 <ngb-carousel >
   <ng-template ngbSlide *ngFor="let data of dataArray">
    
@@ -36,85 +36,110 @@
 </ngb-carousel>
 </div>
 
-<div class="exterior bg-black">
+<div class="exterior bg-black" style="padding-left:10px;padding-right:10px; padding-bottom:80px;">
 <div class="container bg-black mt-2 p-0">
   <!-- First Header -->
   <h2 class="text-left mb-2">Live Now</h2>
   <div class="scroll-container mb-1">
-    <div *ngFor="let card of cards" class="porp">
+    <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
       <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
-      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white;">
-        <!-- Topic styled bold -->
+      <!-- Top Colored Box -->
+      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
         
-        <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
+        <!-- Description styled at the top and spanning the whole card -->
+        <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
         
-        <!-- Description styled slightly smaller and placed below topic -->
-        <p class="card-text mb-3">{{card.description}}</p>
+        <!-- Viewers Count in Upper Right -->
+        <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
+          <i class="fas fa-user"></i> 100
+        </div>
+      </div>
+    
+      <!-- Black Box Below -->
+      <div class="bg-black text-white" style="border: 1px solid black;">
+        <div class="user-info" style="width:250px;display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
+      
         
-        <!-- "Join" button with "x/{max speakers}" and "#spectating" to its right -->
-        
-        
-        <div class="user-info">
-          <div style="display:flex; flex-direction: column;">
           
-          <img [src]="'/assets/Steve1.jpeg'" alt="Steve" class="bigger-image" style="border-radius:50%; width:40px; height:40px;object-fit: cover;
-          display: block; position:relative; bottom:0;"> <!-- Adjust width as needed -->
-          <h5 style="padding-left:10px; margin-bottom:0;">Steve</h5>
+          <!-- User Image and Name -->
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;"> <!-- Width and height set to 30px -->
+            <h5 style="margin-top: 5px; font-size: 12px;">Steve</h5> <!-- font-size reduced to 12px -->
           </div>
-          <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
-            <span>100 spectating</span>
-           
+          
+          <!-- Topic -->
+          <div>
+            <span style="font-size: 14px;">{{card.topic}}</span> <!-- font-size reduced to 14px -->
+          </div>
         </div>
-        </div>
-     </div>
+      </div>
     </div>
+    
+    
+    
   </div>
 
   <!-- Second Header -->
   <h2 class="text-left mb-2 mt-3">Top Channels We Think You'll Like</h2>
   <div class="scroll-container mb-1">
-    <div *ngFor="let card of cards" class="porp bg-danger">
+    <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
       <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
-      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white;">
-        <!-- Topic styled bold -->
+      <!-- Top Colored Box -->
+      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
         
-        <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
+        <!-- Description styled at the top and spanning the whole card -->
+        <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
         
-        <!-- Description styled slightly smaller and placed below topic -->
-        <p class="card-text mb-3">{{card.description}}</p>
+        <!-- Viewers Count in Upper Right -->
+        <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
+          <i class="fas fa-user"></i> 100
+        </div>
+      </div>
+    
+      <!-- Black Box Below -->
+      <div class="bg-black text-white" style="border: 1px solid black;">
+        <div class="user-info" style="width:250px;display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
+      
         
-        <!-- "Join" button with "x/{max speakers}" and "#spectating" to its right -->
-        
-        
-        <div class="user-info">
-          <div style="display:flex; flex-direction: column;">
           
-          <img [src]="'/assets/Steve1.jpeg'" alt="Steve" class="bigger-image" style="border-radius:50%; width:40px; height:40px;object-fit: cover;
-          display: block; position:relative; bottom:0;"> <!-- Adjust width as needed -->
-          <h5 style="padding-left:10px; margin-bottom:0;">Steve</h5>
+          <!-- User Image and Name -->
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;"> <!-- Width and height set to 30px -->
+            <h5 style="margin-top: 5px; font-size: 12px;">Steve</h5> <!-- font-size reduced to 12px -->
           </div>
-          <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
-            <span>100 spectating</span>
-            
+          
+          <!-- Topic -->
+          <div>
+            <span style="font-size: 14px;">{{card.topic}}</span> <!-- font-size reduced to 14px -->
+          </div>
         </div>
-        </div>
-     </div>
+      </div>
     </div>
   </div>
 
   <!-- Third Header -->
   <h2 class="text-left mb-2 mt-3">Topics We Think You'll Like</h2>
-  <div class="scroll-container">
-    <div *ngFor="let card of cards" class="porp">
-      <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
-      <div class="custom-card shadow-lg bg-black text-white" style="border:1px solid white;">
-        <!-- Topic styled bold -->
-        <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
-        <div class="d-flex justify-content-between align-items-center">
-            <span>1000 Debates</span>
-            
-        </div>
-     </div>
+
+  <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
+   
+    <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(-1)">Popular Topics</button>
+    <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
+  </div>
+  <div *ngIf="expandPane==-1" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="position:relative;overflow-x:scroll;">
+    <div *ngFor="let card of cards">
+      <button class="btn btn-danger" style="margin-right:5px; margin-left:5px;border-radius:40%;"(click)="saveTopic(card.topic)">{{card.topic}}</button>
+    </div>
+  </div>
+  <div *ngFor="let card of cards let i = index" style="position:relative; display:flex; flex-direction:column;">
+    <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
+   
+      <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(i)">{{card.topic}}</button>
+      <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
+    </div>
+    <div *ngIf="expandPane==i" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
+      <div *ngFor="let card of cards">
+        <button class="btn btn-danger" style="margin-right:5px; margin-left:5px;border-radius:40%;" (click)="saveTopic(card.topic)">{{card.topic}}</button>
+      </div>
     </div>
   </div>
 </div>
@@ -123,9 +148,18 @@
 
 </div>
 <div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+  <div style="position:absolute; left:10px;top:10px; z-index:99999">
+    <button class="btn btn-outline-white text-white" (click)="togglePanel(0)">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
   <div class="d-flex justify-content-center mt-3"> 
+    
     <div class="drag-handle centered"></div>
   </div>
+  <div *ngIf="selectedButton===5" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
+    <app-about-nodes></app-about-nodes>
+    </div>
     <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
       <app-tournament-bulletin></app-tournament-bulletin>
     </div>
@@ -243,25 +277,7 @@ overflow-y:hidden;">
 
 
 </div>
-<!--
-<div class="right">
-  <div class="linklist">
-     <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['/create']" style="font-size: 1.5rem; text-align:left;" (click)="authorize('host')"><i class="fas fas fa-plus-circle"></i> Create</button>
-     <button type="button" class="btn btn-outline-secondary custom-border custom-text" style="font-size: 1.5rem;text-align:left;" data-toggle="modal" data-target="#findDebateModal" (click)="findMatch()"> 
-      <div *ngIf="!spinner">
-      <i class="fas fa-search"></i> Group Finder
-    </div>
-    <div *ngIf="spinner" style="display:flex;">
-    <div id="loader" class="spinner" style="margin-left:0;margin-right:7px;" *ngIf="spinner"></div>Finding Group
-    </div>
-    </button>
-    
-     <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['browse']" style="font-size: 1.5rem; text-align:left;"><i class="fas fa-eye"></i> Browse</button>
-     <button type="button" class="btn btn-outline-secondary custom-border custom-text" [routerLink]="['tournament']" style="font-size: 1.5rem; text-align:left;"><i class="fas fa-trophy"></i> Tournaments</button>
-     <button class="btn btn-warning" [routerLink]="['debateMob', 1]"><b>Mobile Link</b></button>
-    </div>
-  
-</div>-->
+
 
 
 

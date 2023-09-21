@@ -46,8 +46,7 @@ export class HomeComponent{
     {
         title: 'Welcome to Sequitur Nodes',
         description: 'home for live multi-media discussions',
-        photo: 'assets/LandingPage.jpeg',
-        
+        button: 5
     },
     {
         title: 'Upcoming Tournaments',

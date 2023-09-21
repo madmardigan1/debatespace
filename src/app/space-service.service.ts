@@ -15,7 +15,7 @@ export interface Card {
 
 export class CardDataService {
   private cards = new BehaviorSubject<Card[]>([
-    {id: '1', topic: "Politics", description: "What Trump just did", number: 10},
+    {id: '1', topic: "Politics", description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", number: 10},
     {id: '2', topic: "Technology", description: "Latest breakthroughs in AI", number: 50},
     {id: '3', topic: "Science", description: "Mars rover finds something interesting", number: 20},
     {id: '4', topic: "Sports", description: "Olympics highlights", number: 25},

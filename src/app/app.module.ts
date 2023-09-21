@@ -43,6 +43,10 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { UserCardComponent } from './debate-space-mob/user-summary-mob/user-card/user-card.component';
+import { AboutNodesComponent } from './home/about-nodes/about-nodes.component';
+import { ReportFormComponent } from './debate-space-mob/report-form/report-form.component';
+import { ShareNodeComponent } from './debate-space-mob/share-node/share-node.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 //node
 
@@ -74,6 +78,10 @@ import { UserCardComponent } from './debate-space-mob/user-summary-mob/user-card
     TopicMenuComponent,
     UserSearchComponent,
     UserCardComponent,
+    AboutNodesComponent,
+    ReportFormComponent,
+    ShareNodeComponent,
+    
 
 
     
@@ -81,6 +89,7 @@ import { UserCardComponent } from './debate-space-mob/user-summary-mob/user-card
 
   ],
   imports: [
+    MatSnackBarModule,
     MatMenuModule,
     MatSlideToggleModule,
     MatTabsModule,

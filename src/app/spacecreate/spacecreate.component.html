@@ -66,6 +66,11 @@
     
 
     <div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+      <div style="position:absolute; left:10px;top:10px;z-index: 3;">
+        <button class="btn btn-outline-white text-white" (click)="togglePanel()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
         <div class="d-flex justify-content-center mt-3"> 
           <div class="drag-handle centered"></div>
         </div>

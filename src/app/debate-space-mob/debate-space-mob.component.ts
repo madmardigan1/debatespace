@@ -8,6 +8,7 @@ import { DebateSpaceService } from './debate-space.service';
 import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
 import { GPTsummaryService } from './gptsummary-mob/gptsummary.service';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   animations: [
@@ -63,7 +64,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   @ViewChild(ChatSpaceMobComponent, { static: false }) secondChild!: ChatSpaceMobComponent;
   toggleChats:boolean = false;
   toggleChatsText:string = "Type in chat";
-  selectedButton: number = 1;
+  selectedButton: number = -1;
   private subscription! : Subscription;
   @ViewChild('chatView') private chatContainer!: ElementRef;
     text: string = '';
@@ -79,7 +80,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     theRestState: string = 'expanded';
     expandShrink=false;
     value = '';
-    constructor (private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService){
+    getLink:string = '';
+    constructor (private snackBar: MatSnackBar,private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService){
       this.userType=this.debateAuth.getUser();
     }
   
@@ -98,29 +100,35 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
           // Handle case when card is not found, e.g., redirect or show a message
         }
       });
-
+      this.getLink = this.router.url;
+      
+      /*   use this one when it goes live. it will access the actual website link;
+      this.getLink = window.location.href;
+      */
 
     }
     generateRoute(card: any) {
       return ['/debate', card.id];
     }
     
+    copyLinkToClipboard() {
+      // Code to copy link to clipboard here...
+      
+      this.snackBar.open('Link copied to clipboard', '', {
+        duration: 1000,
+        verticalPosition: 'top'
+      });
+      
+    }
+    
+    post() {
+      //this should direct to the sequitur post form with the getLink data
+    }
     updateText(newText: string) {
       this.text = newText;
       this.scrollToBottom();
     }
   
-    toggleChat () {
-      this.selectedButton = 1;
-      if (this.toggleChats) {
-        this.toggleChatsText = "Type in chat";
-      }
-      else {
-        this.toggleChatsText = "Respond to speaker";
-      
-      }
-      this.toggleChats = !this.toggleChats;
-    }
     receiveValue(value: boolean) {
       this.receiveType = !this.receiveType;
       if (!value) {
@@ -151,11 +159,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.panelType = panelType;
     }
 
-    selectButton(buttonNumber: number): void {
-      this.selectedButton = buttonNumber;
-    }
 
-  
     toggle(buttonType: string): void {
       this.debateSpace.Toggle(buttonType);
     }
@@ -183,6 +187,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       if (this.startY && event.clientY - this.startY > 50) { // Drag down by 50 pixels to close
         this.panelState = 'hidden';
         this.stopDrag();
+      
       }
     }
 
@@ -226,8 +231,13 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
 
     simulate(type:string):void {
       this.userType=type;
-      console.log(this.userType);
+     
     }
+
+
+    
   }
+
+  
   
 

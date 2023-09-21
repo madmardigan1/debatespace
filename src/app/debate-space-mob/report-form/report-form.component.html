@@ -1,0 +1,31 @@
+<!-- HTML Structure -->
+<div class="report-container">
+    <h1>Report this Node</h1>
+    <div class="form-container">
+      <form (ngSubmit)="onSubmit()">
+        <div class="checkbox-item">
+          <input type="checkbox" id="sexualContent" name="sexualContent" [(ngModel)]="formData.sexualContent">
+          <label for="sexualContent">Sexual / Lewd Content</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="racistContent" name="racistContent" [(ngModel)]="formData.racistContent">
+          <label for="racistContent">Racist Content</label>
+        </div>
+        <div class="checkbox-item">
+            <input type="checkbox" id="harmContent" name="harmContent" [(ngModel)]="formData.harmContent">
+            <label for="harmContent">Self Harm</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="violenceContent" name="violenceContent" [(ngModel)]="formData.violenceContent">
+            <label for="violenceContent">Violence</label>
+          </div>
+        <div class="text-area text-black">
+          <textarea id="additionalDetails" name="additionalDetails" placeholder="Additional Details" [(ngModel)]="formData.additionalDetails"></textarea>
+        </div>
+        <div class="submit-button" style="border-radius:1px solid white;" >
+          <button class="btn btn-white" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+ 

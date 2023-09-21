@@ -1,9 +1,6 @@
 <div class="userpane" style="height:100%;">
   <div style="position:sticky; top:0; z-index: 10; background-color: inherit;">
     <!-- Fixed to the top -->
-    <button class="btn btn-outline-white text-white" style="position:absolute; top:0px; left:10px;" (click)="closeClicked.emit()">
-      <i class="fas fa-times"></i>
-    </button>
     <h1 style="text-align:center; padding-top:10px; font-size: 24px; margin-bottom: 5px;">Guests</h1> 
     <p style="text-align:center; margin-left: 10px; margin-top: 5px;">
       <i class="fas fa-user"></i>
@@ -40,26 +37,29 @@
   </div>
   
   <div *ngIf="getUsersByRole('host').length === 0">
-    <h2 style="margin-top: 10px; margin-bottom: 10px;">Host</h2>
-    <button (click)="togglePanel()" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
+    <h2  style="margin-top: 10px; margin-bottom: 10px;">Host</h2>
+    <button (click)="togglePanel()"class="text-primary" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
   </div>
   <div *ngIf="getUsersByRole('speaker').length === 0">
     <h2 style="margin-top: 10px; margin-bottom: 10px;">Speakers</h2>
-    <button (click)="togglePanel()" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
+    <button (click)="togglePanel()"class="text-primary"  style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
   </div>
   <div *ngIf="getUsersByRole('spectator').length === 0">
-    <h2 style="margin-top: 10px; margin-bottom: 10px;">Spectators</h2>
-    <button (click)="togglePanel()" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
+    <h2  style="margin-top: 10px; margin-bottom: 10px;">Spectators</h2>
+    <button (click)="togglePanel()" class="text-primary" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
   </div>
 </div>
 </div>
 
 <div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+  <button class="btn btn-outline-white text-white" style="z-index:999999;position:absolute; top:10px; left:10px;" (click)="togglePanel()">
+    <i class="fas fa-times"></i>
+  </button> 
   <div class="d-flex justify-content-center mt-3"> 
     <div class="drag-handle centered"></div>
   </div>
     <div class="content" style="display:flex; flex-direction:column; position:relative;height:70vh">
-      <app-user-search (closeClicked)="togglePanel()"></app-user-search>
+      <app-user-search></app-user-search>
    </div>
 </div>
 

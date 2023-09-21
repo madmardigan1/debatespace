@@ -4,9 +4,11 @@
   <button class="btn btn-primary"(click)="simulate('host')">Simulate Host</button>
 </div>
 
-
-<div class="mobcentering" style="width:100%;height:100%; justify-content: center; display:flex; position:absolute;">
-  <div class="outerbox bg-black">
+<div class="d-flex justify-content-center" style="width:100%;height:100%;">
+  <div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
+    flex-direction: column;
+    position:absolute;
+    overflow-y:hidden;">
     <div class="nodeArea"  [@expandShrink]="nodeState" >
       <app-node-space-mob #nodeSpace [userType]="userType" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
      </div>
@@ -14,16 +16,27 @@
      <div class="theRest" [@expandShrinkrest]="theRestState">
      
          <div class="viewsecond bg-black">
-          <div class="d-flex bg-dark" style="height:auto;">
-            <button class="btn btn-white text-white padding-right-10" (click)="receiveValue(false)">
-              <i class="fas fa-caret-down"></i>
-            </button>
-            <button class="btn btn-white text-white padding-right-10" (click)="toggleFirstPanel('chat')">Chat</button>
-            <button class="btn btn-white text-white padding-right-10"(click)="toggleFirstPanel('summary')">Summary</button>
-            <button class="btn btn-white text-white padding-right-10" (click)="fullScreen(true)">
-              <i class="fas fa-caret-up"></i>
-            </button>
+          <div class="d-flex bg-dark justify-content-between" style="height:auto;">
+            <div class="d-flex">
+              <button class="btn btn-white text-white padding-right-10" (click)="receiveValue(false)">
+                <i class="fas fa-caret-down"></i>
+              </button>
+              <button class="btn btn-white text-white padding-right-10" [ngClass]="{'btn-danger': panelType === 'chat'}" (click)="toggleFirstPanel('chat')">Chat</button>
+              <button class="btn btn-white text-white padding-right-10" [ngClass]="{'btn-danger': panelType === 'summary'}" (click)="toggleFirstPanel('summary')">Summary</button>
+              <button class="btn btn-white text-white padding-right-10" (click)="fullScreen(true)">
+                <i class="fas fa-caret-up"></i>
+              </button>
+            </div>
+            <div class="d-flex align-items-center" style="position:relative;">
+              <button mat-icon-button [matMenuTriggerFor]="shareMenu" class="btn btn-outline-white bg-dark text-center mt-0 p-0">
+                <i class="far fa-share-square text-white" style="font-size:15px;"></i>
+              </button>
+              <button mat-icon-button [matMenuTriggerFor]="menu" class="btn btn-outline-white bg-dark text-center mt-0 p-0">
+                <i class="fas fa-ellipsis-h text-white" style="font-size:15px;"></i>
+              </button>
+            </div>
           </div>
+        
           <div *ngIf="panelType=='chat'" class="chat-output-area text-white" style="position: relative; display:flex; flex: auto; flex-direction: column;  overflow:auto;
           overflow-wrap: break-word; /* Modern browsers */">
             
@@ -42,15 +55,17 @@
           </div>
          
           
-          
-          <button mat-icon-button [matMenuTriggerFor]="menu" class="btn btn-outline-white bg-dark text-center mt-0 p-0" style="align-items:center; opacity:.8;position:absolute; top:0px;right:20px; height:5px;width:auto;z-index:1000;">
-            <i class="fas fa-ellipsis-h text-white" style="font-size:15px;"></i>
-          </button>
+         
+
             <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>About</button>
-              <button mat-menu-item>Share Space</button>
+              <button mat-menu-item (click)="togglePanel(6)">About</button>
               <button mat-menu-item (click)="togglePanel(5)">Adjust Settings</button>
-              <button mat-menu-item>Report this space</button>
+              <button mat-menu-item (click)="togglePanel(7)">Report this space</button>
+            </mat-menu>
+              <!-- The nested share menu -->
+<mat-menu #shareMenu="matMenu" xPosition="before">
+  <button mat-menu-item (click)="copyLinkToClipboard()">Copy Link</button>
+  <button mat-menu-item (click)="post()">Post</button>
             </mat-menu>
           <button class="btn btn-outline-white text-white" (click)="togglePanel(3)" style="position:absolute; bottom:10px;left:10px;border-radius:50%; width:50px;height:50px;z-index:1000;">
             <i class="fas fa-users"></i>
@@ -91,7 +106,7 @@
           
           </button>-->
           <div *ngIf="userType==='host'||userType==='speaker'" style="position:absolute; bottom:70px;right:10px;">
-          <button (click)="togglePanel(1)" class="btn btn-outline-light bg-primary" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:1000;">
+          <button (click)="togglePanel(1)" class="btn btn-outline-light bg-danger" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:1000;">
           <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i> 
           <i *ngIf="isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>   
           </button>
@@ -100,13 +115,19 @@
             
    </div>
    <div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+    
     <div class="d-flex justify-content-center mt-3"> 
+      
+      <button class="btn btn-outline-white text-white" style="position:absolute; top:10px; left:10px; z-index: 500;" (click)="togglePanel(-1)">
+        <i class="fas fa-times"></i>
+      </button>
+      
       <div class="drag-handle centered"></div>
     </div>
-      <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
-      
+    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
+     
       <div style="display:flex; justify-content: center;">
-      <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-primary" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggle')">
+      <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggle')">
         <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>        
         <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>  
      </button>
@@ -134,13 +155,22 @@
         </button> 
         </div>
       </div>
-    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:70vh;" >
+    
+    
+    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:50vh;" >
       <app-user-summary-mob (closeClicked)="togglePanel(0)"></app-user-summary-mob> 
       
   </div>
-    <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >
+    <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;height:50vh;" >
+
       <app-av-control-mob></app-av-control-mob>     
       
+    </div>
+    <div *ngIf="selectedButton===6" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
+      <app-about-nodes></app-about-nodes>    
+    </div>
+    <div *ngIf="selectedButton===7"  class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
+      <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(0)"></app-report-form>  
     </div>
     </div>
      
