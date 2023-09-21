@@ -1,18 +1,71 @@
-<h1 style="padding-left:10px;">Speakers</h1>
-<div class="organizer" style="height:100%; display:flex; flex-direction: column;">
-<div class="scroll-container mb-1">
-  <div *ngFor="let user of users" class="porp">
-         <div class="form-group">
-        <button (click)="getdetails(user)" style="background-color: transparent; border-color:transparent;">
-          <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image"> <!-- Adjust width as needed -->
-          <div style="text-align: center; color: white;">{{ user.name }}</div>
-          <div style="text-align: center; color: rgba(255, 255, 255, 0.625);">{{ user.role }}</div>
-        </button>
-    </div>
-        </div> 
-        
+<div class="userpane" style="height:100%;">
+  <div style="position:sticky; top:0; z-index: 10; background-color: inherit;">
+    <!-- Fixed to the top -->
+    <button class="btn btn-outline-white text-white" style="position:absolute; top:0px; left:10px;" (click)="closeClicked.emit()">
+      <i class="fas fa-times"></i>
+    </button>
+    <h1 style="text-align:center; padding-top:10px; font-size: 24px; margin-bottom: 5px;">Guests</h1> 
+    <p style="text-align:center; margin-left: 10px; margin-top: 5px;">
+      <i class="fas fa-user"></i>
+      {{ users.length }}
+    </p>
+  </div>
+  <div style="display:flex; flex-direction:column; position:relative; overflow-y: scroll; padding-left: 20px; height: 80%;">
+    <!-- All other sections, kept scrollable -->
+    <div *ngIf="getUsersByRole('host').length > 0">
+      <h2 style="margin-top: 10px; margin-bottom: 10px;">Host</h2> <!-- Existing content -->
+      <div class="user-list">
+        <ng-container *ngFor="let user of getUsersByRole('host')">
+          <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+        </ng-container>
       </div>
+    </div>
 
+  <div *ngIf="getUsersByRole('speaker').length > 0">
+    <h2>Speakers</h2>
+    <div class="user-list">
+      <ng-container *ngFor="let user of getUsersByRole('speaker')">
+        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
+    </div>
+  </div>
+  
+  <div *ngIf="getUsersByRole('spectator').length > 0">
+    <h2>Spectators</h2>
+    <div class="user-list">
+      <ng-container *ngFor="let user of getUsersByRole('spectator')">
+        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
+    </div>
+  </div>
+  
+  <div *ngIf="getUsersByRole('host').length === 0">
+    <h2 style="margin-top: 10px; margin-bottom: 10px;">Host</h2>
+    <button (click)="togglePanel()" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
+  </div>
+  <div *ngIf="getUsersByRole('speaker').length === 0">
+    <h2 style="margin-top: 10px; margin-bottom: 10px;">Speakers</h2>
+    <button (click)="togglePanel()" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
+  </div>
+  <div *ngIf="getUsersByRole('spectator').length === 0">
+    <h2 style="margin-top: 10px; margin-bottom: 10px;">Spectators</h2>
+    <button (click)="togglePanel()" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
+  </div>
+</div>
+</div>
+
+<div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
+  <div class="d-flex justify-content-center mt-3"> 
+    <div class="drag-handle centered"></div>
+  </div>
+    <div class="content" style="display:flex; flex-direction:column; position:relative;height:70vh">
+      <app-user-search (closeClicked)="togglePanel()"></app-user-search>
+   </div>
+</div>
+
+
+
+<!--
 <div class="extendpane" 
   [style.visibility]="panelReveal ? 'visible' : 'hidden'"
   [style.pointer-events]="panelReveal ? 'auto' : 'none'">
@@ -40,3 +93,4 @@
   </div>
 
 </div>
+-->

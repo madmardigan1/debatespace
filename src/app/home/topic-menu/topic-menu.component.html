@@ -1,5 +1,5 @@
 
-<div class="topics d-flex justify-content-center" style="width:100%;height:100%;">
+<div class="d-flex justify-content-center" style="width:100%;height:100%;">
 <div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
 flex-direction: column;
 overflow-y:hidden;">
@@ -14,7 +14,7 @@ overflow-y:hidden;">
     </button>
   </div>
 </div>
-<div class="d-flex" style="overflow-x:scroll; flex-grow:1; position:relative;">
+<div class="topics d-flex" style="overflow-x:hidden; flex-grow:1; position:relative;">
 <div *ngFor="let list of savedTopics">
   <div class="bg-danger" style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;">{{list}}</div>
 </div>
@@ -24,7 +24,7 @@ overflow-y:hidden;">
     <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(-1)">Popular Topics</button>
     <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
   </div>
-  <div *ngIf="expandPane==-1" class="scrollTopic d-flex mt-3 mb-3; width:100%;" style="position:relative;overflow-x:scroll;">
+  <div *ngIf="expandPane==-1" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="position:relative;overflow-x:scroll;">
     <div *ngFor="let card of cards">
       <button class="btn btn-danger" style="margin-right:5px; margin-left:5px;border-radius:40%;"(click)="saveTopic(card.topic)">{{card.topic}}</button>
     </div>
@@ -35,7 +35,7 @@ overflow-y:hidden;">
       <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(i)">{{card.topic}}</button>
       <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
     </div>
-    <div *ngIf="expandPane==i" class="scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
+    <div *ngIf="expandPane==i" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
       <div *ngFor="let card of cards">
         <button class="btn btn-danger" style="margin-right:5px; margin-left:5px;border-radius:40%;" (click)="saveTopic(card.topic)">{{card.topic}}</button>
       </div>

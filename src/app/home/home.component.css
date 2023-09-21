@@ -94,6 +94,10 @@
       display: flex;  /* Add flex display */
       align-items: center; /* Center the items vertically */
   }
+
+  .scroll-container::-webkit-scrollbar {
+    display: none;
+  }
   .porp {
     display: flex;   /* This makes .porp a flex container */
     flex-direction: column;  /* Stack children vertically */
@@ -169,7 +173,7 @@
   
   /* Style for Windows scrollbar */
   .scrollable-list2::-webkit-scrollbar {
-    width: 8px;
+    display:none;
   }
   .scrollable-list2::-webkit-scrollbar-thumb {
     background-color: #888;

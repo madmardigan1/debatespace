@@ -1,0 +1,10 @@
+<div class="user-card" (click)="userClicked.emit()">
+  <button style="background-color: transparent; border-color: transparent;">
+    <div class="circular-image-container">
+      <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image">
+    </div>
+    
+    <div style="text-align: center; color: white;">{{ user.name }}</div>
+    <div style="text-align: center; color: rgba(255, 255, 255, 0.625);">{{ user.role }}</div>
+  </button>
+</div>

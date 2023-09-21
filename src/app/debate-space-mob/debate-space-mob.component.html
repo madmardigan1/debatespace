@@ -134,8 +134,8 @@
         </button> 
         </div>
       </div>
-    <div *ngIf="selectedButton===3" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >
-      <app-user-summary-mob></app-user-summary-mob> 
+    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:70vh;" >
+      <app-user-summary-mob (closeClicked)="togglePanel(0)"></app-user-summary-mob> 
       
   </div>
     <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >

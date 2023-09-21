@@ -151,7 +151,7 @@
         <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
       
               <h3 class="text-center mb-4 text-white">Join a Node</h3>
-              <div class="d-flex" style="overflow-x:scroll">
+              <div class="topics d-flex" style="overflow-x:scroll">
               <div class="justify-content-center text-center" style="margin-left:50px;">
               <button class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" [routerLink]="['topicMenu']">
                 <i class="fa fa-plus"></i>
@@ -204,7 +204,7 @@ overflow-y:hidden;">
     </button>
   </div>
 </div>
-<div class="d-flex" style="overflow-x:scroll; flex-grow:1; position:relative;">
+<div class="topics d-flex" style="overflow-x:scroll; flex-grow:1; position:relative;">
 <div *ngFor="let list of savedTopics">
   <div class="bg-danger" style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;">{{list}}</div>
 </div>

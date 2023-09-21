@@ -1,24 +1,60 @@
 
 <div class="userpane">
-    <h1 style="padding-top:10px; padding-left:10px;">Speakers:</h1>
-    <div style="display:flex">
-    <div *ngFor="let user of users" style="display:flex; flex-direction: column; width:70px; align-items: center;">
-    <button (click)="getdetails(user)" style="background-color: transparent; border-color:transparent;">
-      <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image"> <!-- Adjust width as needed -->
-      <div style="text-align: center; color: white;">{{ user.name }}</div>
-      <div style="text-align: center; color: rgba(255, 255, 255, 0.625);">{{ user.role }}</div>
-    </button>
+  <div style="position:relative;">
+    <button class="btn-close" style="position:absolute; top:10px; left:10px;" (click)="closePanel()"></button>
+    <h1 style="text-align:center; padding-top:10px;">Guests</h1>
+    <p style="text-align:center;">{{ users.length }}</p>
+  </div>
+
+  <div *ngIf="getUsersByRole('host').length > 0">
+    <h2>Host</h2>
+    <div class="user-list">
+      <ng-container *ngFor="let user of getUsersByRole('host')">
+        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
     </div>
+  </div>
+
+  <div *ngIf="getUsersByRole('speaker').length > 0">
+    <h2>Speakers</h2>
+    <div class="user-list">
+      <ng-container *ngFor="let user of getUsersByRole('speaker')">
+        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
+    </div>
+  </div>
+  
+  <div *ngIf="getUsersByRole('spectator').length > 0">
+    <h2>Spectators</h2>
+    <div class="user-list">
+      <ng-container *ngFor="let user of getUsersByRole('spectator')">
+        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
+    </div>
+  </div>
+  
+  <div *ngIf="getUsersByRole('host').length === 0">
+    <h2>Host</h2>
+    <a href="#">Invite Users</a>
+  </div>
+  <div *ngIf="getUsersByRole('speaker').length === 0">
+    <h2>Speakers</h2>
+    <a href="#">Invite Users</a>
+  </div>
+  <div *ngIf="getUsersByRole('spectator').length === 0">
+    <h2>Spectators</h2>
+    <a href="#">Invite Users</a>
   </div>
 </div>
 
+<!--
 <div class="extendpane" 
   [style.visibility]="panelReveal ? 'visible' : 'hidden'"
   [style.pointer-events]="panelReveal ? 'auto' : 'none'">>
   <div class="profilearea">
     <div class="Moment" style="position:absolute; top:0; right:0;">M: {{selectedMoment}}</div>
     <div *ngIf="selectedPhoto && selectedName">
-      <img [src]="selectedPhoto" alt="{{ selectedName }}" class="bigger-image"> <!-- Adjust width as needed -->
+      <img [src]="selectedPhoto" alt="{{ selectedName }}" class="bigger-image"> 
       <div class="text-white" style="text-align: center; margin-top:10px;">{{ selectedName }}</div>
     </div>
   </div>
@@ -32,6 +68,8 @@
     </div>
     <button class="btn btn-primary"style="margin-top:10px; margin-bottom:10px; width:80%;">follow</button>
     <button class="btn btn-success" style="margin-top:10px; margin-bottom:10px; width:80%;">tip</button>
-   
+  
   </div>
+ 
 </div>
+  -->

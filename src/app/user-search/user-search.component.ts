@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit,ElementRef  } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit,ElementRef, Output, EventEmitter } from '@angular/core';
 import { UserSearchService } from './user-search.service';
 @Component({
   selector: 'app-user-search',
@@ -6,6 +6,7 @@ import { UserSearchService } from './user-search.service';
   styleUrls: ['./user-search.component.css']
 })
 export class UserSearchComponent implements OnInit, AfterViewInit {
+  @Output() closeClicked = new EventEmitter<void>();
   value = '';
   filteredUsers: string[] = [];
   selectedUsers: string[]= [];

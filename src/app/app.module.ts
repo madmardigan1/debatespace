@@ -42,6 +42,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
 import { UserSearchComponent } from './user-search/user-search.component';
+import { UserCardComponent } from './debate-space-mob/user-summary-mob/user-card/user-card.component';
 
 //node
 
@@ -72,6 +73,7 @@ import { UserSearchComponent } from './user-search/user-search.component';
     LeaderboardComponent,
     TopicMenuComponent,
     UserSearchComponent,
+    UserCardComponent,
 
 
     
