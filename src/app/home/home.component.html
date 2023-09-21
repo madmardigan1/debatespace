@@ -24,8 +24,8 @@
 <ngb-carousel >
   <ng-template ngbSlide *ngFor="let data of dataArray">
    
-    <div class="card bg-black text-white text-center" style="opacity:.7;height: 20rem; background-image: url('assets/LandingPage.jpeg'); background-size:cover;">
-      <div class="card-body">
+    <div class="card custom-cardss bg-black text-white text-center" style="height: 20rem;">
+      <div class="card-body" style="z-index: 2;">
         <h1 class="card-title" style="z-index:500; margin-top:20%;">{{ data.title }}</h1>
         <p class="card-text" style="z-index:500;">{{ data.description }}</p>
         <button *ngIf="data.link" [routerLink]="[data.link]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
