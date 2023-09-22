@@ -48,7 +48,7 @@
 }
 
 .custom-toggle-checkbox:checked + .custom-toggle-label {
-    background-color: #007bff; /* Bootstrap primary color */
+    background-color:  #dc3545;
 }
 
 .custom-toggle-checkbox:checked + .custom-toggle-label::before {

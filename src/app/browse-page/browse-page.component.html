@@ -9,16 +9,17 @@
     
     <!-- Button Group -->
     <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
-        <button class="btn btn-outline-white; text-white" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('topic')">Topics</button> <!-- Added margin-right for spacing between buttons -->
+        <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': searchType === 'topic'}" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('topic')">Topics</button> <!-- Added margin-right for spacing between buttons -->
        
-        <button class="btn btn-outline-white; text-white" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('user')">Users</button>
+        <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': searchType === 'user'}"style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('user')">Users</button>
     </div>
     
     <div style="padding: 10px;position:relative;width:100%; overflow-block:auto;">
         <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="search()"placeholder="Search for a {{searchType}}...">
         <button class="btn btn-outine-danger" *ngIf="searchTerm"  (click)="search()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Search</button>
       </div>
-
+      
+      <div *ngIf="matchedCards.length==0">No Nodes match your search...</div>
     <!-- Cards Container -->
     <div style="display: flex; flex-wrap: wrap;">
         <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
@@ -43,7 +44,7 @@
           <!-- User Image and Name -->
           <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> <!-- added margin-right -->
             <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-            <h5 style="margin-top: 5px; font-size: 12px;">Steve</h5>
+            <h5 style="margin-top: 5px; font-size: 12px;">{{card.user}}</h5>
           </div>
           
           <!-- Topic Container -->

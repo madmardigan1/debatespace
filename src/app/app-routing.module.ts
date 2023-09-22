@@ -16,7 +16,8 @@ const routes: Routes = [
   { path: 'tournament', component: TournamentBulletinComponent},
   { path: 'browse/:topic', component: BrowsePageComponent},
   { path: 'debateMob/:id', component: DebateSpaceMobComponent},
-  { path: 'topicMenu', component:TopicMenuComponent}
+  { path: 'topicMenu', component:TopicMenuComponent},
+  { path: 'home', component:HomeComponent}
 ];
 
 @NgModule({

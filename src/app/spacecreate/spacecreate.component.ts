@@ -41,11 +41,15 @@ export class SpacecreateComponent implements AfterViewInit {
   topic: string[] = [];
   private subscription!: Subscription;
   private subscription2!: Subscription;
+  textplaceholder: 'What do you want to talk about?' | 'state your claim...' = 'What do you want to talk about?';
+
+
   isRanked = false;
   @ViewChild('topicInput') topicInput!: ElementRef;
   constructor(private userSearch:UserSearchService,private location:Location, private fb: FormBuilder, private topicMenu: TopicMenuService,private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService) {
    // Inside your component class constructor:
 this.form = this.fb.group({
+  isToggled2: [false],
   description: [''],
   isToggled1: [false],  // new form control for toggle
   additionalOptionValue: [false]  // new form control for checkbox
@@ -66,12 +70,12 @@ this.form = this.fb.group({
       }
     });
   }
-  printToggleValue() {
-    console.log(this.isToggled);
- }
-  toggleRanked() {
-    this.isRanked = !this.isRanked;
+
+  ranked() {  
+    this.textplaceholder = this.textplaceholder === 'What do you want to talk about?' ? 'state your claim...' : 'What do you want to talk about?';
+
 }
+
 
 inviteToggle() {}
 get isToggled1(): boolean {
@@ -82,15 +86,18 @@ get isToggled1(): boolean {
     this.topicInput.nativeElement.focus();
     
   }
-  submit() {
-    const formData = this.form.value;
-    const id = Date.now().toString();
-    const number = 3;
-    const topic=this.topic[1];
-    this.cardService.addCard({ ...formData,topic:this.topic[1],number:number, id: id });
-    this.debateAuth.setUser('host');
-    this.router.navigate(['/debateMob', id]);
-  }
+    submit() {
+      const formData = this.form.value;
+      const id = Date.now().toString();
+      const number = 3;
+      const ranked = this.form.get('isToggled2')?.value;
+      console.log(ranked);
+      const topic=this.topic[1];
+      this.cardService.addCard({ ...formData,topic:this.topic,number:number, id: id, debate:ranked });
+      this.cardService.addTag(this.topic);
+      this.debateAuth.setUser('host');
+      this.router.navigate(['/debateMob',id]);
+    }
   paneSelected(type:string) {
     this.selectionPane=false;
     this.selectionPaneType=type;

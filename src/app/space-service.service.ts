@@ -125,7 +125,7 @@ getcards(): Observable<Card[]> {
   addCard(card: Card) {
     const currentCards = this.cards.getValue();
     this.cards.next([...currentCards, card]);
-
+    console.log(this.cards.value);
     // Here, operate on 'currentCards' directly after updating it
 
 }

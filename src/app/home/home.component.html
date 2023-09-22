@@ -42,7 +42,7 @@
     <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
       <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
       <!-- Top Colored Box -->
-      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
+      <div class="custom-card shadow-lg bg-dark text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
         
         <!-- Description styled at the top and spanning the whole card -->
         <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
@@ -83,7 +83,7 @@
     <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
       <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
       <!-- Top Colored Box -->
-      <div class="custom-card shadow-lg bg-danger text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
+      <div class="custom-card shadow-lg bg-dark text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
         
         <!-- Description styled at the top and spanning the whole card -->
         <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>

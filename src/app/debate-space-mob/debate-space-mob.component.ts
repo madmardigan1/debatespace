@@ -67,15 +67,25 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   selectedButton: number = -1;
   private subscription! : Subscription;
   @ViewChild('chatView') private chatContainer!: ElementRef;
+
+  //game rules
+  private intervalId: any;
+  private setTeam = false;
+
+
+  //other variables
+
     text: string = '';
     card!: Card;
     cards!: any[];
     panelType = "chat";
     receiveType = true;
     receiveType2 = false;
+
     selectedNode: boolean = false;
     userType: string = 'host';
     isRecording = false;
+    isRanked = false;
     nodeState: string = 'shrunk';
     theRestState: string = 'expanded';
     expandShrink=false;
@@ -96,6 +106,10 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
         const card = cards.find((card) => card.id === id);
         if (card !== undefined) { // Check if card is not undefined
           this.card = card;
+          this.isRanked = this.card.debate!;
+          if (this.isRanked) {
+            this.loadGameRules();
+          }
         } else {
           // Handle case when card is not found, e.g., redirect or show a message
         }
@@ -120,7 +134,22 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       });
       
     }
-    
+    loadGameRules() : void {
+      this.intervalId = setInterval(() => {
+        this.executeFunctions();
+      }, 30000); // 30 seconds
+      //only implemented if debate is activated
+    }
+
+    executeFunctions () {
+      this.setTeam = !this.setTeam;
+      //update moments
+      //activate features for active team
+      //deactivate features for other team
+      //update points values
+
+    }
+
     post() {
       //this should direct to the sequitur post form with the getLink data
     }
