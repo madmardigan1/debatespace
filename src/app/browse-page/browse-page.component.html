@@ -1,36 +1,61 @@
-<div class="container" style="position:relative; top:0%;left:0%;width:90%; top:5%;">
-    <h1 class="mb-4">Browse</h1> <!-- Added margin-bottom for vertical spacing -->
+<div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
+  
+    <div class="bg-black text-white" style=" width:390px; height:100%; display: flex;
+    flex-direction: column;
+    position:absolute;
+    overflow-y:scroll;">
+    <div style="margin-right:10px; margin-left:10px;">
+    <h1 class="mb-4 mt-4 text-center">Browse</h1> <!-- Added margin-bottom for vertical spacing -->
     
     <!-- Button Group -->
     <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
-        <button class="btn btn-primary" style="width: auto; margin-right: 10px">Categories</button> <!-- Added margin-right for spacing between buttons -->
-        <button class="btn btn-primary">Live Channels</button>
+        <button class="btn btn-outline-white; text-white" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('topic')">Topics</button> <!-- Added margin-right for spacing between buttons -->
+       
+        <button class="btn btn-outline-white; text-white" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('user')">Users</button>
     </div>
     
-    <!-- Search Input -->
-    <div class="mb-4"> <!-- Added margin-bottom for vertical spacing -->
-        <input type="text" class="form-control d-inline-block" style="width: 20%; padding-right: 40px;" placeholder="Search Topics"> <!-- Set width to 50% -->
-    </div>
+    <div style="padding: 10px;position:relative;width:100%; overflow-block:auto;">
+        <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="search()"placeholder="Search for a {{searchType}}...">
+        <button class="btn btn-outine-danger" *ngIf="searchTerm"  (click)="search()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Search</button>
+      </div>
 
     <!-- Cards Container -->
     <div style="display: flex; flex-wrap: wrap;">
-        <div *ngFor="let card of cards" class="porp mb-4" style="flex-basis: calc(25% - 10px); margin-right: 10px;"> <!-- Added margin-bottom for vertical spacing between cards -->
+        <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
 
-            <div class="custom-card shadow-lg bg-dark text-white">
-                <!-- Content of your card -->
-                <h4 class="card-title d-inline-block mb-2" style="font-size:24px;">{{card.topic}}</h4>
-                <p class="card-text mb-3">{{card.description}}</p>
-                <div class="user-info">
-                    <div style="display:flex; flex-direction: column;">
-                        <img [src]="'/assets/Steve1.jpeg'" alt="Steve" class="bigger-image" style="border-radius:50%; width:40px; height:40px;object-fit: cover; display: block; position:relative; bottom:0;">
-                        <h5 style="padding-left:10px; margin-bottom:0;">Steve</h5>
-                    </div>
-                    <div style="display:flex; flex-direction: column; position:absolute; right:0; bottom:0;">
-                        <span>100 spectating</span>
-                        <button [routerLink]="['/debate', card.id]" class="btn btn-primary btn-lg" (click)="authorize('spectator')">Spectate</button>
-                    </div>
-                </div>
+            <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
+      <!-- Top Colored Box -->
+      <div class="custom-card shadow-lg bg-dark text-white" style=" position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
+        
+        <!-- Description styled at the top and spanning the whole card -->
+        <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
+        
+        <!-- Viewers Count in Upper Right -->
+        <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
+          <i class="fas fa-user"></i> {{card.number}}
+        </div>
+      </div>
+    
+      <!-- Black Box Below -->
+      <div class="bg-black text-white" style="border: 1px solid black;">
+        <div class="user-info" style="width:250px; display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
+          
+          <!-- User Image and Name -->
+          <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> <!-- added margin-right -->
+            <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
+            <h5 style="margin-top: 5px; font-size: 12px;">Steve</h5>
+          </div>
+          
+          <!-- Topic Container -->
+          <div style="display: flex; flex-wrap: wrap; max-height: 50px; overflow: hidden; align-content: flex-start;">
+            <div *ngFor="let topic of card.topic" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;"> <!-- adjusted margins -->
+              <span style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;">{{topic}}</span> <!-- adjusted font-size and padding -->
             </div>
+          </div>
+        </div>
+      </div>
         </div>
     </div>
+</div>
+</div>
 </div>

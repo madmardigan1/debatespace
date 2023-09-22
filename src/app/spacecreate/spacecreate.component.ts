@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { CardDataService, Card } from '../space-service.service';
+import { CardDataService, Card, Topics } from '../space-service.service';
 import { Router } from '@angular/router';
 import { DebateAuthService } from '../home/debate-auth.service';
 import { TopicMenuService } from '../home/topic-menu/topic-menu.service';

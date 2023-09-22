@@ -7,6 +7,12 @@
   .custom-cardss {
     position: relative;
 }
+.custom-btn-smaller {
+  font-size: 11px !important; /* force the font size */
+  padding: 3px 8px !important; /* force the padding */
+  border-radius: 10px !important; /* force the border radius */
+  margin-right: 2px !important; /* force the margin */
+}
 
 .custom-cardss::before {
     content: "";

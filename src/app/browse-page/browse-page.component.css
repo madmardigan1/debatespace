@@ -1,0 +1,12 @@
+.porp {
+    display: flex;   /* This makes .porp a flex container */
+    flex-direction: column;  /* Stack children vertically */
+    width: 300px;
+    height: 100%;  
+    margin-right: 10px;
+    overflow-wrap: break-word;
+    overflow-x:block;
+    word-wrap: break-word;
+    position: relative; 
+    border:1px solid white;
+  }

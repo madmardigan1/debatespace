@@ -1,5 +1,5 @@
 import { Component} from '@angular/core';
-import { CardDataService, Card } from '../space-service.service';
+import { CardDataService, Card, Topics } from '../space-service.service';
 import { DebateAuthService } from './debate-auth.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,7 @@ import { Carousel } from './carousel';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TopicMenuService } from './topic-menu/topic-menu.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -31,8 +32,10 @@ import { Subscription } from 'rxjs';
 })
 export class HomeComponent{
   savedTopics: string[] = [];
+  currentTopics!: Topics; 
   expandPane = -2;
   topicSelection = false;
+  searchTerm: string = ''; 
   joinState=false;
   userForm: FormGroup;
   matchWindow = false;
@@ -41,7 +44,9 @@ export class HomeComponent{
   cards: Card[] = [];
   selectedOption: string = '';
   spinner = false;
+  matchedTopics: any[] = []; 
   selectedButton=0;
+
   dataArray: Carousel[] = [
     {
         title: 'Welcome to Sequitur Nodes',
@@ -62,7 +67,7 @@ export class HomeComponent{
      }
 ];
 
-  constructor(private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
     this.userForm = this.fb.group({
       roles: this.fb.group({
         speaker: [false],
@@ -83,6 +88,36 @@ export class HomeComponent{
         this.panelState='visible';
       }
     });
+
+    this.cardService.getTopics().subscribe(data => {
+      this.currentTopics = data;
+    });
+    
+  
+
+  
+  }
+  removeTopic (data:any):void {
+    this.savedTopics.splice(data);
+  }
+
+  onSearch() {
+    this.matchedTopics = [];
+    if (this.searchTerm) {
+      // Iterate over each category in the currentTopics
+      for (let category in this.currentTopics) {
+        // Use Array.prototype.push.apply to combine the results of each category's search into the matchedTopics array
+        Array.prototype.push.apply(
+          this.matchedTopics,
+          this.currentTopics[category].filter(topic => topic.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+        );
+      }
+    }
+ 
+  }
+
+  objectKeys(obj: any) {
+    return Object.keys(obj);
   }
 
 authorize(typeofUser: string) {
@@ -112,6 +147,11 @@ togglePanel(togglenumber: number|undefined): void {
   if (togglenumber) {
   this.selectedButton=togglenumber;}
   this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
+}
+
+browse(topic:string) {
+
+  this.router.navigate(['/browse', topic]);
 }
 
 startDrag(event: MouseEvent): void {
