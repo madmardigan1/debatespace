@@ -47,6 +47,7 @@ import { AboutNodesComponent } from './home/about-nodes/about-nodes.component';
 import { ReportFormComponent } from './debate-space-mob/report-form/report-form.component';
 import { ShareNodeComponent } from './debate-space-mob/share-node/share-node.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RankTabComponent } from './debate-space-mob/rank-tab/rank-tab.component';
 
 //node
 
@@ -81,6 +82,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AboutNodesComponent,
     ReportFormComponent,
     ShareNodeComponent,
+    RankTabComponent,
     
 
 

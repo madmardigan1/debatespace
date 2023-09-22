@@ -71,8 +71,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   //game rules
   private intervalId: any;
   private setTeam = false;
-
-
+  isRanked = true;
+  banner = false;
   //other variables
 
     text: string = '';
@@ -81,11 +81,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     panelType = "chat";
     receiveType = true;
     receiveType2 = false;
-
     selectedNode: boolean = false;
     userType: string = 'host';
     isRecording = false;
-    isRanked = false;
     nodeState: string = 'shrunk';
     theRestState: string = 'expanded';
     expandShrink=false;
@@ -137,12 +135,19 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     loadGameRules() : void {
       this.intervalId = setInterval(() => {
         this.executeFunctions();
-      }, 30000); // 30 seconds
+      }, 3000); // 30 seconds
       //only implemented if debate is activated
     }
 
     executeFunctions () {
       this.setTeam = !this.setTeam;
+      //send text update to teams
+    
+        this.banner = true;
+        setTimeout(() => {
+          this.banner = false;
+        }, 5000);  // Hide after 5 seconds
+
       //update moments
       //activate features for active team
       //deactivate features for other team
@@ -259,7 +264,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     }
 
     simulate(type:string):void {
-      this.userType=type;
+      if (type =='spectator'||type=='speaker'||type=='host'){this.userType=type;}
+      if (type =='ranked') {this.isRanked=true;}
+      if (type =='normal') {this.isRanked = false;}
      
     }
 

@@ -2,6 +2,8 @@
   <button class="btn btn-primary" (click)="simulate('spectator')">Simulate User</button>
   <button class="btn btn-primary"(click)="simulate('speaker')">Simulate Speaker</button>
   <button class="btn btn-primary"(click)="simulate('host')">Simulate Host</button>
+  <button class="btn btn-primary"(click)="simulate('ranked')">Simulate ranked</button>
+  <button class="btn btn-primary"(click)="simulate('normal')">Simulate normal mode</button>
 </div>
 
 <div class="d-flex justify-content-center" style="width:100%;height:100%;">
@@ -9,6 +11,8 @@
     flex-direction: column;
     position:absolute;
     overflow-y:hidden;">
+    <div *ngIf="banner" class="bg-danger align-items-center text-center text-white" style="z-index:5000;opacity:.7; position:absolute; width:100%; height:50px;">Round Over</div>
+    
     <div class="nodeArea"  [@expandShrink]="nodeState" >
       <app-node-space-mob #nodeSpace [userType]="userType" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
      </div>
@@ -18,12 +22,13 @@
          <div class="viewsecond bg-black">
           <div class="d-flex bg-dark justify-content-between" style="height:auto;">
             <div class="d-flex">
-              <button class="btn btn-white text-white padding-right-10" (click)="receiveValue(false)">
+              <button class="btn btn-white text-white padding-right-3" (click)="receiveValue(false)">
                 <i class="fas fa-caret-down"></i>
               </button>
-              <button class="btn btn-white text-white padding-right-10" [ngClass]="{'btn-danger': panelType === 'chat'}" (click)="toggleFirstPanel('chat')">Chat</button>
-              <button class="btn btn-white text-white padding-right-10" [ngClass]="{'btn-danger': panelType === 'summary'}" (click)="toggleFirstPanel('summary')">Summary</button>
-              <button class="btn btn-white text-white padding-right-10" (click)="fullScreen(true)">
+              <button class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'chat'}"style="padding:4px;margin-right:2px; font-size:15px;" (click)="toggleFirstPanel('chat')">Chat</button>
+              <button class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'summary'}" style="padding:4px;margin-right:2px;;font-size:15px;"(click)="toggleFirstPanel('summary')">Summary</button>
+              <button *ngIf="isRanked" class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'scoreboard'}" style="padding:4px;font-size:15px;"(click)="toggleFirstPanel('scoreboard')">Scoreboard</button>
+              <button class="btn btn-white text-white padding-right-3" (click)="fullScreen(true)">
                 <i class="fas fa-caret-up"></i>
               </button>
             </div>
@@ -51,6 +56,10 @@
           </div>
           <div *ngIf="panelType=='summary'" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >
             <app-gptsummary-mob></app-gptsummary-mob>
+          
+          </div>
+          <div *ngIf="panelType=='scoreboard'" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >
+            <app-rank-tab></app-rank-tab>
           
           </div>
          

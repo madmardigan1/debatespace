@@ -43,6 +43,7 @@ search () {
     return card.user.toLowerCase().includes(this.searchTerm.toLowerCase());
     });
   }
+  
 
 }
 ngOnInit(): void {
