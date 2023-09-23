@@ -22,12 +22,12 @@
 <ngb-carousel >
   <ng-template ngbSlide *ngFor="let data of dataArray">
    
-    <div class="card custom-cardss bg-black text-white text-center" style="height: 20rem;">
-      <div class="card-body" style="z-index: 2;">
+    <div class="card custom-cardss bg-black text-white text-center" style="z-index:1;height: 20rem;">
+      <div class="card-body" style="z-index: 20;">
         <h1 class="card-title" style="z-index:500; margin-top:20%;">{{ data.title }}</h1>
         <p class="card-text" style="z-index:500;">{{ data.description }}</p>
         <button *ngIf="data.link" [routerLink]="[data.link]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
-        <button *ngIf="data.button" (click)="togglePanel(data.button)" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
+        <button *ngIf="data.button" (click)="togglePanel(data.button)" style="z-index:0;color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
       </div>
     </div>
   </ng-template>
@@ -49,7 +49,7 @@
         
         <!-- Viewers Count in Upper Right -->
         <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
-          <i class="fas fa-user"></i> {{card.number}}
+          <i class="fas fa-user"></i> {{card.user.length}}
         </div>
       </div>
     
@@ -90,7 +90,7 @@
         
         <!-- Viewers Count in Upper Right -->
         <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
-          <i class="fas fa-user"></i> {{card.number}}
+          <i class="fas fa-user"></i> {{card.user.length}}
         </div>
       </div>
     

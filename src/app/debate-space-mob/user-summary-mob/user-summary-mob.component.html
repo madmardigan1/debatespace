@@ -4,50 +4,72 @@
     <h1 style="text-align:center; padding-top:10px; font-size: 24px; margin-bottom: 5px;">Guests</h1> 
     <p style="text-align:center; margin-left: 10px; margin-top: 5px;">
       <i class="fas fa-user"></i>
-      {{ users.length }}
+      {{ cardUsers.length }}
     </p>
   </div>
+  <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
+    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': userToggle === 'all'}" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleUsers('all')">All</button> <!-- Added margin-right for spacing between buttons -->
+    
+    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': userToggle === 'speakers'}" style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleUsers('speakers')">Speakers</button> <!-- Added margin-right for spacing between buttons -->
+   
+    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': userToggle === 'spectators'}"style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleUsers('spectators')">Spectators</button>
+</div>
   <div style="display:flex; flex-direction:column; position:relative; overflow-y: scroll; padding-left: 20px; height: 80%;">
     <!-- All other sections, kept scrollable -->
-    <div *ngIf="getUsersByRole('host').length > 0">
+    <div *ngIf="hostCount.length > 0 && userToggle =='all'">
       <h2 style="margin-top: 10px; margin-bottom: 10px;">Host</h2> <!-- Existing content -->
       <div class="user-list">
-        <ng-container *ngFor="let user of getUsersByRole('host')">
-          <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
+        <ng-container *ngFor="let user of hostCount">
+          <app-user-card [user]="hostCount" (click)="getDetails(user)"></app-user-card>
         </ng-container>
       </div>
     </div>
+    <div *ngIf="userToggle !=='spectators'">
+    <div class="d-flex align-items-center justify-content-between" style="width:100%;">
+      <div class="d-flex align-items-center">
+          <h2 style="margin-bottom:0; margin-right:10px">Speakers</h2>
+          <p style="margin:0; margin-right:5px; padding:0;">{{speakerCount.length}} / 8</p>
+          <i class="fas fa-user"></i>
+      </div>
+      
+      <div style="margin-right:10px;" *ngIf="speakerCount.length < 8">
+          <button (click)="togglePanel()" class="text-primary">Invite Speakers</button>
+      </div>
+  </div>
+  
+   
+  <div *ngIf="speakerCount.length > 0">
+    <div class="user-list">
+      <ng-container *ngFor="let user of speakerCount">
+        <app-user-card [user]="speakerCount" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div *ngIf="userToggle !=='speakers'">
+  <div class="d-flex align-items-center justify-content-between" style="width:100%;">
+    <div class="d-flex align-items-center">
+        <h2 style="margin-bottom:0; margin-right:10px">Spectators</h2>
+        <p style="margin:0; margin-right:5px; padding:0;">{{spectatorCount.length}}</p>
+        <i class="fas fa-user"></i>
+    </div>
+    
+    <div style="margin-right:10px;">
+        <button (click)="togglePanel()" class="text-primary">Invite Spectators</button>
+    </div>
+</div>
+  
+  <div *ngIf="spectatorCount.length > 0">
+    
+    <div class="user-list">
+      <ng-container *ngFor="let user of spectatorCount">
+        <app-user-card [user]="spectatorCount" (click)="getDetails(user)"></app-user-card>
+      </ng-container>
+    </div>
+  </div>
+  </div>
+ 
 
-  <div *ngIf="getUsersByRole('speaker').length > 0">
-    <h2>Speakers</h2>
-    <div class="user-list">
-      <ng-container *ngFor="let user of getUsersByRole('speaker')">
-        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
-      </ng-container>
-    </div>
-  </div>
-  
-  <div *ngIf="getUsersByRole('spectator').length > 0">
-    <h2>Spectators</h2>
-    <div class="user-list">
-      <ng-container *ngFor="let user of getUsersByRole('spectator')">
-        <app-user-card [user]="user" (click)="getDetails(user)"></app-user-card>
-      </ng-container>
-    </div>
-  </div>
-  
-  <div *ngIf="getUsersByRole('host').length === 0">
-    <h2  style="margin-top: 10px; margin-bottom: 10px;">Host</h2>
-    <button (click)="togglePanel()"class="text-primary" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
-  </div>
-  <div *ngIf="getUsersByRole('speaker').length === 0">
-    <h2 style="margin-top: 10px; margin-bottom: 10px;">Speakers</h2>
-    <button (click)="togglePanel()"class="text-primary"  style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
-  </div>
-  <div *ngIf="getUsersByRole('spectator').length === 0">
-    <h2  style="margin-top: 10px; margin-bottom: 10px;">Spectators</h2>
-    <button (click)="togglePanel()" class="text-primary" style="margin-top: 10px; margin-bottom: 10px;">Invite Users</button>
-  </div>
 </div>
 </div>
 
@@ -58,7 +80,7 @@
   <div class="d-flex justify-content-center mt-3"> 
     <div class="drag-handle centered"></div>
   </div>
-    <div class="content" style="display:flex; flex-direction:column; position:relative;height:70vh">
+    <div class="content" style="display:flex; flex-direction:column; position:relative;height:50vh">
       <app-user-search></app-user-search>
    </div>
 </div>

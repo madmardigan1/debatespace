@@ -1,4 +1,5 @@
 <div class="user-card">
+  <div *ngFor="let user of user">
   <button style="background-color: black; border-color: black;">
     <div class="circular-image-container">
       <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image">
@@ -7,4 +8,5 @@
     <div style="text-align: center; color: white;">{{ user.name }}</div>
     <div style="text-align: center; color: rgba(255, 255, 255, 0.625);">{{ user.role }}</div>
   </button>
+  </div>  
 </div>

@@ -104,7 +104,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
         const card = cards.find((card) => card.id === id);
         if (card !== undefined) { // Check if card is not undefined
           this.card = card;
-          this.isRanked = this.card.debate!;
+          this.isRanked = this.card.ranked!;
           if (this.isRanked) {
             this.loadGameRules();
           }

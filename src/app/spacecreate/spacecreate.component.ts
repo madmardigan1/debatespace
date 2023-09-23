@@ -86,14 +86,21 @@ get isToggled1(): boolean {
     this.topicInput.nativeElement.focus();
     
   }
+
+ 
+  speakers?: string[]; // Optional speakers array
+  spectators?: string[]; // Optional spectators array
+  totalUsers?: number; 
+
+ 
+  
+
     submit() {
       const formData = this.form.value;
       const id = Date.now().toString();
-      const number = 3;
+      const number = 1;
       const ranked = this.form.get('isToggled2')?.value;
-      console.log(ranked);
-      const topic=this.topic[1];
-      this.cardService.addCard({ ...formData,topic:this.topic,number:number, id: id, debate:ranked });
+      this.cardService.addCard({ ...formData,user: [{name:"steve",role:'host',rank:3,photoUrl:'/assets/Steve.jpeg'}],topic:this.topic, id: id, ranked:ranked });
       this.cardService.addTag(this.topic);
       this.debateAuth.setUser('host');
       this.router.navigate(['/debateMob',id]);

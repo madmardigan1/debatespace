@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+//metrics for each user..consider adding more later
+export interface User {
+  name: string;
+  role: string;
+  rank: number;
+  photoUrl: string;
+}
+
+//data for each Node that gets created
 export interface Card {
   id: string;
-  user: string;
+  user: User[]; // The main user
   topic: string[];
   description: string;
-  number: number;
-  entrancefee?: number;
-  debate?: boolean;
+  ranked?: boolean;
 }
 
 export interface Topic {
@@ -16,6 +23,7 @@ export interface Topic {
   tally: number;
 }
 
+//arrary to contain all topics generated.  Any user created topic is added to the usertopics section...This should get sorted manually later.
 export interface Topics {
   usertopics: Topic[];
   politics: Topic[];
@@ -38,16 +46,40 @@ export interface Topics {
 
 export class CardDataService {
   private cards = new BehaviorSubject<Card[]>([
-    {id: '1',user: 'Jared', topic: ["Politics", "Ukraine", "Corruption", "Trump", "War"], description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", number: 10},
-    {id: '2',user: 'Jared', topic: ["Technology", "AI", "Innovation"], description: "Latest breakthroughs in AI", number: 50},
-    {id: '3',user: 'Jared', topic: ["Science", "Space", "Mars"], description: "Mars rover finds something interesting", number: 20},
-    {id: '4',user: 'Jared', topic: ["Sports", "Olympics", "Highlights"], description: "Olympics highlights", number: 25},
-    {id: '5',user: 'Jared', topic: ["Environment", "Climate", "Global Warming"], description: "Climate change and its effects", number: 30},
-    {id: '6',user: 'Jared', topic: ["Economy", "Market", "Trends"], description: "Market trends for this month", number: 40},
-    {id: '7',user: 'Jared', topic: ["Arts", "Gallery", "Review"], description: "Review of a popular art gallery", number: 15},
-    {id: '8',user: 'Jared', topic: ["Lifestyle", "Fashion", "Trends"], description: "Trending fashions for this year", number: 22},
-    {id: '9',user: 'Jared', topic: ["Travel", "Destinations", "Post-pandemic"], description: "Best destinations for post-pandemic travel", number: 35},
-    {id: '10',user: 'Jared', topic: ["Health", "Wellness", "Tips"], description: "Tips for a healthy lifestyle", number: 28}
+    {
+      id: '1', 
+      user: [
+        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
+        {name: 'Jared', role: 'spectator', rank: 2, photoUrl: '/assets/Jared.jpeg'}
+      ],
+      topic: ["Politics", "Ukraine", "Corruption", "Trump", "War"], 
+      description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", 
+      ranked: true
+    },
+    {
+      id: '2', 
+      user: [
+        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
+      ], 
+      topic: ["Technology", "AI", "Innovation"], 
+      description: "Latest breakthroughs in AI", 
+      ranked: true
+    },
+    {
+      id: '3', 
+      user: [
+        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
+      ], 
+      topic: ["Science", "Space", "Mars"], 
+      description: "Mars rover finds something interesting", 
+      ranked: true
+    },
+    // ... Continue in this manner for at least 8 lines.
   ]);
 
   private topicsInstance = new BehaviorSubject<Topics>({
@@ -125,10 +157,32 @@ getcards(): Observable<Card[]> {
   addCard(card: Card) {
     const currentCards = this.cards.getValue();
     this.cards.next([...currentCards, card]);
-    console.log(this.cards.value);
+   
     // Here, operate on 'currentCards' directly after updating it
 
 }
+
+updateCard(id: string, name:string, role:string,rank:number, photoUrl:string): void {
+  const updatedCards = this.cards.getValue().map(card => {
+    if (card.id === id) {
+      card.user.push({
+        name: name,
+        role: role,
+        rank: rank,
+        photoUrl: photoUrl
+      });
+
+      return {
+        ...card,
+        
+      };
+    }
+    return card;
+  });
+  this.cards.next(updatedCards);
+}
+
+
 
 addTag(newTagNames: string[]): void {
   const currentTopics = this.topicsInstance.getValue();

@@ -21,10 +21,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url('/assets/LandingPage.jpeg');
-    background-size: cover;
-    opacity: 0.4;
-    z-index: 0;  /* This ensures the image stays behind the content */
+   /* This ensures the image stays behind the content */
 }
 
   .slide-panel {

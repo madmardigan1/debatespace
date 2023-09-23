@@ -40,10 +40,13 @@ search () {
   }
   if (this.searchType == 'user') {
     this.matchedCards = this.cards.filter(card => {
-    return card.user.toLowerCase().includes(this.searchTerm.toLowerCase());
+      return card.user.some(u => 
+        u.name.toLowerCase().includes(this.searchTerm.toLowerCase()) && u.role === 'host'
+      );
     });
   }
   
+
 
 }
 ngOnInit(): void {
