@@ -32,7 +32,7 @@
           <i class="fas fa-user"></i>
       </div>
       
-      <div style="margin-right:10px;" *ngIf="speakerCount.length < 8">
+      <div style="margin-right:10px;" *ngIf="speakerCount.length < 8 && userType=='host'">
           <button (click)="togglePanel()" class="text-primary">Invite Speakers</button>
       </div>
   </div>
@@ -54,7 +54,7 @@
         <i class="fas fa-user"></i>
     </div>
     
-    <div style="margin-right:10px;">
+    <div *ngIf="userType == 'host'" style="margin-right:10px;">
         <button (click)="togglePanel()" class="text-primary">Invite Spectators</button>
     </div>
 </div>

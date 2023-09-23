@@ -36,6 +36,7 @@ export class UserSummaryMobComponent implements OnInit {
   userToggle = 'all';
   speakerCount : User[] = [];
   hostCount : User[] = [];
+  @Input() userType = '';
   cardUsers: User[]=[]; 
   spectatorCount : User[]=[]; 
   cardx!: User;

@@ -15,7 +15,7 @@ export interface Card {
   user: User[]; // The main user
   topic: string[];
   description: string;
-  ranked?: boolean;
+  ranked: boolean;
 }
 
 export interface Topic {
@@ -215,6 +215,25 @@ addTag(newTagNames: string[]): void {
 getTopics(): Observable<Topics> {
   return this.topicsInstance.asObservable();
 }
+
+findMatches(userTopics: string[], userRanked: boolean): Card[] {
+  // Extract the current cards from the BehaviorSubject
+  const allCards = this.cards.getValue();
+
+  // Filter cards that match the user's criteria
+  const matchedCards = allCards.filter(card => {
+    // Check if at least one topic matches
+    const hasCommonTopic = card.topic.some(topic => userTopics.includes(topic));
+    
+    // Check if the ranked type matches
+    const hasSameRankType = card.ranked === userRanked;
+
+    return hasCommonTopic && hasSameRankType;
+  });
+
+  return matchedCards;
+}
+
 
 }
 

@@ -24,6 +24,10 @@
    /* This ensures the image stays behind the content */
 }
 
+.active {
+  filter: blur(5px);
+  pointer-events: none; 
+}
   .slide-panel {
     border: 1px solid white;
     position: absolute;

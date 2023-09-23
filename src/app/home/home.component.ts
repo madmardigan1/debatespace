@@ -8,6 +8,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { TopicMenuService } from './topic-menu/topic-menu.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatchMakerService } from './match-maker/match-maker.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -36,6 +37,8 @@ export class HomeComponent{
   expandPane = -2;
   topicSelection = false;
   searchTerm: string = ''; 
+  matchmaking: Card[] = [];
+  matchsub!:Subscription;
   joinState=false;
   userForm: FormGroup;
   matchWindow = false;
@@ -67,13 +70,9 @@ export class HomeComponent{
      }
 ];
 
-  constructor(private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private matchMaker: MatchMakerService,private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
     this.userForm = this.fb.group({
-      roles: this.fb.group({
-        speaker: [false],
-        host: [false]
-      }),
-      topics: this.fb.array([])
+      isToggled : false
     });
     
     this.cardService.cards$.subscribe((data) => {
@@ -130,6 +129,15 @@ submitForm(): void {
   this.spinner=true;
   this.joinState=false;
  this.panelState='hidden';
+ this.matchMaker.matchRequest({name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'}, this.savedTopics, this.userForm.get('isToggled')!.value);
+ this.matchsub=this.matchMaker.getTopics().subscribe((data) => {
+  this.matchmaking = data;
+});
+ 
+}
+cancelMatch(): void {
+  this.matchsub.unsubscribe();
+  this.matchmaking=[];
 }
 
 get topics(): FormArray {

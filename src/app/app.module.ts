@@ -44,6 +44,7 @@ import { ReportFormComponent } from './debate-space-mob/report-form/report-form.
 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RankTabComponent } from './debate-space-mob/rank-tab/rank-tab.component';
+import { MatchMakerComponent } from './home/match-maker/match-maker.component';
 
 //node
 
@@ -70,6 +71,7 @@ import { RankTabComponent } from './debate-space-mob/rank-tab/rank-tab.component
     AboutNodesComponent,
     ReportFormComponent,
     RankTabComponent,
+    MatchMakerComponent,
     
   ],
   imports: [

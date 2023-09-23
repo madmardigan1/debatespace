@@ -167,7 +167,7 @@
     
     
     <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:50vh;" >
-      <app-user-summary-mob [card]="this.card.id"></app-user-summary-mob> 
+      <app-user-summary-mob [userType]="this.userType" [card]="this.card.id"></app-user-summary-mob> 
       
   </div>
     <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;height:50vh;" >
