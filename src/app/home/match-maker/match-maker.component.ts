@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { trigger, transition, style, animate, query, animateChild, group } from '@angular/animations';
 import { MatchMakerService } from './match-maker.service';
 import { Card, CardDataService } from 'src/app/space-service.service';
 import { DebateAuthService } from '../debate-auth.service';
@@ -6,8 +7,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-match-maker',
   templateUrl: './match-maker.component.html',
-  styleUrls: ['./match-maker.component.css']
+  styleUrls: ['./match-maker.component.css'],
 })
+
 export class MatchMakerComponent {
 
 matchList : Card[]=[];
@@ -34,10 +36,11 @@ counter=0;
     }
   }
 
-  join () {
-    this.cardServ.updateCard(this.matchList[this.counter].id, 'steve','speaker',400,'/assets/Steve.jpeg');
+  join (counter: string) {
+    this.cardServ.updateCard(counter, 'steve','speaker',400,'/assets/Steve.jpeg');
     this.debateAuth.setUser('speaker');
-    this.router.navigate(['/debateMob',this.matchList[this.counter].id]);
+    this.closeClicked.emit();
+    this.router.navigate(['/debateMob',counter]);
   }
   end () {
     this.closeClicked.emit();

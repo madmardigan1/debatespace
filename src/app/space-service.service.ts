@@ -53,6 +53,9 @@ export class CardDataService {
         {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
         {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
         {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
         {name: 'Jared', role: 'spectator', rank: 2, photoUrl: '/assets/Jared.jpeg'}
       ],
       topic: ["Politics", "Ukraine", "Corruption", "Trump", "War"], 

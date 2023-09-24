@@ -1,10 +1,18 @@
 
 
 <div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
-  <div *ngIf="matchmaking.length>0" style="position:absolute; top:25%;   width:390px; z-index:1000000;">
-    <app-match-maker (closeClicked)="cancelMatch()"></app-match-maker>
+  
+
+  <div #myModal class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark text-white"style="width:390px;top:15%">
+      <div class="modal-content" style="width:390px;">
+        
+        <app-match-maker class="bg-dark text-white" *ngIf="matchmaking.length>0"(closeClicked)="cancelMatch()"></app-match-maker>
+      
+      </div>
+    </div>
   </div>
-  <div class="bg-dark text-white" [ngClass]="{'active': matchmaking.length>0}" *ngIf="!topicSelection" style=" width:390px; height:100%; display: flex;
+  <div class="bg-dark text-white"  *ngIf="!topicSelection" style=" width:390px; height:100%; display: flex;
   flex-direction: column;
   position:absolute;
   overflow-y:hidden;">
@@ -22,7 +30,7 @@
     <div class="center" style="position:relative; overflow-y: scroll;">
 
 <div class="carot text-white" style="border:1px solid white; padding-left:5px;padding-right:5px;">
-<ngb-carousel >
+<ngb-carousel [showNavigationIndicators]="false">
   <ng-template ngbSlide *ngFor="let data of dataArray">
    
     <div class="card custom-cardss bg-black text-white text-center" style="z-index:1;height: 20rem;">

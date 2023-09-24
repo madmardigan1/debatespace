@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component,ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CardDataService, Card, Topics } from '../space-service.service';
 import { DebateAuthService } from './debate-auth.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
@@ -9,6 +9,9 @@ import { TopicMenuService } from './topic-menu/topic-menu.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatchMakerService } from './match-maker/match-maker.service';
+
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -31,11 +34,12 @@ import { MatchMakerService } from './match-maker/match-maker.service';
     
   ],
 })
-export class HomeComponent{
+export class HomeComponent implements AfterViewInit{
   savedTopics: string[] = [];
   currentTopics!: Topics; 
   expandPane = -2;
   topicSelection = false;
+  isModalshown = false;
   searchTerm: string = ''; 
   matchmaking: Card[] = [];
   matchsub!:Subscription;
@@ -96,6 +100,14 @@ export class HomeComponent{
 
   
   }
+
+  @ViewChild('myModal') modal!: ElementRef;
+  bsModal: any;
+
+  ngAfterViewInit(): void {
+    this.bsModal = new bootstrap.Modal(this.modal.nativeElement);
+ 
+  }
   removeTopic (data:any):void {
     this.savedTopics.splice(data);
   }
@@ -132,10 +144,24 @@ submitForm(): void {
  this.matchMaker.matchRequest({name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'}, this.savedTopics, this.userForm.get('isToggled')!.value);
  this.matchsub=this.matchMaker.getTopics().subscribe((data) => {
   this.matchmaking = data;
+  if (this.matchmaking.length > 0) {
+    this.openModal();  // This is the method that opens the modal programmatically.
+  }
 });
  
+
+ 
 }
+openModal(): void {
+  this.bsModal.show();
+}
+closeModal(): void {
+  this.bsModal.hide();
+}
+
+
 cancelMatch(): void {
+  this.bsModal.hide();
   this.matchsub.unsubscribe();
   this.matchmaking=[];
 }
