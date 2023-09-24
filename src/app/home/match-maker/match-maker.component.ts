@@ -36,11 +36,11 @@ counter=0;
     }
   }
 
-  join (counter: string) {
-    this.cardServ.updateCard(counter, 'steve','speaker',400,'/assets/Steve.jpeg');
+  join (counter: Card) {
+    this.cardServ.updateCard(counter.id, 'steve','speaker',400,'/assets/Steve.jpeg');
     this.debateAuth.setUser('speaker');
     this.closeClicked.emit();
-    this.router.navigate(['/debateMob',counter]);
+    this.router.navigate(['/debateMob',counter.id]);
   }
   end () {
     this.closeClicked.emit();

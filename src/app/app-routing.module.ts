@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
@@ -7,14 +7,16 @@ import { TournamentBulletinComponent } from './tournament-bulletin/tournament-bu
 import { BrowsePageComponent } from './browse-page/browse-page.component';
 import { DebateSpaceMobComponent } from './debate-space-mob/debate-space-mob.component';
 import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
+import { SearchComponent } from './search/search.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'create' , component: SpacecreateComponent},
-  { path: 'tournament', component: TournamentBulletinComponent},
+  { path: 'home/create' , component: SpacecreateComponent},
+  { path: 'home/tournament', component: TournamentBulletinComponent},
   { path: 'browse/:topic', component: BrowsePageComponent},
   { path: 'debateMob/:id', component: DebateSpaceMobComponent},
-  { path: 'topicMenu', component:TopicMenuComponent},
-  { path: 'home', component:HomeComponent}
+  { path: 'home/topicMenu', component:TopicMenuComponent},
+  { path: 'home', component:HomeComponent},
+  { path: 'search', component:SearchComponent}
 ];
 
 @NgModule({

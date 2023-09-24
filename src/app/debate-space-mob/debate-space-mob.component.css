@@ -18,7 +18,7 @@
   
   
   .theRest {
-    
+    height:60%;
     flex:auto;
     display: flex;
     flex-direction: column;
@@ -29,6 +29,7 @@
 
   .viewsecond {
     flex:1;
+    height:auto;
     display:flex;
     flex-direction:column;
     overflow-y: hidden;
@@ -41,7 +42,7 @@
     width: 100%;
     height: auto;
     overflow-y:scroll;
-    margin-bottom:10px;
+
 }
 .navigationPane{
     position:relative;

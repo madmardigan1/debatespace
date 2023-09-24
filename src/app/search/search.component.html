@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
+  
+    <div class="bg-black text-white" style=" width:390px; height:100%; display: flex;
+    flex-direction: column;
+    position:absolute;
+    overflow-y:scroll;">
+    <div style="margin-right:10px; margin-left:10px;">
+    <h1 class="mb-4 mt-4 text-center">Categories</h1> <!-- Added margin-bottom for vertical spacing -->
+    
+    <!-- Button Group -->
+    <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
+
+        <!-- Left-most buttons -->
+        <button class="btn btn-outline-white text-white" [ngClass]="{'btn-danger': searchType === 'all'}" style="border:1px solid white; width: auto; margin-right: 10px" (click)="toggleSearch('all')">All</button>
+        <button class="btn btn-outline-white text-white" [ngClass]="{'btn-danger': searchType === 'ranked'}" style="border:1px solid white; width: auto; margin-right: 10px" (click)="toggleSearch('ranked')">Ranked</button>
+    
+        <!-- Spacer to push next items to the right -->
+        <div class="ml-auto"></div>
+    
+        <!-- Right-most Sort button -->
+        <div class="d-flex align-items-center">
+        <div style="font-size:20px; padding-right:4px;">Sort by</div>
+        <button class="text-white" style="width:130px;border:1px solid white"mat-button [matMenuTriggerFor]="sortMenu">
+        <div class="d-flex align-items-center"><p style="margin:0;padding:0;"> {{sortType}}</p><i style="padding-left:3px;"class="fas fa-angle-down"></i></div>  
+        </button>
+       
+
+        <mat-menu #sortMenu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="sort('user.length')">Most Popular</button>
+            <button mat-menu-item (click)="sort('id')">Most Recent</button>
+        </mat-menu>
+    </div>
+    </div>
+    
+    
+    <!-- Cards Container -->
+    <div *ngIf="matchedCards.length>0" style="display: flex; flex-wrap: wrap;overflow-y:scroll;">
+        <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
+
+            <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="join(card)"></button>
+      <!-- Top Colored Box -->
+      <div class="custom-card shadow-lg bg-dark text-white" style=" position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
+        
+        <!-- Description styled at the top and spanning the whole card -->
+        <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
+        
+        <!-- Viewers Count in Upper Right -->
+        <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
+          <i class="fas fa-user"></i> {{card.user.length}}
+        </div>
+      </div>
+    
+       
+      <!-- Black Box Below -->
+      <div class="bg-black text-white" style="border: 1px solid black; padding: 5px;">
+        <div class="user-info" style="display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+            
+            <!-- User Image and Name -->
+            <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> 
+                <img [src]="card.user[0].photoUrl" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
+                <h5 class="text-center" style="margin: 0px; font-size: 12px;">{{card.user[0].name}}</h5>
+            </div>
+    
+            <!-- Topic Container -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-content: flex-start;">
+                <div *ngFor="let topic of card.topic" style="display: inline-flex; margin-right: 5px; margin-bottom: 5px;">
+                    <span style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px;">{{topic}}</span>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    
+        </div>
+    </div>
+</div>
+</div>
+</div>

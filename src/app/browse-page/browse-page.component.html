@@ -5,7 +5,7 @@
     position:absolute;
     overflow-y:scroll;">
     <div style="margin-right:10px; margin-left:10px;">
-    <h1 class="mb-4 mt-4 text-center">Browse</h1> <!-- Added margin-bottom for vertical spacing -->
+    <h1 class="mb-4 mt-4 text-center">Search</h1> <!-- Added margin-bottom for vertical spacing -->
     
     <!-- Button Group -->
     <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
@@ -16,47 +16,61 @@
     </div>
     
     <div style="padding-top:10px; padding-bottom:10px;position:relative;width:100%; overflow-block:auto;">
-        <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="search()"placeholder="Search for a {{searchType}}...">
+        <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="search()"placeholder="Search for a {{searchType}}..." (input)="onSearch()">
         <button class="btn btn-outine-danger" *ngIf="searchTerm"  (click)="search()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Search</button>
       </div>
 
-      <div *ngIf="matchedCards.length==0">No Nodes match your search...</div>
+      <div *ngIf="searchTerm && matchedTopics.length">
+        <div class="d-flex"style="flex-wrap: wrap; max-height:200px; margin:0px, 10px; padding-bottom:10px;">
+        <div *ngFor="let topic of matchedTopics" class="d-flex" >
+          <button class="btn btn-danger btn-sm" style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;" (click)="searchbutton(topic)">{{topic}}</button> 
+
+        </div>
+      </div>
+      </div>
+
+
+      <div *ngIf="searchTerm.length>0&&searchType=='topic' && matchedCards.length==0 && matchedTopics.length==0">No Nodes match your search...</div>
+      <div *ngIf="searchTerm.length>0&&searchType=='user' && matchedTopics.length==0">No users hosting that contain these characters...</div>
     <!-- Cards Container -->
     <div style="display: flex; flex-wrap: wrap;">
-        <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
+      <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
 
-            <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
-      <!-- Top Colored Box -->
-      <div class="custom-card shadow-lg bg-dark text-white" style=" position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
-        
-        <!-- Description styled at the top and spanning the whole card -->
-        <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
-        
-        <!-- Viewers Count in Upper Right -->
-        <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
-          <i class="fas fa-user"></i> {{card.number}}
-        </div>
-      </div>
+        <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="join(card)"></button>
+  <!-- Top Colored Box -->
+  <div class="custom-card shadow-lg bg-dark text-white" style=" position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
     
-      <!-- Black Box Below -->
-      <div class="bg-black text-white" style="border: 1px solid black;">
-        <div class="user-info" style="width:250px; display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
-          
-          <!-- User Image and Name -->
-          <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> <!-- added margin-right -->
-            <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-            <h5 style="margin-top: 5px; font-size: 12px;">{{card.user}}</h5>
-          </div>
-          
-          <!-- Topic Container -->
-          <div style="display: flex; flex-wrap: wrap; max-height: 50px; overflow: hidden; align-content: flex-start;">
-            <div *ngFor="let topic of card.topic" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;"> <!-- adjusted margins -->
-              <span style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;">{{topic}}</span> <!-- adjusted font-size and padding -->
+    <!-- Description styled at the top and spanning the whole card -->
+    <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
+    
+    <!-- Viewers Count in Upper Right -->
+    <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
+      <i class="fas fa-user"></i> {{card.user.length}}
+    </div>
+  </div>
+
+   
+  <!-- Black Box Below -->
+   <!-- Black Box Below -->
+   <div class="bg-black text-white" style="border: 1px solid black; padding: 5px;">
+    <div class="user-info" style="display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+        
+        <!-- User Image and Name -->
+        <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> 
+            <img [src]="card.user[0].photoUrl" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
+            <h5 class="text-center" style="margin: 0px; font-size: 12px;">{{card.user[0].name}}</h5>
+        </div>
+
+        <!-- Topic Container -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-content: flex-start;">
+            <div *ngFor="let topic of card.topic" style="display: inline-flex; margin-right: 5px; margin-bottom: 5px;">
+                <span style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px;">{{topic}}</span>
             </div>
-          </div>
         </div>
-      </div>
-        </div>
+
+    </div>
+</div>
+    </div>
     </div>
 </div>
 </div>

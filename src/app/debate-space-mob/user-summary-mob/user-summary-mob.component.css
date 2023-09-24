@@ -1,10 +1,10 @@
 .slide-panel {
     border: 1px solid white;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: auto;
+   
     overflow: hidden;
     opacity: 1;
     border-top-right-radius: 20px;
@@ -17,4 +17,35 @@
     width: 40px;
     background-color: #cccccc;
     cursor: pointer;
+  }
+  .circular-image-container {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .circular-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+  
+  .bigger-image-container {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bigger-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
   }

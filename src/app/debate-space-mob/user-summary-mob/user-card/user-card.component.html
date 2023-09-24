@@ -1,6 +1,6 @@
 <div class="user-card">
   <div *ngFor="let user of user">
-  <button style="background-color: black; border-color: black;">
+  <button style="background-color: black; border-color: black;" (click)="send()">
     <div class="circular-image-container">
       <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image">
     </div>

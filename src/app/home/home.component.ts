@@ -1,5 +1,5 @@
 import { Component,ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { CardDataService, Card, Topics } from '../space-service.service';
+import { CardDataService, Card, Topics, User } from '../space-service.service';
 import { DebateAuthService } from './debate-auth.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -131,8 +131,10 @@ export class HomeComponent implements AfterViewInit{
     return Object.keys(obj);
   }
 
-authorize(typeofUser: string) {
-  this.debateAuth.setUser(typeofUser);
+authorize(card: Card) {
+  this.debateAuth.setUser('spectator');
+  this.cardService.updateCard(card.id,"Steve",'spectator',3,'/assets/Steve.jpeg')
+  this.router.navigate(['/debateMob',card.id]);
 }
  
 

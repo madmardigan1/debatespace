@@ -58,7 +58,7 @@ export class CardDataService {
         {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
         {name: 'Jared', role: 'spectator', rank: 2, photoUrl: '/assets/Jared.jpeg'}
       ],
-      topic: ["Politics", "Ukraine", "Corruption", "Trump", "War"], 
+      topic: ["Politics", "Ukraine", "Corruption", "Trump", "ProTrump", "#trump@", "War"], 
       description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", 
       ranked: true
     },
@@ -80,7 +80,7 @@ export class CardDataService {
       ], 
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
-      ranked: true
+      ranked: false
     },
     // ... Continue in this manner for at least 8 lines.
   ]);

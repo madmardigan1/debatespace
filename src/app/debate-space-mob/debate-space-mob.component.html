@@ -52,12 +52,14 @@
               <app-chat-submit-mob (submitit)="updateText($event)" [toggleChatsText]="toggleChatsText"></app-chat-submit-mob>
             </div>
             
-            <div class="1" style="position:absolute;right:5px;bottom:5px;display:flex;"></div>
+      
           </div>
-          <div *ngIf="panelType=='summary'" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >
+          <div *ngIf="panelType=='summary'" class="bg-black text-white" style="position:relative; flex:auto; display: flex; flex-direction: column;">
             <app-gptsummary-mob></app-gptsummary-mob>
+        </div>
+        
           
-          </div>
+          
           <div *ngIf="panelType=='scoreboard'" class="bg-black text-white" style="overflow-y:scroll;flex:auto;" >
             <app-rank-tab></app-rank-tab>
           
@@ -71,7 +73,7 @@
               <button mat-menu-item (click)="togglePanel(5)">Adjust Settings</button>
               <button mat-menu-item (click)="togglePanel(7)">Report this space</button>
             </mat-menu>
-              <!-- The nested share menu -->
+            
 <mat-menu #shareMenu="matMenu" xPosition="before">
   <button mat-menu-item (click)="copyLinkToClipboard()">Copy Link</button>
   <button mat-menu-item (click)="post()">Post</button>
@@ -166,7 +168,7 @@
       </div>
     
     
-    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:50vh;" >
+    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:60vh;" >
       <app-user-summary-mob [userType]="this.userType" [card]="this.card.id"></app-user-summary-mob> 
       
   </div>

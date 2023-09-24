@@ -8,4 +8,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class UserCardComponent {
   @Input() user: any;
   @Output() userClicked = new EventEmitter<void>();
+
+  send() {
+    this.userClicked.emit();
+  }
 }

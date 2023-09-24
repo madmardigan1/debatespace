@@ -31,9 +31,11 @@ export class UserSummaryMobComponent implements OnInit {
   public selectedName!: string;
   subscription!: Subscription;
   subscription2!:Subscription;
+  detailcard:any;
   selectedMoment!: number;
   panelReveal = false;
   userToggle = 'all';
+  toggledPanel=0;
   speakerCount : User[] = [];
   hostCount : User[] = [];
   @Input() userType = '';
@@ -50,11 +52,12 @@ export class UserSummaryMobComponent implements OnInit {
   ];
 
   constructor (private cd: ChangeDetectorRef,private userSearch: UserSearchService, private cardService: CardDataService) {
-    this.subscription2 =this.userSearch.listentoInvite().subscribe(topics => {
+   
+   /* this.subscription2 =this.userSearch.listentoInvite().subscribe(topics => {
       if(topics !== '') {
         this.togglePanel();
       }
-    });
+    });*/
     
   }
 
@@ -91,10 +94,15 @@ export class UserSummaryMobComponent implements OnInit {
 panelState: 'hidden' | 'visible' = 'hidden';
 startY: number | null = null;
 
-togglePanel(): void {
-
+togglePanel(input: number): void {
+  this.toggledPanel=input;
   this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
 
+}
+
+details (input: any) {
+  this.togglePanel(2);
+  this.detailcard = input;
 }
 toggleUsers(type:string):void {
   this.userToggle=type;

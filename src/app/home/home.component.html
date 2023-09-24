@@ -18,7 +18,7 @@
   overflow-y:hidden;">
  
     <div>
-    <button class="btn btn-danger" (click)="togglePanel(3)" style="    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);opacity:.8; border:2px solid black; border-radius:50%;position:absolute;bottom:10px;right:10px;z-index:2; width:70px;height:70px; z-index:10000;">
+    <button class="btn btn-danger" (click)="togglePanel(3)" style="    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);opacity:.8; border:2px solid black; border-radius:50%;position:absolute;bottom:10px;right:10px; width:70px;height:70px; z-index:990;">
       <div *ngIf="!spinner">
       <i style="font-size:40px;"class="fas fa-eye"></i>
      </div>
@@ -51,7 +51,7 @@
   <h2 class="text-left mb-2">Live Now</h2>
   <div class="scroll-container mb-1">
     <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
-      <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
+      <button  style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900" (click)="authorize(card)"></button>
       <!-- Top Colored Box -->
       <div class="custom-card shadow-lg bg-dark text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
         
@@ -71,7 +71,7 @@
           <!-- User Image and Name -->
           <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> <!-- added margin-right -->
             <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-            <h5 style="margin-top: 5px; font-size: 12px;">Steve</h5>
+            <h5 style="margin-top: 5px; font-size: 12px;">{{card.user[0].name}}</h5>
           </div>
           
           <!-- Topic Container -->
@@ -92,7 +92,7 @@
   <h2 class="text-left mb-2 mt-3">Top Channels We Think You'll Like</h2>
   <div class="scroll-container mb-1">
     <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
-      <button [routerLink]="['/debateMob', card.id]" style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="authorize('spectator')"></button>
+      <button  style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900" (click)="authorize(card)"></button>
       <!-- Top Colored Box -->
       <div class="custom-card shadow-lg bg-dark text-white" style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
         
@@ -112,7 +112,7 @@
           <!-- User Image and Name -->
           <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> <!-- added margin-right -->
             <img [src]="'/assets/Steve1.jpeg'" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-            <h5 style="margin-top: 5px; font-size: 12px;">Steve</h5>
+            <h5 style="margin-top: 5px; font-size: 12px;">{{card.user[0].name}}</h5>
           </div>
           
           <!-- Topic Container -->
@@ -149,7 +149,7 @@
 
 </div>
 <div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
-  <div style="position:absolute; left:10px;top:10px; z-index:99999">
+  <div style="position:absolute; left:10px;top:10px; z-index:10000;">
     <button class="btn btn-outline-white text-white" (click)="togglePanel(0)">
       <i class="fas fa-times"></i>
     </button>

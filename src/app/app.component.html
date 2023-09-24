@@ -1,22 +1,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<div style="width:100%;">
+<div class="container-fluid text-white bg-black py-2 d-flex align-items-center justify-content-between banner-top" style="width:390px;">
 
-<div class="container-fluid text-white bg-black py-2 d-flex align-items-center justify-content-between banner-top">
- 
-  <h1>Sequitur</h1>
-
- 
-
-  <div class="position-relative">
-    <input type="text" class="form-control d-inline-block" style="padding-right: 40px;" placeholder="Search...">
-    <button class="btn btn-light position-absolute" style="right: 0px; top: 50%; transform: translateY(-50%);" type="button">
-      <i class="fas fa-search"></i>
-    </button>
-  </div>
-  <a href="/browse/:''" class="text-white text-decoration-none"><h1>Browse</h1></a>
-  <a href="#" class="text-white text-decoration-none"><h1>Debate</h1></a>
+  <button [routerLink]="['home']" class="text-white text-decoration-none"><h1><i class="fa fa-home"></i></h1></button>
+  <div class="d-flex">
+  <button [routerLink]="['search']" class="mx-4 text-white text-decoration-none"><h1>Browse</h1></button>
+  <button [routerLink]="['browse/:']"class="text-white text-decoration-none"><h1>   <i class="fas fa-search"></i></h1></button>
+</div>
 </div>
 
-
+</div>
 
 
 <div class="routercontainer">
