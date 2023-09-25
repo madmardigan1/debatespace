@@ -11,7 +11,7 @@
     flex-direction: column;
     position:absolute;
     overflow-y:hidden;">
-    <div *ngIf="banner" class="bg-danger align-items-center text-center text-white" style="z-index:5000;opacity:.7; position:absolute; width:100%; height:50px;">Round Over</div>
+   
     
     <div class="nodeArea"  [@expandShrink]="nodeState" >
       <app-node-space-mob #nodeSpace [userType]="userType" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>

@@ -166,6 +166,7 @@ cancelMatch(): void {
   this.bsModal.hide();
   this.matchsub.unsubscribe();
   this.matchmaking=[];
+  this.joinState=false;
 }
 
 get topics(): FormArray {

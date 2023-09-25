@@ -23,7 +23,7 @@ overflow-y:hidden;">
     <!-- Step 1: Add a search bar -->
     <div style="padding: 10px;position:relative;width:100%; overflow-block:auto;">
       <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="addNewTopic()"placeholder="Search for topics..." (input)="onSearch()">
-      <button class="btn btn-outine-danger" *ngIf="searchTerm && !matchedTopics.length"  (click)="addNewTopic()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Add</button>
+      <button class="btn btn-outine-danger" *ngIf="searchTerm && !matchedTopics.length &&addTopic=='true'"  (click)="addNewTopic()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Add</button>
     </div>
 
     <!-- Step 2: Show matched topics -->

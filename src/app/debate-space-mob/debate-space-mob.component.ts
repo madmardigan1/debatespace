@@ -70,9 +70,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
 
   //game rules
   private intervalId: any;
-  private setTeam = false;
+  debateFeatures=false;
   isRanked = true;
-  banner = false;
+ 
   //other variables
 
     text: string = '';
@@ -133,27 +133,14 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       
     }
     loadGameRules() : void {
+      this.debateFeatures = true;
       this.intervalId = setInterval(() => {
-        this.executeFunctions();
-      }, 3000); // 30 seconds
-      //only implemented if debate is activated
-    }
-
-    executeFunctions () {
-      this.setTeam = !this.setTeam;
-      //send text update to teams
     
-        this.banner = true;
-        setTimeout(() => {
-          this.banner = false;
-        }, 5000);  // Hide after 5 seconds
-
-      //update moments
-      //activate features for active team
-      //deactivate features for other team
-      //update points values
-
+      }, 3000)
+    
     }
+
+   
 
     post() {
       //this should direct to the sequitur post form with the getLink data

@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'home/tournament', component: TournamentBulletinComponent},
   { path: 'browse/:topic', component: BrowsePageComponent},
   { path: 'debateMob/:id', component: DebateSpaceMobComponent},
-  { path: 'home/topicMenu', component:TopicMenuComponent},
+  { path: 'home/topicMenu/:myParam', component:TopicMenuComponent},
   { path: 'home', component:HomeComponent},
   { path: 'search', component:SearchComponent}
 ];

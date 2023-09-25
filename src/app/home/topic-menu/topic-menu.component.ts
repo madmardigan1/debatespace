@@ -1,24 +1,27 @@
-import { Component, OnChanges} from '@angular/core';
+import { Component, OnChanges, OnInit} from '@angular/core';
 import { TopicMenuService } from './topic-menu.service';
 import { CardDataService, Topics } from 'src/app/space-service.service';
 import { Card,Topic,  } from 'src/app/space-service.service';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-topic-menu',
   templateUrl: './topic-menu.component.html',
   styleUrls: ['./topic-menu.component.css']
 })
-export class TopicMenuComponent {
+export class TopicMenuComponent implements OnInit{
   cards: Card[] =[];
   currentTopics!: Topics; 
   topicSelection=false;
   joinState=false;
   savedTopics: string[] = [];
   expandPane=-2;
+  addTopic = 'true';
   searchTerm: string = ''; 
   matchedTopics: any[] = []; 
-  constructor(private location: Location,private topicServ:TopicMenuService, private cardService:CardDataService) {
+  parameterValue: string = '';
+  constructor(private location: Location,private topicServ:TopicMenuService, private cardService:CardDataService, private route:ActivatedRoute) {
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
     });
@@ -26,6 +29,14 @@ export class TopicMenuComponent {
       this.currentTopics = data;
     });
     
+  }
+  ngOnInit(): void {
+    this.parameterValue = this.route.snapshot.paramMap.get('myParam') || 'defaultValue';
+
+
+      this.addTopic = this.parameterValue;
+
+   
   }
 
   objectKeys(obj: any) {
@@ -74,7 +85,7 @@ export class TopicMenuComponent {
   }
   
   addNewTopic(): void {
-    if (this.searchTerm) {
+    if (this.searchTerm && this.addTopic=='true') {
         this.saveTopic(this.searchTerm);
       
         
