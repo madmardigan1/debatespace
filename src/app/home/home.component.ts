@@ -1,4 +1,4 @@
-import { Component,ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component,ViewChild, ElementRef, AfterViewInit, TemplateRef } from '@angular/core';
 import { CardDataService, Card, Topics, User } from '../space-service.service';
 import { DebateAuthService } from './debate-auth.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
@@ -7,10 +7,12 @@ import { Carousel } from './carousel';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TopicMenuService } from './topic-menu/topic-menu.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+
 import { MatchMakerService } from './match-maker/match-maker.service';
 
 declare var bootstrap: any;
+
 
 @Component({
   selector: 'app-home',
@@ -38,6 +40,7 @@ export class HomeComponent implements AfterViewInit{
   savedTopics: string[] = [];
   currentTopics!: Topics; 
   expandPane = -2;
+  firstSlide = false;
   topicSelection = false;
   isModalshown = false;
   searchTerm: string = ''; 
@@ -74,7 +77,7 @@ export class HomeComponent implements AfterViewInit{
      }
 ];
 
-  constructor(private matchMaker: MatchMakerService,private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private activatedRoute:ActivatedRoute,private matchMaker: MatchMakerService,private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
     this.userForm = this.fb.group({
       isToggled : false
     });
@@ -85,15 +88,16 @@ export class HomeComponent implements AfterViewInit{
 
     this.subscription =this.topicMenu.getTopics().subscribe(topics => {
       this.savedTopics=topics;
+      this.closeSecondModal();
       if (this.savedTopics.length>0) {
-        this.selectedButton=3;
-        this.joinState=true;
-        this.panelState='visible';
+        
+       
       }
     });
 
     this.cardService.getTopics().subscribe(data => {
       this.currentTopics = data;
+      
     });
     
   
@@ -101,11 +105,64 @@ export class HomeComponent implements AfterViewInit{
   
   }
 
-  @ViewChild('myModal') modal!: ElementRef;
-  bsModal: any;
+
+ 
+
+@ViewChild('firstModal') firstModal!: ElementRef;
+@ViewChild('secondModal') secondModal!: ElementRef;
+@ViewChild('thirdModal') thirdModal!: ElementRef;
+
+
+openFirstModal() {
+  this.firstModal.nativeElement.style.display = 'flex';
+  this.firstModal.nativeElement.classList.add('open1');
+}
+
+closeFirstModal(event?: Event) {
+  // If an event is provided, this is an overlay click
+  if (event && this.secondModal.nativeElement.classList.contains('open')) {
+    this.closeSecondModal();
+  } else if (!this.secondModal.nativeElement.classList.contains('open')) {
+    this.firstModal.nativeElement.classList.remove('open1');
+    this.joinState=false;
+  }
+}
+
+openSecondModal() {
+
+  this.secondModal.nativeElement.classList.add('open');
+
+}
+
+
+closeSecondModal() {
+  this.secondModal.nativeElement.classList.remove('open');
+}
+
+
+openThirdModal() {
+
+  this.thirdModal.nativeElement.classList.add('open');
+
+}
+
+
+closeThirdModal() {
+  this.thirdModal.nativeElement.classList.remove('open');
+  this.matchsub.unsubscribe();
+  this.matchmaking=[];
+  this.joinState=false;
+}
+
+
+
+
+  
 
   ngAfterViewInit(): void {
-    this.bsModal = new bootstrap.Modal(this.modal.nativeElement);
+   
+  
+
  
   }
   removeTopic (data:any):void {
@@ -139,35 +196,30 @@ authorize(card: Card) {
  
 
 submitForm(): void {
+  this.firstSlide=false;
   this.selectedButton = 0;
   this.spinner=true;
   this.joinState=false;
  this.panelState='hidden';
+ this.closeFirstModal();
  this.matchMaker.matchRequest({name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'}, this.savedTopics, this.userForm.get('isToggled')!.value);
  this.matchsub=this.matchMaker.getTopics().subscribe((data) => {
   this.matchmaking = data;
   if (this.matchmaking.length > 0) {
-    this.openModal();  // This is the method that opens the modal programmatically.
+    this.openThirdModal();  // This is the method that opens the modal programmatically.
   }
 });
  
 
  
 }
-openModal(): void {
-  this.bsModal.show();
-}
-closeModal(): void {
-  this.bsModal.hide();
-}
 
 
-cancelMatch(): void {
-  this.bsModal.hide();
-  this.matchsub.unsubscribe();
-  this.matchmaking=[];
-  this.joinState=false;
+addTopicsMenu () {
+ 
+  this.router.navigate(['home/topicMenu/:false']);
 }
+
 
 get topics(): FormArray {
   return this.userForm.get('topics') as FormArray;
@@ -181,9 +233,25 @@ panelState: 'hidden' | 'visible' = 'hidden';
 startY: number | null = null;
 
 togglePanel(togglenumber: number|undefined): void {
+  
   if (togglenumber) {
-  this.selectedButton=togglenumber;}
-  this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
+ 
+  this.selectedButton=togglenumber;
+  //this.firstSlide=true;
+  this.openFirstModal();
+}
+
+  else {
+    this.selectedButton!=togglenumber;
+    this.closeFirstModal();
+   // this.firstSlide=false;
+  }
+ 
+
+  //this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
+  
+  
+
 }
 
 browse(topic:string) {
@@ -199,6 +267,7 @@ startDrag(event: MouseEvent): void {
 
 handleDrag = (event: MouseEvent) => {
   if (this.startY && event.clientY - this.startY > 50) { // Drag down by 50 pixels to close
+    this.closeFirstModal();
     this.panelState = 'hidden';
     this.stopDrag();
   }

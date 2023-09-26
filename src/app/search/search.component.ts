@@ -17,6 +17,7 @@ export class SearchComponent {
   searchTerm='';
   searchType = 'topic';
   sortType = 'Most Popular'
+  firstSlide=false;
   constructor (private cardService: CardDataService, 
     private debateAuth: DebateAuthService, private router:Router
     ) {

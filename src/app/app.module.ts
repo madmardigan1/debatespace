@@ -46,7 +46,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RankTabComponent } from './debate-space-mob/rank-tab/rank-tab.component';
 import { MatchMakerComponent } from './home/match-maker/match-maker.component';
 import { SearchComponent } from './search/search.component';
-
+import { MatDialogModule } from '@angular/material/dialog';
 //node
 
 
@@ -77,6 +77,7 @@ import { SearchComponent } from './search/search.component';
     
   ],
   imports: [
+    MatDialogModule,
     MatSnackBarModule,
     MatMenuModule,
     MatSlideToggleModule,
@@ -92,7 +93,8 @@ import { SearchComponent } from './search/search.component';
     MatIconModule,
     MatButtonModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    
   ],
   providers: [SharedserviceService],
   bootstrap: [AppComponent]

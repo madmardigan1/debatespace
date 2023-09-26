@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<div style="width:100%;">
-<div class="container-fluid text-white bg-black py-2 d-flex align-items-center justify-content-between banner-top" style="width:390px;">
+<div class="top d-flex justify-content-center bg-white" style="position:relative;height:100%;width:100%;">
+  <div style="position:relative; width:390px; height:100%;">
+<div [ngClass]="{'active':blurState!=-1}"class="container-fluid text-white bg-dark py-2 d-flex align-items-center justify-content-between banner-top" style="width:390px;">
 
   <button [routerLink]="['home']" class="text-white text-decoration-none"><h1><i class="fa fa-home"></i></h1></button>
   <div class="d-flex">
@@ -9,11 +10,11 @@
 </div>
 </div>
 
-</div>
 
 
 <div class="routercontainer">
   <router-outlet ></router-outlet>
   </div>
-  
+</div>
 
+</div>

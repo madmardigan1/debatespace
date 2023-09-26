@@ -9,7 +9,7 @@ import { DebateSpaceMobComponent } from './debate-space-mob/debate-space-mob.com
 import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
 import { SearchComponent } from './search/search.component';
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component:HomeComponent},
   { path: 'home/create' , component: SpacecreateComponent},
   { path: 'home/tournament', component: TournamentBulletinComponent},
   { path: 'browse/:topic', component: BrowsePageComponent},

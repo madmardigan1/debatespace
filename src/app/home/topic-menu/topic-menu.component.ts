@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit} from '@angular/core';
+import { Component, OnChanges, OnInit, Output,EventEmitter} from '@angular/core';
 import { TopicMenuService } from './topic-menu.service';
 import { CardDataService, Topics } from 'src/app/space-service.service';
 import { Card,Topic,  } from 'src/app/space-service.service';
@@ -17,8 +17,9 @@ export class TopicMenuComponent implements OnInit{
   joinState=false;
   savedTopics: string[] = [];
   expandPane=-2;
-  addTopic = 'true';
+  addTopic = 'false';
   searchTerm: string = ''; 
+  @Output() closeTopics = new EventEmitter<void>();
   matchedTopics: any[] = []; 
   parameterValue: string = '';
   constructor(private location: Location,private topicServ:TopicMenuService, private cardService:CardDataService, private route:ActivatedRoute) {
@@ -65,6 +66,7 @@ export class TopicMenuComponent implements OnInit{
   closeMenu () : void {
     this.topicSelection = !this.topicSelection;
     this.savedTopics = [];
+    this.closeTopics.emit();
   }
   
   expand (select:number) : void {
@@ -78,10 +80,18 @@ export class TopicMenuComponent implements OnInit{
   addTopics ():void{
     this.topicServ.addTopics(this.savedTopics);
     this.cardService.addTag(this.savedTopics);
-    this.goBack();
+    
+    if (this.addTopic) {
+      this.location.back();
+      }
+
   }
   goBack(): void {
+    this.savedTopics=[];
+    this.closeTopics.emit();
+    if (this.addTopic) {
     this.location.back();
+    }
   }
   
   addNewTopic(): void {
@@ -90,6 +100,7 @@ export class TopicMenuComponent implements OnInit{
       
         
         this.searchTerm = ''; // Reset the search term after adding
+        this.closeTopics.emit();
     }
   }
 

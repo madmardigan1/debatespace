@@ -1,17 +1,107 @@
 
 
 <div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
-  
 
-  <div #myModal class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog bg-dark text-white"style="width:390px;top:15%">
-      <div class="modal-content" style="width:390px;">
-        
-        <app-match-maker class="bg-dark text-white" *ngIf="matchmaking.length>0"(closeClicked)="cancelMatch()"></app-match-maker>
+  <div class="modal1" #firstModal (click)="closeFirstModal()">
+  
+    <div class="bg-black text-white modal-content" (click)="$event.stopPropagation()">
       
+      <div style="position:absolute; left:10px;top:10px; z-index:1002;">
+        <button class="btn btn-outline-white text-white" (click)="togglePanel(0)">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
+      <div class="d-flex justify-content-center mt-3"> 
+        
+        <div class="drag-handle centered"></div>
+      </div>
+
+      <div *ngIf="selectedButton===5" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
+        <app-about-nodes></app-about-nodes>
+        </div>
+        <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
+          <app-tournament-bulletin></app-tournament-bulletin>
+        </div>
+        <div *ngIf="selectedButton===2" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
+          <app-leaderboard></app-leaderboard>>
+        </div>
+        <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:auto;">
+          <div *ngIf="!joinState" style="height:30vh;">
+          <div class="d-flex justify-content-center align-items-center bg-black text-white" style="flex-direction:column; width:100%; height:100%;">
+            <div style="position:relative;">
+                <h1>Choose</h1>
+            </div>
+            <div class="d-flex mx-3" style="position:relative; z-index:1600;">
+            <button class="btn btn-white bg-white text-black mx-2" [routerLink]="['/home/create']">Host</button>
+            <button class="btn btn-white bg-white text-black mx-2" (click)="joinToggle()">Join</button>
+            </div>
+    
+        </div>
+        </div>
+        <div *ngIf="joinState" style="height:30vh;">
+          
+         
+          <div class="topics d-flex mt-10" style="overflow-x:scroll">
+            <div class="justify-content-center text-center" style="margin-left:60px;">
+              <button class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" (click)="openSecondModal(); $event.stopPropagation()">
+                <i class="fa fa-plus"></i>
+            </button>
+            <h5>Add Topics</h5>
+            </div>
+              <div *ngFor="let list of savedTopics">
+                <div class="bg-danger" style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;">{{list}}</div>
+              </div>
+             </div>
+          <div class="groupForm bg-black" style="border-radius: 15px;">
+            <div class="popUpForm">
+            <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
+          
+                 
+                 
+                  <div class="d-flex text-white" style="justify-content: space-between; align-items: center;">
+                      <div style="align-items:center;">
+                  <span style="margin-right:5px;">Casual</span>
+                  <div class="custom-toggle">
+                      <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled">
+          
+                      <label for="customToggle" class="custom-toggle-label"></label>
+                  </div>
+                  <span style="margin-left:5px;">Ranked</span>
+                </div>
+                </div>
+          
+               
+              <div class="form-group mt-4 text-center">
+                <button type="submit" class="btn btn-primary" >Find a group</button>
+              </div>
+            </form>
+          </div>
+          </div>
+    
+        </div>
+        </div>
     </div>
   </div>
+  
+  <!-- Second Slide-In Modal -->
+  <div class="slide-in-modal" #secondModal (click)="closeSecondModal()">
+    <div class="modal-content1" (click)="$event.stopPropagation()">
+        <app-topic-menu (closeTopics)="closeSecondModal()"></app-topic-menu>>
+        
+    </div>
+  </div>
+  
+ 
+
+ 
+
+  <div #thirdModal class="matchModal" (click)="closeThirdModal()">
+    <div class="modal-content2" (click)="$event.stopPropagation()">
+        <app-match-maker class="bg-dark text-white" *ngIf="matchmaking.length>0"(closeClicked)="closeThirdModal()"></app-match-maker>
+    </div>
+  </div>  
+
+
   <div class="bg-dark text-white"  *ngIf="!topicSelection" style=" width:390px; height:100%; display: flex;
   flex-direction: column;
   position:absolute;
@@ -148,85 +238,3 @@
 </div>
 
 </div>
-<div class="slide-panel bg-black" style="display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
-  <div style="position:absolute; left:10px;top:10px; z-index:10000;">
-    <button class="btn btn-outline-white text-white" (click)="togglePanel(0)">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="d-flex justify-content-center mt-3"> 
-    
-    <div class="drag-handle centered"></div>
-  </div>
-  <div *ngIf="selectedButton===5" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
-    <app-about-nodes></app-about-nodes>
-    </div>
-    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
-      <app-tournament-bulletin></app-tournament-bulletin>
-    </div>
-    <div *ngIf="selectedButton===2" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
-      <app-leaderboard></app-leaderboard>>
-    </div>
-    <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:auto;">
-      <div *ngIf="!joinState" style="height:30vh;">
-      <div class="d-flex justify-content-center align-items-center bg-black text-white" style="flex-direction:column; width:100%; height:100%;">
-        <div style="position:relative;">
-            <h1>Choose</h1>
-        </div>
-        <div class="d-flex mx-3" style="position:relative">
-        <button class="btn btn-white bg-white text-black mx-2" [routerLink]="['create']">Host</button>
-        <button class="btn btn-white bg-white text-black mx-2" (click)="joinToggle()">Join</button>
-        </div>
-
-    </div>
-    </div>
-    <div *ngIf="joinState" style="height:35vh;">
-      <div class="groupForm bg-black" style="border-radius: 15px;">
-        <div class="popUpForm">
-        <form [formGroup]="userForm" (ngSubmit)="submitForm()" style="margin: 10px;" >
-      
-              <h3 class="text-center mb-4 text-white">Join a Node</h3>
-              <div class="topics d-flex" style="overflow-x:scroll">
-              <div class="justify-content-center text-center" style="margin-left:50px;">
-              <button class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;" [routerLink]="['/home/topicMenu', 'false']">
-                <i class="fa fa-plus"></i>
-              </button>
-              <h5>Add Topics</h5>
-              </div>
-                <div *ngFor="let list of savedTopics">
-                  <div class="bg-danger" style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;">{{list}}</div>
-                </div>
-               </div>
-              <div class="d-flex text-white" style="justify-content: space-between; align-items: center;">
-                  <div style="align-items:center;">
-              <span style="margin-right:5px;">Casual</span>
-              <div class="custom-toggle">
-                  <input type="checkbox" id="customToggle" class="custom-toggle-checkbox" formControlName="isToggled">
-      
-                  <label for="customToggle" class="custom-toggle-label"></label>
-              </div>
-              <span style="margin-left:5px;">Ranked</span>
-            </div>
-            </div>
-      
-           
-          <div class="form-group mt-4 text-center">
-            <button type="submit" class="btn btn-primary" >Find a group</button>
-          </div>
-        </form>
-      </div>
-      </div>
-
-    </div>
-    </div>
-    
-   
-</div>
-</div>
-
-
-</div>
-
-
-
-

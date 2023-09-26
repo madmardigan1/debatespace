@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, ViewChild, ElementRef} from '@angular/core';
 
 
 @Component({
@@ -7,7 +7,12 @@ import { Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent  {
+  
   title = 'debatespaces';
+  blurState = -1;
+
+constructor() {
+}
 
 
 

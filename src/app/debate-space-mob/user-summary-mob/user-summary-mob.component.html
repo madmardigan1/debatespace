@@ -1,4 +1,54 @@
-<div class="userpane" style="height:100%;">
+<div class="modal1" #firstModal (click)="closeFirstModal()">
+  
+  <div class="bg-black text-white modal-content" (click)="$event.stopPropagation()">
+
+    
+      <div *ngIf="toggledPanel==1" style="height:60vh; display:flex; flex-direction:column; position:relative;flex-grow:1">
+      <div class="position:relative; height:auto; d-flex justify-content-center mt-3"> 
+        <div class="drag-handle centered"></div>
+      </div >
+      <div style="flex-grow:auto;">
+     
+         
+          <app-user-search></app-user-search>
+        </div>
+       </div>
+     
+      
+    
+    
+      <div *ngIf="toggledPanel==2" class="extendpane bg-danger" style="height:50vh;position:relative; position:flex; flex-direction: column;">
+        <div class="bg-danger">
+        <div class="position:relative; height:auto; d-flex justify-content-center mt-3 mb-10"> 
+          <div class="drag-handle centered"></div>
+        </div>
+      
+      <div class="position:relative; d-flex mt-10, mx-2" style="padding: 10px, 10px; transform:translateY(+50%)">
+          <div class="bigger-image-container bg-dark">
+          <img [src]="detailcard.photoUrl" alt="{{ detailcard.name }}" class="bigger-image"> 
+        </div>
+    
+      </div>
+    </div>
+    <div class="bottom bg-dark" style="height:40vh; padding-top:20px">
+        <div class="d-flex align-items-center justify-content-between">
+          <div style="font-size:20px;padding-left:20px">{{detailcard.name}}</div>
+          <div class="">
+        <button class="btn btn-primary"style="border-radius:10px;padding-right:10px;padding-left:10px;">follow</button>
+        <button class="btn btn-success" style="border-radius:10px;padding-right:10px;padding-left:10px;margin-left:10px;">tip</button>
+        <button class="btn btn-dark" style="background-color:transparent; border-color: transparent; padding-top:0; padding-right:15px; margin:0;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </div>
+      </div>
+    </div>
+    </div>
+      </div>
+     
+
+</div>
+
+<div  class="userpane" style="height:100%;">
   <div style="position:relative; top:0; z-index: 10; background-color: inherit;">
     <!-- Fixed to the top -->
     <h1 style="text-align:center; padding-top:10px; font-size: 24px; margin-bottom: 5px;">Guests</h1> 
@@ -104,7 +154,9 @@
  
 
 </div>
+</div>
 
+<!--
 <div *ngIf="toggledPanel>0" class="slide-panel bg-black" style="max-height:60vh; display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
   
   <button class="btn btn-outline-white text-white" style="z-index:999999;position:absolute; top:10px; left:10px;" (click)="togglePanel(0)">
@@ -151,9 +203,9 @@
 </div>
 </div>
   </div>
-  </div>
+ 
 
 
-
+-->
 
 

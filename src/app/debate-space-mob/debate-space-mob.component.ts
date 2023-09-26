@@ -10,6 +10,7 @@ import { GPTsummaryService } from './gptsummary-mob/gptsummary.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+
 @Component({
   animations: [
     trigger('expandShrink', [
@@ -74,10 +75,12 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   isRanked = true;
  
   //other variables
-
+    firstDarkenPane = false;
+    secondDarkenPane = false;
     text: string = '';
     card!: Card;
     cards!: any[];
+    blurState = 0;
     panelType = "chat";
     receiveType = true;
     receiveType2 = false;
@@ -93,10 +96,49 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.userType=this.debateAuth.getUser();
     }
   
+
+    @ViewChild('firstModal') firstModal!: ElementRef;
+    @ViewChild('secondModal') secondModal!: ElementRef;
+    @ViewChild('thirdModal') thirdModal!: ElementRef;
+    
+    
+    openFirstModal() {
+      this.firstModal.nativeElement.style.display = 'flex';
+      this.firstModal.nativeElement.classList.add('open1');
+    }
+    
+    closeFirstModal(event?: Event) {
+      // If an event is provided, this is an overlay click
+      if (event && this.secondModal.nativeElement.classList.contains('open')) {
+        this.closeSecondModal();
+      } else if (!this.secondModal.nativeElement.classList.contains('open')) {
+        this.firstModal.nativeElement.classList.remove('open1');
+      
+      }
+    }
+    
+    openSecondModal() {
+    
+      this.secondModal.nativeElement.classList.add('open');
+    
+    }
+    
+    
+    closeSecondModal() {
+      this.secondModal.nativeElement.classList.remove('open');
+    }
+
+
+
+
     ngAfterViewChecked() {
       this.scrollToBottom();
     }
 
+    panelBlur (number:number) {
+      this.blurState=number;
+     
+    }
     ngOnInit() {
       const id = this.route.snapshot.paramMap.get('id');
       this.cardService.cards$.subscribe((cards) => {
@@ -195,7 +237,18 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   
     togglePanel(togglenumber: number): void {
       this.selectedButton=togglenumber;
-      this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
+      if (this.selectedButton!=-1){
+        if( this.selectedButton == 1) {
+          this.openSecondModal();
+
+        }
+        else {this.openFirstModal();}
+      }
+      else {
+        this.closeFirstModal();
+        this.closeSecondModal();
+      }
+      //this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
     }
   
     startDrag(event: MouseEvent): void {
@@ -206,7 +259,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   
     handleDrag = (event: MouseEvent) => {
       if (this.startY && event.clientY - this.startY > 50) { // Drag down by 50 pixels to close
-        this.panelState = 'hidden';
+        this.closeFirstModal();
+        this.closeSecondModal();
         this.stopDrag();
       
       }
@@ -234,6 +288,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.startY = null;
       document.removeEventListener('mousemove', this.handleDrag);
       document.removeEventListener('mouseup', this.stopDrag);
+ 
     }
 
     onSubmitit(event: Event) {

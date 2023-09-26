@@ -5,6 +5,7 @@
     left: 0;
     right: 0;
     z-index: 1000; /* Ensure it stays on top of other elements */
+    background-color: black;
   }
   
 
@@ -12,6 +13,7 @@
     position: absolute;
     height: 92%;
     top: 8%;
-    left: 0;
+   
     width: 100%;
 }
+

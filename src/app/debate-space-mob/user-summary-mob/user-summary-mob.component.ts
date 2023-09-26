@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef, SimpleChanges} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild,ElementRef, ChangeDetectorRef, SimpleChanges} from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { UserSearchService } from 'src/app/user-search/user-search.service';
 import { Subscription } from 'rxjs';
@@ -35,7 +35,7 @@ export class UserSummaryMobComponent implements OnInit {
   selectedMoment!: number;
   panelReveal = false;
   userToggle = 'all';
-  toggledPanel=0;
+  toggledPanel : number = 0;
   speakerCount : User[] = [];
   hostCount : User[] = [];
   @Input() userType = '';
@@ -43,6 +43,7 @@ export class UserSummaryMobComponent implements OnInit {
   spectatorCount : User[]=[]; 
   cardx!: User;
   @Input() card!: string;
+  @Output() numberEmitter = new EventEmitter<number>();
   @Output() closeClicked = new EventEmitter<void>();
   public users = [
     { name: 'Steve', role: 'host', rank: 300, photoUrl: 'assets/Steve1.jpeg' },
@@ -61,6 +62,23 @@ export class UserSummaryMobComponent implements OnInit {
     
   }
 
+  @ViewChild('firstModal') firstModal!: ElementRef;
+
+  
+  
+  openFirstModal() {
+    this.firstModal.nativeElement.style.display = 'flex';
+    this.firstModal.nativeElement.classList.add('open1');
+  }
+  
+  closeFirstModal(event?: Event) {
+    // If an event is provided, this is an overlay click
+   
+      this.firstModal.nativeElement.classList.remove('open1');
+      this.closeClicked.emit();
+    
+  }
+  
 
  getDetails(user:User){}
   
@@ -96,7 +114,9 @@ startY: number | null = null;
 
 togglePanel(input: number): void {
   this.toggledPanel=input;
-  this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
+  this.openFirstModal();
+  this.numberEmitter.emit(input);
+  //this.panelState = this.panelState === 'hidden' ? 'visible' : 'hidden';
 
 }
 
