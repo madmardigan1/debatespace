@@ -36,7 +36,7 @@ export class TopicMenuComponent implements OnInit{
 
 
       this.addTopic = this.parameterValue;
-
+  
    
   }
 
@@ -81,7 +81,7 @@ export class TopicMenuComponent implements OnInit{
     this.topicServ.addTopics(this.savedTopics);
     this.cardService.addTag(this.savedTopics);
     
-    if (this.addTopic) {
+    if (this.addTopic=='true') {
       this.location.back();
       }
 
@@ -89,9 +89,11 @@ export class TopicMenuComponent implements OnInit{
   goBack(): void {
     this.savedTopics=[];
     this.closeTopics.emit();
-    if (this.addTopic) {
+    if (this.addTopic=='true') {
+   
     this.location.back();
     }
+ 
   }
   
   addNewTopic(): void {

@@ -196,7 +196,7 @@ authorize(card: Card) {
  
 
 submitForm(): void {
-  this.firstSlide=false;
+
   this.selectedButton = 0;
   this.spinner=true;
   this.joinState=false;
