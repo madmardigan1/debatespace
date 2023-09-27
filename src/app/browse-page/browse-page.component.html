@@ -1,10 +1,10 @@
 <div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
   
-    <div class="bg-black text-white" style=" width:390px; height:100%; display: flex;
+    <div class="bg-black text-white" style=" width:100%; height:100%; display: flex;
     flex-direction: column;
     position:absolute;
-    overflow-y:scroll;">
-    <div style="margin-right:10px; margin-left:10px;">
+    overflow-y:scroll; align-items: center;">
+ 
     <h1 class="mb-4 mt-4 text-center">Search</h1> <!-- Added margin-bottom for vertical spacing -->
     
     <!-- Button Group -->
@@ -15,7 +15,7 @@
         <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': searchType === 'user'}"style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('user')">Users</button>
     </div>
     
-    <div style="padding-top:10px; padding-bottom:10px;position:relative;width:100%; overflow-block:auto;">
+    <div style="padding-top:10px; padding-bottom:10px;position:relative;width:100%; max-width:500px; overflow-block:auto;">
         <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="search()"placeholder="Search for a {{searchType}}..." (input)="onSearch()">
         <button class="btn btn-outine-danger" *ngIf="searchTerm"  (click)="search()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Search</button>
       </div>
@@ -72,6 +72,6 @@
 </div>
     </div>
     </div>
-</div>
+
 </div>
 </div>

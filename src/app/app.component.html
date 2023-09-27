@@ -1,20 +1,109 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<div class="top d-flex justify-content-center bg-white" style="position:relative;height:100%;width:100%;">
-  <div style="position:relative; width:390px; height:100%;">
-<div [ngClass]="{'active':blurState!=-1}"class="container-fluid text-white bg-dark py-2 d-flex align-items-center justify-content-between banner-top" style="width:390px;">
-
-  <button [routerLink]="['home']" class="text-white text-decoration-none"><h1><i class="fa fa-home"></i></h1></button>
-  <div class="d-flex">
-  <button [routerLink]="['search']" class="mx-4 text-white text-decoration-none"><h1>Browse</h1></button>
-  <button [routerLink]="['browse/:']"class="text-white text-decoration-none"><h1>   <i class="fas fa-search"></i></h1></button>
-</div>
-</div>
 
 
 
-<div class="routercontainer">
+
+
+<div class="bg-black d-flex align-items-center" style="flex-direction:column; position:relative;height:100%;width:100%;">
+  
+  <div #banner class="container-fluid text-white bg-dark py-2 d-flex align-items-center justify-content-between banner-top">
+    <div *ngIf="!isMobile" class="d-flex" style="width:33%">
+      <div><h1 style="padding:0; margin-left:30px; margin-bottom:0;">Sequitur</h1></div>
+    </div>
+    <div *ngIf="!isMobile" class="text-black d-flex justify-content-center" style="width:33%">
+      <div *ngIf="!isMobile" style="position: relative; padding:0; width:100%; margin-bottom:0;">
+          <input aria-label="value" aria-describedby="button-addon2" 
+                 style="padding-left: 40px; width:100%; border-radius:99999px; border:1px solid white;">
+          
+          <button style="position: absolute; top: 50%; transform: translateY(-50%); left: 5px; background: transparent; border: none;">
+              <i class="fas fa-search"></i>
+          </button>
+      </div>
+  </div>
+  
+    <div *ngIf="!isMobile" class="d-flex justify-content-end" style="width:33%">
+      <div class="d-flex align-items-center" style="margin-right:30px" *ngIf="!isMobile">
+        <h1 style="margin:0; padding:0; margin-right:30px">M 90.043</h1>
+        <div class="circular-image-container">
+          <img src="/assets/Steve.jpeg" class="circular-image">
+        </div>
+      </div>
+    </div>
+    <button *ngIf="isMobile"[routerLink]="['home']" class="text-white text-decoration-none"><h1><i class="fa fa-home"></i></h1></button>
+   
+    <div *ngIf="isMobile" class="d-flex">
+    <button [routerLink]="['search']" class="mx-4 text-white text-decoration-none"><h1>Browse</h1></button>
+    <button [routerLink]="['browse/:']"class="text-white text-decoration-none"><h1>   <i class="fas fa-search"></i></h1></button>
+  </div>
+  </div>
+  <div class="bottom text-white" style="width:100%; display:flex;height:100%; justify-content: center;">
+    <div class="bg-black text-white" *ngIf="!isMobile" class="menu" style="border:1px solid rgb(255,255,255, .3); height:100%; position:relative;width:25%; display:flex; flex-direction: column;align-items: center; margin: 0 20px;">
+      
+      <div style="position:relative;display:flex;flex-direction: column; align-items:baseline; width:100%; padding-left:30px;padding-right:15px; padding-top:50px;">
+         <button *ngIf="!isMobile" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+          <i class="fas fa-pencil-alt fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
+          <h1 style="margin:0; padding:0;">New Post</h1>
+        </button>
+    
+        <button *ngIf="!isMobile" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+          <i class="fas fa-list fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
+          <h1 style="margin:0; padding:0;">Topics</h1>
+        </button>
+        
+        <button *ngIf="!isMobile" class="bg-black text-white text-decoration-none d-flex align-items-center  w-100 py-2">
+          <i class="fas fa-comments fa-2x" style="margin-right:20px"></i> <!-- Increase icon size and use "Browse" icon -->
+          <h1 style="margin:0; padding:0;">Talk</h1>
+        </button>
+        
+        <button *ngIf="!isMobile" [routerLink]="['home']" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+          <i class="fas fa-share-alt fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
+          <h1 style="margin:0; padding:0;">Nodes</h1>
+        </button>
+      
+      </div>
+      
+    
+    
+    </div>
+  <div #screen class=" bg-black project" style="position:relative; height:100%;display:flex;flex-direction: column;">
+
+  
+
+
+<div class="bg-black d-flex bottom" style="position:relative; flex:auto;width:100%;">
+<div class="routercontainer" style="border:1px solid rgb(255,255,255, .3);">
   <router-outlet ></router-outlet>
   </div>
 </div>
 
+</div>
+<div class="bg-black text-white" *ngIf="!isMobile" class="menu" style="position:relative;width:25%; height:100%; display:flex; flex-direction: column;align-items: center;margin: 0 20px;">
+      
+  <div style="position:relative;display:flex;flex-direction: column; align-items:end; width:100%; padding-left:15px;padding-right:30px; padding-top:50px; border:1px solid rgb(255,255,255, .3); ">
+    
+
+    <button *ngIf="!isMobile" [routerLink]="['home']" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+      <i class="fas fa-compass fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
+      <h1 style="margin:0; padding:0;">Discover</h1>
+    </button>
+    
+    <button *ngIf="!isMobile" [routerLink]="['search']" class="bg-black text-white text-decoration-none d-flex align-items-center  w-100 py-2">
+      <i class="fas fa-globe fa-2x" style="margin-right:20px"></i> <!-- Increase icon size and use "Browse" icon -->
+      <h1 style="margin:0; padding:0;">Browse</h1>
+    </button>
+  
+    <button *ngIf="!isMobile" [routerLink]="['browse/:']" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+      <i class="fas fa-search fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
+      <h1 style="margin:0; padding:0;">Search</h1>
+    </button>
+  
+  </div>
+  
+
+
+</div>
+</div>
+</div>
+<div style="position:fixed;left:0px;bottom:0px;">
+<button class="btn btn-danger" (click)="toggleMode()">toggle device</button>
 </div>

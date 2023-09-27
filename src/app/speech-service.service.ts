@@ -28,10 +28,17 @@ export class SpeechService {
 
       
     }
+   else {
+    console.warn("Speech Recognition is not available in this browser.");
+  }
   }
 
   
   startListening() {
+    if (!this.recognition) {
+      console.warn("Speech recognition is not available.");
+      return;
+    }
     this.transcript='';
     this.finalTranscript = '';
     if (this.recognition) {
@@ -56,6 +63,10 @@ export class SpeechService {
   }
 
   stopListening() {
+    if (!this.recognition) {
+      console.warn("Speech recognition is not available.");
+      return;
+    }
     this.transcript = '';
     this.finalTranscript = '';
 
@@ -86,12 +97,15 @@ export class SpeechService {
       };
 
       this.mediaRecorder.start();
+    }).catch(error => {
+      console.warn("Error accessing microphone:", error);
     });
   }
 
   stopAndReturnAudio(): Promise<Blob | null> {
     return new Promise((resolve, reject) => {
       if (!this.mediaRecorder) {
+        console.warn("Media recorder is not initialized.");
         resolve(null);
         return;
       }

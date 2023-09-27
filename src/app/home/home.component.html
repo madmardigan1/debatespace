@@ -102,12 +102,12 @@
   </div>  
 
 
-  <div class="bg-dark text-white"  *ngIf="!topicSelection" style=" width:390px; height:100%; display: flex;
+  <div class="bg-dark text-white"  *ngIf="!topicSelection" style="width:100%; height:100%; display: flex;
   flex-direction: column;
   position:absolute;
   overflow-y:hidden;">
  
-    <div>
+    <div *ngIf="device">
     <button class="btn btn-danger" (click)="togglePanel(3)" style="    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);opacity:.8; border:2px solid black; border-radius:50%;position:absolute;bottom:10px;right:10px; width:70px;height:70px; z-index:990;">
       <div *ngIf="!spinner">
       <i style="font-size:40px;"class="fas fa-eye"></i>
@@ -119,7 +119,7 @@
     </div>
     <div class="center" style="position:relative; overflow-y: scroll;">
 
-<div class="carot text-white" style="border:1px solid white; padding-left:5px;padding-right:5px;">
+<div class="carot text-white">
 <ngb-carousel [showNavigationIndicators]="false">
   <ng-template ngbSlide *ngFor="let data of dataArray">
    
@@ -224,9 +224,10 @@
     <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
    
       <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(i)">{{category}}</button>
-      <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
+      <i class="fas fa-chevron-right pr-5" [class.rotated]="expandedStates[i]" style="position:absolute; left:5px;padding:0;"></i>
+
     </div>
-    <div *ngIf="expandPane==i" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
+    <div *ngIf="expandPane[i]" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
       <div *ngFor="let topic of currentTopics[category]">
         <button class="btn btn-danger" style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;" (click)="browse(topic.name)">{{topic.name}}</button>
       </div>

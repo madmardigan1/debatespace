@@ -82,6 +82,26 @@ export class CardDataService {
       description: "Mars rover finds something interesting", 
       ranked: false
     },
+    {
+      id: '4', 
+      user: [
+        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
+      ], 
+      topic: ["Science", "Space", "Mars"], 
+      description: "Mars rover finds something interesting", 
+      ranked: false
+    },
+    {
+      id: '5', 
+      user: [
+        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
+        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
+      ], 
+      topic: ["Science", "Space", "Mars"], 
+      description: "Mars rover finds something interesting", 
+      ranked: false
+    },
     // ... Continue in this manner for at least 8 lines.
   ]);
 

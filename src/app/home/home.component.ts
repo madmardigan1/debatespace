@@ -8,7 +8,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { TopicMenuService } from './topic-menu/topic-menu.service';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { DeviceTypeService } from '../device-type.service';
 import { MatchMakerService } from './match-maker/match-maker.service';
 
 declare var bootstrap: any;
@@ -37,9 +37,11 @@ declare var bootstrap: any;
   ],
 })
 export class HomeComponent implements AfterViewInit{
+  expandedStates: { [key: number]: boolean } = {};
+  device = true;
   savedTopics: string[] = [];
   currentTopics!: Topics; 
-  expandPane = -2;
+  expandPane:any = [];
   firstSlide = false;
   topicSelection = false;
   isModalshown = false;
@@ -77,11 +79,14 @@ export class HomeComponent implements AfterViewInit{
      }
 ];
 
-  constructor(private activatedRoute:ActivatedRoute,private matchMaker: MatchMakerService,private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private deviceType:DeviceTypeService ,private activatedRoute:ActivatedRoute,private matchMaker: MatchMakerService,private router: Router,private topicMenu: TopicMenuService,private cardService: CardDataService, private debateAuth: DebateAuthService, private fb: FormBuilder, private modalService: NgbModal) {
     this.userForm = this.fb.group({
       isToggled : false
     });
     
+    this.deviceType.getDevice().subscribe(type => {
+      this.device=type;
+    });
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
     });
@@ -292,7 +297,10 @@ closeMenu () : void {
 }
 
 expand (select:number) : void {
-  this.expandPane = select;
+  this.expandPane[select] = !this.expandPane[select];
+    this.expandedStates[select] = !this.expandedStates[select];
+
+
 }
 
 saveTopic (list:string) : void {
