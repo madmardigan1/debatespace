@@ -47,6 +47,8 @@ import { RankTabComponent } from './debate-space-mob/rank-tab/rank-tab.component
 import { MatchMakerComponent } from './home/match-maker/match-maker.component';
 import { SearchComponent } from './search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NodesComponent } from './nodes/nodes.component';
+
 //node
 
 
@@ -74,6 +76,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     RankTabComponent,
     MatchMakerComponent,
     SearchComponent,
+    NodesComponent,
+ 
     
   ],
   imports: [

@@ -1,7 +1,7 @@
 .porp {
     display: flex;   /* This makes .porp a flex container */
     flex-direction: column;  /* Stack children vertically */
-    width: 300px;
+ 
     height: 100%;  
     
     overflow-wrap: break-word;

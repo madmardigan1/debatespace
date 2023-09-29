@@ -8,6 +8,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { UserSearchService } from '../user-search/user-search.service';
+import { DeviceTypeService } from '../device-type.service';
 @Component({
   selector: 'app-spacecreate',
   templateUrl: './spacecreate.component.html',
@@ -39,6 +40,7 @@ export class SpacecreateComponent implements AfterViewInit {
   form: FormGroup;
   cards: Card[] = [];
   topic: string[] = [];
+  isMobile=true;
   private subscription!: Subscription;
   private subscription2!: Subscription;
   textplaceholder: 'What do you want to talk about?' | 'state your claim...' = 'What do you want to talk about?';
@@ -46,7 +48,7 @@ export class SpacecreateComponent implements AfterViewInit {
 
   isRanked = false;
   @ViewChild('topicInput') topicInput!: ElementRef;
-  constructor(private userSearch:UserSearchService,private location:Location, private fb: FormBuilder, private topicMenu: TopicMenuService,private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService) {
+  constructor(private userSearch:UserSearchService,private location:Location, private fb: FormBuilder, private topicMenu: TopicMenuService,private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private device:DeviceTypeService) {
    // Inside your component class constructor:
 this.form = this.fb.group({
   isToggled2: [false],
@@ -55,7 +57,7 @@ this.form = this.fb.group({
   additionalOptionValue: [false]  // new form control for checkbox
 });
 
-
+    this.device.getDevice().subscribe(data => this.isMobile=data);
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
     });

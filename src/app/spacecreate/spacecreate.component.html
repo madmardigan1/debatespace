@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-center" style="width:100%;height:100%;">
-    <div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
+    <div class="topic selection bg-black" style="position:absolute; width:100%; height:100%; display: flex;
       flex-direction: column;
       position:absolute;
       overflow-y:hidden;">
-      <div style="position:absolute; left:10px;top:10px;z-index: 3;">
+      <div *ngIf="isMobile" style="position:absolute; left:10px;top:10px;z-index: 3;">
         <button class="btn btn-outline-white text-white" (click)="goBack()">
           <i class="fas fa-times"></i>
         </button>
@@ -13,8 +13,8 @@
         <h2 class="text-center text-white mb-4">Create a Node!</h2>
   
         <!-- Topic Input -->
-        <div class="d-flex mb-3" style="justify-content: space-between; overflow-y: scroll;">
-          <div class="form-group d-flex flex-column align-items-center" style="width:30%;">
+        <div class="d-flex mb-7" style="justify-content: space-between; overflow-y: scroll;">
+          <div class="form-group d-flex flex-column align-items-center">
             <label for="topic" class="text-white mr-2">Add Topics</label> <!-- Separation between label and button -->
             <button type="button" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;"
             [routerLink]="['/home/topicMenu', 'true']">
@@ -35,7 +35,7 @@
               (change)="ranked()">
             <label for="customToggle" class="custom-toggle-label"></label>
           </div>
-          <span style="margin-left:5px;">Ranked</span>
+          <span style="margin-left:5px;">Debate</span>
         </div>
 
 

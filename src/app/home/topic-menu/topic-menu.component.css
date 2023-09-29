@@ -7,3 +7,12 @@
     scrollbar-width: none;
   
   }
+
+  .rotated {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+  }
+
+  .fas.fa-chevron-right {
+    transition: transform 0.3s ease;
+  }

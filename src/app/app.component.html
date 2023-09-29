@@ -65,45 +65,30 @@
     
     
     </div>
-  <div #screen class=" bg-black project" style="position:relative; height:100%;display:flex;flex-direction: column;">
+  <div  #screen   style="position:relative; height:100%;display:flex;">
 
-  
-
-
-<div class="bg-black d-flex bottom" style="position:relative; flex:auto;width:100%;">
 <div class="routercontainer" style="border:1px solid rgb(255,255,255, .3);">
   <router-outlet ></router-outlet>
   </div>
 </div>
 
-</div>
+
+
 <div class="bg-black text-white" *ngIf="!isMobile" class="menu" style="position:relative;width:25%; height:100%; display:flex; flex-direction: column;align-items: center;margin: 0 20px;">
       
-  <div style="position:relative;display:flex;flex-direction: column; align-items:end; width:100%; padding-left:15px;padding-right:30px; padding-top:50px; border:1px solid rgb(255,255,255, .3); ">
+  <div style="position:relative;display:flex;flex-direction: column; align-items:baseline; width:100%; padding-left:15px;padding-right:30px; padding-top:50px; border:1px solid rgb(255,255,255, .3); ">
     
-
-    <button *ngIf="!isMobile" [routerLink]="['home']" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
-      <i class="fas fa-compass fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
-      <h1 style="margin:0; padding:0;">Discover</h1>
-    </button>
-    
-    <button *ngIf="!isMobile" [routerLink]="['search']" class="bg-black text-white text-decoration-none d-flex align-items-center  w-100 py-2">
-      <i class="fas fa-globe fa-2x" style="margin-right:20px"></i> <!-- Increase icon size and use "Browse" icon -->
-      <h1 style="margin:0; padding:0;">Browse</h1>
-    </button>
-  
-    <button *ngIf="!isMobile" [routerLink]="['browse/:']" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
-      <i class="fas fa-search fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
-      <h1 style="margin:0; padding:0;">Search</h1>
-    </button>
-  
-  </div>
+    <app-nodes></app-nodes>
   
 
 
 </div>
 </div>
 </div>
+
 <div style="position:fixed;left:0px;bottom:0px;">
 <button class="btn btn-danger" (click)="toggleMode()">toggle device</button>
 </div>
+
+
+

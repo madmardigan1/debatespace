@@ -3,7 +3,7 @@
     <div class="bg-black text-white" style=" width:100%; height:100%; display: flex;
     flex-direction: column;
     position:absolute;
-    overflow-y:scroll; align-items: center;">
+    overflow-y:scroll; align-items: center; padding-left:20px; padding-right:20px;">
  
     <h1 class="mb-4 mt-4 text-center">Search</h1> <!-- Added margin-bottom for vertical spacing -->
     
@@ -15,7 +15,7 @@
         <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': searchType === 'user'}"style="border:1px solid white; width: auto; margin-right: 10px"(click)="toggleSearch('user')">Users</button>
     </div>
     
-    <div style="padding-top:10px; padding-bottom:10px;position:relative;width:100%; max-width:500px; overflow-block:auto;">
+    <div style="padding-top:10px; padding-bottom:10px;position:relative;width:100%; overflow-block:auto;">
         <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="search()"placeholder="Search for a {{searchType}}..." (input)="onSearch()">
         <button class="btn btn-outine-danger" *ngIf="searchTerm"  (click)="search()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Search</button>
       </div>
@@ -33,8 +33,8 @@
       <div *ngIf="searchTerm.length>0&&searchType=='topic' && matchedCards.length==0 && matchedTopics.length==0">No Nodes match your search...</div>
       <div *ngIf="searchTerm.length>0&&searchType=='user' && matchedTopics.length==0">No users hosting that contain these characters...</div>
     <!-- Cards Container -->
-    <div style="display: flex; flex-wrap: wrap;">
-      <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
+   
+      <div *ngFor="let card of matchedCards" class="porp mb-4" style=" height:200px; width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
 
         <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="join(card)"></button>
   <!-- Top Colored Box -->
@@ -71,7 +71,7 @@
     </div>
 </div>
     </div>
-    </div>
+  
 
 </div>
 </div>

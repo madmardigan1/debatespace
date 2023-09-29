@@ -52,6 +52,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   siblingChecker: any;
   thumbsPosition: { x: number, y: number } = { x: 0, y: 0 };
   isRecording = false;
+  @Input() isRanked = false;
   network!: Network;
   zoomscale = 1.0;
   positions: any;
@@ -67,7 +68,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Moment: 0, soundClip: null },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Moment: 0, soundClip: null, commentType: 'good' },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -77,7 +78,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   submitText = '';
   lastSelectedNode = 1;
   private phrasesSubscription: Subscription | null = null;
-
+  private timerId: any;
 
   constructor(
       private debateSpace: DebateSpaceService,
@@ -111,11 +112,37 @@ ngOnInit(): void {
 }
 
 ngAfterViewInit() {
+ 
+ 
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
+  if (this.isRanked) {
+    this.loadGameRules();
+  }
   
 }
+
+loadGameRules() {
+  this.startTimer();
+}
+
+startTimer() {
+  this.timerId = setInterval(() => {
+   
+    this.nodes.forEach(node => {
+      const test = this.getSiblingNodeId(node.id);
+        console.log(node.id + "" + node.Moment);
+  
+      if (test!=null) {
+        node.Moment += 1;
+    }
+    })
+    
+  }, 18000);
+}
+
+
 
 private initializeSubscriptions() {
   // Group all the settingsService subscriptions
@@ -828,6 +855,12 @@ goBack(){
   this.handleNodeClick(
     this.previousNode
   );
+}
+
+ngOnDestroy(): void {
+  if (this.timerId) {
+    clearInterval(this.timerId);
+  }
 }
   }
   

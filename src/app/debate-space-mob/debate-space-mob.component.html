@@ -1,4 +1,4 @@
-<div style="position:fixed;bottom:20px;left:20px;display:flex;flex-direction: column; z-index:100000;">
+<div style="position:fixed;bottom:50px;left:0px;display:flex;flex-direction: column; z-index:100000;">
   <button class="btn btn-primary" (click)="simulate('spectator')">Simulate User</button>
   <button class="btn btn-primary"(click)="simulate('speaker')">Simulate Speaker</button>
   <button class="btn btn-primary"(click)="simulate('host')">Simulate Host</button>
@@ -6,9 +6,9 @@
   <button class="btn btn-primary"(click)="simulate('normal')">Simulate normal mode</button>
 </div>
 
-<div class="modal1" #firstModal (click)="closeFirstModal()">
+<div class="modal1" [ngClass]="{'modal1mobile':deviceType,'modal1desktop':!deviceType}" #firstModal (click)="closeFirstModal()">
   
-  <div class="bg-black text-white modal-content"  #firstModal (mousedown)="startDrag($event)" (click)="$event.stopPropagation()">
+  <div  [ngClass]="{'modal1mobilecontent':deviceType,'modal1desktopcontent':!deviceType}" class="bg-black text-white modal-content"  #firstModal (mousedown)="startDrag($event)" (click)="$event.stopPropagation()">
  
     <div class="d-flex justify-content-center mt-3">  
       
@@ -16,9 +16,42 @@
         <i class="fas fa-times"></i>
       </button>
       
-      <div class="drag-handle centered" ></div>
+      <div *ngIf="deviceType" class="drag-handle centered" ></div>
     </div>
-    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
+    
+    
+    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:60vh;" >
+      <app-user-summary-mob  (closeClicked)="closeSecondModal()" [userType]="this.userType" [card]="this.card.id"></app-user-summary-mob> 
+      
+  </div>
+    <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;height:50vh;" >
+
+      <app-av-control-mob></app-av-control-mob>     
+      
+    </div>
+    <div *ngIf="selectedButton===6" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
+      <app-about-nodes></app-about-nodes>    
+    </div>
+    <div *ngIf="selectedButton===7"  class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
+      <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(0)"></app-report-form>  
+    </div>
+
+  </div>
+</div>
+
+
+<div  [ngClass]="{'slidemobile':deviceType,'slidedesktop':!deviceType}" class="slide-in-modal" #secondModal (click)="closeSecondModal()">
+  <div  [ngClass]="{'slidecontentmobile':deviceType,'slidecontentdesk':!deviceType}" class="modal-content1 bg-black text-white"#secondModal (mousedown)="startDrag($event)"(click)="$event.stopPropagation()">
+    <div class="d-flex justify-content-center mt-3">  
+    
+      <button class="btn btn-outline-white text-white" style="position:absolute; top:10px; left:10px; z-index: 500;" (click)="togglePanel(-1)">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div *ngIf="deviceType" class="drag-handle centered" ></div>
+    </div>
+    
+    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; width:390px; height:25vh;">
      
       <div style="display:flex; justify-content: center;">
       <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggle')">
@@ -49,84 +82,22 @@
         </button> 
         </div>
       </div>
-    
-    
-    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:60vh;" >
-      <app-user-summary-mob  (closeClicked)="closeSecondModal()" [userType]="this.userType" [card]="this.card.id"></app-user-summary-mob> 
-      
-  </div>
-    <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;height:50vh;" >
 
-      <app-av-control-mob></app-av-control-mob>     
       
-    </div>
-    <div *ngIf="selectedButton===6" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
-      <app-about-nodes></app-about-nodes>    
-    </div>
-    <div *ngIf="selectedButton===7"  class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
-      <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(0)"></app-report-form>  
-    </div>
-
   </div>
 </div>
 
-  <div class="slide-in-modal" #secondModal (click)="closeSecondModal()">
-    <div class="modal-content1 bg-black text-white"#secondModal (mousedown)="startDrag($event)"(click)="$event.stopPropagation()">
-      <div class="d-flex justify-content-center mt-3">  
-      
-        <button class="btn btn-outline-white text-white" style="position:absolute; top:10px; left:10px; z-index: 500;" (click)="togglePanel(-1)">
-          <i class="fas fa-times"></i>
-        </button>
-        
-        <div class="drag-handle centered" ></div>
-      </div>
-      <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
-     
-        <div style="display:flex; justify-content: center;">
-        <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggle')">
-          <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>        
-          <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>  
-       </button>
-       
-        </div>
-          <div style="position:absolute; bottom:0; display:flex; justify-content: center; width:100%;">
-          <form (submit)="onSubmitit($event)">
-        
-                <div style="position: relative; bottom:0; flex-grow: 1">      
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        placeholder='Respond to speaker'
-                        aria-label="value" 
-                        aria-describedby="button-addon2" 
-                        [(ngModel)]="value" 
-                        name="inputValue" 
-                        style="padding-right: 40px;"  
-                    >
-                </div>
-                
-           </form>
-           <button *ngIf="value.length > 0" style="position:absolute; right:5px;" class="btn btn-outline-light bg-black rounded-circle" type="submit" id="button-addon2">
-            <i class="fas fa-arrow-right"></i>
-          </button> 
-          </div>
-        </div>
-        
-    </div>
-  </div>
-  
 
 
 <div  class="bg-black d-flex justify-content-center" style="width:100%;height:100%;">
  
-  <div class="topic selection bg-black" style="position:absolute; width:100%; height:100%; display: flex;
+  <div class="topic selection bg-black" style="position:relative; width:100%; height:100%; display: flex;
     flex-direction: column;
-    position:absolute;
     overflow-y:hidden;">
    
     
     <div class="nodeArea"  [@expandShrink]="nodeState" >
-      <app-node-space-mob #nodeSpace [userType]="userType" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
+      <app-node-space-mob #nodeSpace [userType]="userType" [isRanked]="isRanked" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
      </div>
   
      <div class="theRest" [@expandShrinkrest]="theRestState">
@@ -228,7 +199,7 @@
          <!-- <button class="btn btn-outline-light bg-black" (click)="togglePanel(2)" style="opacity:.8;position:absolute; bottom:10px;right:10px;border-radius:50%; width:50px;height:50px;z-index:1000;">
           
           </button>-->
-          <div *ngIf="userType==='host'||userType==='speaker'" style="position:absolute; bottom:70px;right:10px;">
+          <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen" style="position:absolute; bottom:70px;right:10px;">
           <button (click)="togglePanel(1)" class="btn btn-outline-light bg-danger" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:1000;">
           <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i> 
           <i *ngIf="isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>   

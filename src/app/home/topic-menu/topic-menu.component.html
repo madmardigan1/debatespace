@@ -1,6 +1,6 @@
 
 <div class="d-flex justify-content-center" style="width:100%;height:100%;">
-<div class="topic selection bg-black" style="position:absolute; width:390px; height:100%; display: flex;
+<div class="topic selection bg-black" style="position:absolute; width:100%; height:100%; display: flex;
 flex-direction: column;
 overflow-y:hidden;">
 <div class="top"style="position:relative;display:flex; flex-direction:column;height:90%; overflow-y: scroll;">
@@ -8,7 +8,7 @@ overflow-y:hidden;">
   <div class="d-flex justify-content-center text-white" style="position:relative;">
     <h1>Add Topics</h1>
  
-  <div style="position:absolute; left:10px;top:10px">
+  <div *ngIf="deviceType" style="position:absolute; left:10px;top:10px">
     <button class="btn btn-outline-white text-white" (click)="goBack()">
       <i class="fas fa-times"></i>
     </button>
@@ -44,6 +44,7 @@ overflow-y:hidden;">
   
   </div>
 
+ 
 
 
 
@@ -51,9 +52,9 @@ overflow-y:hidden;">
     <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
    
       <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(i)">{{category}}</button>
-      <i class="fas fa-chevron-right pr-5" style="position:absolute; right:5px;"></i>
+      <i class="fas fa-chevron-right" [class.rotated]="expandedStates[i]" style="position:absolute; left:5px;"></i>
     </div>
-    <div *ngIf="expandPane==i" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
+    <div *ngIf="expandPane[i]" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
       <div *ngFor="let topic of currentTopics[category]">
         <button class="btn btn-danger" style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-left:4px;margin-right: 2px;" (click)="saveTopic(topic.name)">{{topic.name}}</button>
       </div>

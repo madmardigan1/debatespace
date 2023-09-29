@@ -5,6 +5,8 @@ import { Card,Topic,  } from 'src/app/space-service.service';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { DeviceTypeService } from 'src/app/device-type.service';
+
 @Component({
   selector: 'app-topic-menu',
   templateUrl: './topic-menu.component.html',
@@ -16,19 +18,23 @@ export class TopicMenuComponent implements OnInit{
   topicSelection=false;
   joinState=false;
   savedTopics: string[] = [];
-  expandPane=-2;
+  expandedStates: { [key: number]: boolean } = {};
+  expandPane:any = [];
+  deviceType=false;
   addTopic = 'false';
   searchTerm: string = ''; 
   @Output() closeTopics = new EventEmitter<void>();
   matchedTopics: any[] = []; 
   parameterValue: string = '';
-  constructor(private location: Location,private topicServ:TopicMenuService, private cardService:CardDataService, private route:ActivatedRoute) {
+  constructor(private location: Location,private topicServ:TopicMenuService, private cardService:CardDataService, private route:ActivatedRoute, private device:DeviceTypeService) {
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
     });
     this.cardService.getTopics().subscribe(data => {
       this.currentTopics = data;
     });
+
+    this.device.getDevice().subscribe(data => {this.deviceType=data})
     
   }
   ngOnInit(): void {
@@ -70,7 +76,11 @@ export class TopicMenuComponent implements OnInit{
   }
   
   expand (select:number) : void {
-    this.expandPane = select;
+   
+    this.expandPane[select] = !this.expandPane[select];
+    this.expandedStates[select] = !this.expandedStates[select];
+
+
   }
   
   saveTopic (list:string) : void {

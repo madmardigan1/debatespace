@@ -1,11 +1,11 @@
 
 
-<div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
+<div class="d-flex justify-content-center" style="width:100%; height:100%; position:relative;">
 
-  <div class="modal1" #firstModal (click)="closeFirstModal()">
+  <div class="modal1" [ngClass]="{'modal1mobile':device,'modal1desktop':!device}" #firstModal (click)="closeFirstModal()">
   
-    <div class="bg-black text-white modal-content" (click)="$event.stopPropagation()">
-      
+    <div  [ngClass]="{'modal1mobilecontent':device,'modal1desktopcontent':!device}" class="bg-black text-white modal-content" (click)="$event.stopPropagation()">
+     
       <div style="position:absolute; left:10px;top:10px; z-index:1002;">
         <button class="btn btn-outline-white text-white" (click)="togglePanel(0)">
           <i class="fas fa-times"></i>
@@ -23,10 +23,11 @@
           <app-tournament-bulletin></app-tournament-bulletin>
         </div>
         <div *ngIf="selectedButton===2" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:70vh;">
-          <app-leaderboard></app-leaderboard>>
+          <app-leaderboard></app-leaderboard>
         </div>
-        <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:auto;">
-          <div *ngIf="!joinState" style="height:30vh;">
+       
+        <div *ngIf="selectedButton===3" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:100%;">
+          <div *ngIf="!joinState" [style.height]="!device ? '100%' : '30vh'">
           <div class="d-flex justify-content-center align-items-center bg-black text-white" style="flex-direction:column; width:100%; height:100%;">
             <div style="position:relative;">
                 <h1>Choose</h1>
@@ -38,7 +39,7 @@
     
         </div>
         </div>
-        <div *ngIf="joinState" style="height:30vh;">
+        <div *ngIf="joinState" [style.height]="!device ? '100%' : '30vh'">
           
          
           <div class="topics d-flex mt-10" style="overflow-x:scroll">
@@ -66,19 +67,19 @@
           
                       <label for="customToggle" class="custom-toggle-label"></label>
                   </div>
-                  <span style="margin-left:5px;">Ranked</span>
+                  <span style="margin-left:5px;">Debate</span>
                 </div>
                 </div>
           
                
               <div class="form-group mt-4 text-center">
-                <button type="submit" class="btn btn-primary" >Find a group</button>
+                <button [disabled]="savedTopics.length==0" type="submit" class="btn btn-primary" >Find a group</button>
               </div>
             </form>
           </div>
           </div>
-    
         </div>
+        
         </div>
     </div>
   </div>

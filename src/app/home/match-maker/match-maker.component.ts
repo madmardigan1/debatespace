@@ -40,7 +40,8 @@ counter=0;
     this.cardServ.updateCard(counter.id, 'steve','speaker',400,'/assets/Steve.jpeg');
     this.debateAuth.setUser('speaker');
     this.closeClicked.emit();
-    this.router.navigate(['/debateMob',counter.id]);
+    console.log("test");
+    this.router.navigate(['debateMob',counter.id]);
   }
   end () {
     this.closeClicked.emit();

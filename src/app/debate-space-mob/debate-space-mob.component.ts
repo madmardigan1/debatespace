@@ -9,7 +9,7 @@ import { ChatSubmitService } from './chat-submit-mob/chat-submit.service';
 import { GPTsummaryService } from './gptsummary-mob/gptsummary.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { DeviceTypeService } from '../device-type.service';
 
 @Component({
   animations: [
@@ -91,9 +91,14 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     theRestState: string = 'expanded';
     expandShrink=false;
     value = '';
+    deviceType=false;
     getLink:string = '';
-    constructor (private snackBar: MatSnackBar,private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService){
+    isSecondModalOpen = false;
+    constructor (private snackBar: MatSnackBar,private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService, private device:DeviceTypeService){
       this.userType=this.debateAuth.getUser();
+
+      this.device.getDevice().subscribe(data => (this.deviceType=data));
+
     }
   
 
@@ -125,6 +130,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     
     
     closeSecondModal() {
+      this.isSecondModalOpen = false;
       this.secondModal.nativeElement.classList.remove('open');
     }
 
@@ -238,11 +244,12 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     togglePanel(togglenumber: number): void {
       this.selectedButton=togglenumber;
       if (this.selectedButton!=-1){
-        if( this.selectedButton == 1) {
+        if (this.selectedButton==1) {
+          this.isSecondModalOpen = true;
           this.openSecondModal();
-
         }
-        else {this.openFirstModal();}
+        else {
+      this.openFirstModal();}
       }
       else {
         this.closeFirstModal();

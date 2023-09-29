@@ -8,6 +8,9 @@ import { BrowsePageComponent } from './browse-page/browse-page.component';
 import { DebateSpaceMobComponent } from './debate-space-mob/debate-space-mob.component';
 import { TopicMenuComponent } from './home/topic-menu/topic-menu.component';
 import { SearchComponent } from './search/search.component';
+import { NodeSpaceMobComponent } from './debate-space-mob/node-space-mob/node-space-mob.component';
+
+
 const routes: Routes = [
   { path: '', component:HomeComponent},
   { path: 'home/create' , component: SpacecreateComponent},
@@ -16,7 +19,9 @@ const routes: Routes = [
   { path: 'debateMob/:id', component: DebateSpaceMobComponent},
   { path: 'home/topicMenu/:myParam', component:TopicMenuComponent},
   { path: 'home', component:HomeComponent},
-  { path: 'search', component:SearchComponent}
+  { path: 'search', component:SearchComponent},
+
+
 ];
 
 @NgModule({

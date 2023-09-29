@@ -39,6 +39,7 @@ declare var bootstrap: any;
 export class HomeComponent implements AfterViewInit{
   expandedStates: { [key: number]: boolean } = {};
   device = true;
+  modal1Open = true;
   savedTopics: string[] = [];
   currentTopics!: Topics; 
   expandPane:any = [];
@@ -86,6 +87,14 @@ export class HomeComponent implements AfterViewInit{
     
     this.deviceType.getDevice().subscribe(type => {
       this.device=type;
+
+    });
+    this.deviceType.getNumber().subscribe(type => {
+     
+        this.joinState=true;
+        this.togglePanel(type);
+      
+
     });
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
@@ -119,7 +128,8 @@ export class HomeComponent implements AfterViewInit{
 
 
 openFirstModal() {
-  this.firstModal.nativeElement.style.display = 'flex';
+
+  this.modal1Open = !this.modal1Open;
   this.firstModal.nativeElement.classList.add('open1');
 }
 
