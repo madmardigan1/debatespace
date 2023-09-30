@@ -74,6 +74,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   debateFeatures=false;
   isRanked = true;
  
+
+
+
   //other variables
     firstDarkenPane = false;
     secondDarkenPane = false;
@@ -165,6 +168,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       /*   use this one when it goes live. it will access the actual website link;
       this.getLink = window.location.href;
       */
+
 
     }
     generateRoute(card: any) {
@@ -320,7 +324,11 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     }
 
 
+
     
+toggleVideo () {
+ 
+}
   }
 
   

@@ -16,9 +16,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('screen') screen!: ElementRef;
   @ViewChild('banner') banner!: ElementRef;
 
-@ViewChild('firstModal') firstModal!: ElementRef;
-@ViewChild('secondModal') secondModal!: ElementRef;
-
+ 
 constructor(private deviceType: DeviceTypeService) {
 
 }
@@ -28,9 +26,9 @@ constructor(private deviceType: DeviceTypeService) {
 
 
 
-
 ngAfterViewInit(): void {
   this.toggleMode();
+ 
 }
 
 matchmaker(type:number) {

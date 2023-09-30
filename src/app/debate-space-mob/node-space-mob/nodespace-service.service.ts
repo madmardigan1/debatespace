@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NodespaceServiceService {
-
+  private clickedPost = new Subject<number>(); 
   private nodeId = new BehaviorSubject<number | undefined>(1); 
   private SiblingData = new BehaviorSubject<{ previous: string, next: string } | null>({ previous: '1', next: '1' });
   private nodeTextSource = new BehaviorSubject<{ text: string, fullText: string, id: number, soundClip?: any}[]>([{text:'', fullText: '', id:1, soundClip: null}]); // Added initial value as an empty array
@@ -27,11 +27,11 @@ export class NodespaceServiceService {
 
 
 
-  changeNodeText(textArray: { text: string, fullText:string, id: number, soundClip?: any}[]): void {
+  changeNodeText(textArray: { text: string, fullText:string, id: number, videoClip?:any, soundClip?: any}[]): void {
     this.nodeTextSource.next(textArray);
   }
 
-  getNodeText(): Observable<{ text: string, fullText:string, id: number, soundClip?:any}[]> {  // Fixed return type to match what nodeTextSource emits
+  getNodeText(): Observable<{ text: string, fullText:string, id: number, videoClip?:any, soundClip?:any}[]> {  // Fixed return type to match what nodeTextSource emits
     return this.nodeTextSource.asObservable();
   }
 
@@ -51,5 +51,14 @@ sendSoundClip(level: any): void {
 
 getsoundClip(): Observable<string> {
   return this.soundClip.asObservable();
+}
+
+sendVideoClip(level: any): void {
+
+  this.clickedPost.next(level);
+}
+
+getvideoClip(): Observable<number> {
+  return this.clickedPost.asObservable();
 }
 }

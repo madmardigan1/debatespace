@@ -9,12 +9,15 @@ export class SpeechService {
   transcript = '';
   private finalTranscript = '';
   mediaRecorder: any;
-  audioChunks: any[] = [];
-  audioBlob: Blob | null = null;
+  mediaChunks: any[] = [];
+  mediaBlob: Blob | null = null;
   private recognition: any;
  
   public phrases = new Subject<string>();
   private currentTranscript = '';
+
+
+
 
   constructor() {
     // Check for SpeechRecognition API availability
@@ -31,6 +34,12 @@ export class SpeechService {
    else {
     console.warn("Speech Recognition is not available in this browser.");
   }
+
+
+
+
+
+
   }
 
   
@@ -77,52 +86,65 @@ export class SpeechService {
 
 
   clearRecordingAudio() {
-    this.audioBlob = null;
+    this.mediaBlob = null;
   }
 
-  startRecordingAudio() {
-    // Start recording audio
+  startRecording(includeVideo: boolean = false) {
+    // Define media constraints
+    const constraints = {
+        audio: true,
+        video: includeVideo
+    };
 
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      this.mediaRecorder = new MediaRecorder(stream);
-      this.audioChunks = [];
-      
-      this.mediaRecorder.ondataavailable = (event: BlobEvent)=> {
-        this.audioChunks.push(event.data);
-      };
+    
 
-      this.mediaRecorder.onstop = () => {
-        this.audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
-        // Now, you can use this audioBlob to play the audio, or save it somewhere
-      };
 
-      this.mediaRecorder.start();
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+        this.mediaRecorder = new MediaRecorder(stream);
+        
+        // Common chunks array for both audio and video
+        this.mediaChunks = [];
+
+        this.mediaRecorder.ondataavailable = (event: BlobEvent) => {
+            this.mediaChunks.push(event.data);
+        };
+
+        this.mediaRecorder.onstop = () => {
+            const mediaType = includeVideo ? 'video/webm' : 'audio/wav';
+            this.mediaBlob = new Blob(this.mediaChunks, { type: mediaType });
+            // Now, you can use this.mediaBlob to play the audio/video, or save it somewhere
+        };
+
+        this.mediaRecorder.start();
     }).catch(error => {
-      console.warn("Error accessing microphone:", error);
+        console.warn("Error accessing media:", error);
     });
-  }
+}
 
-  stopAndReturnAudio(): Promise<Blob | null> {
-    return new Promise((resolve, reject) => {
+stopAndReturnMedia(): Promise<{ blob: Blob, type: 'audio' | 'video' } | null> {
+  return new Promise((resolve, reject) => {
       if (!this.mediaRecorder) {
-        console.warn("Media recorder is not initialized.");
-        resolve(null);
-        return;
+          console.warn("Media recorder is not initialized.");
+          resolve(null);
+          return;
       }
-  
+
       this.mediaRecorder.onstop = () => {
-        this.audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
-        resolve(this.audioBlob);
+          const mediaType = this.mediaRecorder.mimeType.startsWith('video/') ? 'video' : 'audio';
+          this.mediaBlob = new Blob(this.mediaChunks, { type: this.mediaRecorder.mimeType });
+         
+          resolve({ blob: this.mediaBlob, type: mediaType });
       };
-  
+
       this.mediaRecorder.onerror = (e: Event) => {
-        reject(e);
+          reject(e);
       };
-      
-  
+
       this.mediaRecorder.stop();
-    });
-  }
+  });
+}
+
+
   
 /*
   stopRecordingAudio() {
@@ -137,8 +159,8 @@ export class SpeechService {
   }*/
   
   playRecordedAudio() {
-    if (this.audioBlob) {
-      const audioUrl = URL.createObjectURL(this.audioBlob);
+    if (this.mediaBlob) {
+      const audioUrl = URL.createObjectURL(this.mediaBlob);
       const audio = new Audio(audioUrl);
       audio.play();
     }
@@ -208,6 +230,8 @@ export class SpeechService {
         };
     });
 }
+
+
 
   
 }

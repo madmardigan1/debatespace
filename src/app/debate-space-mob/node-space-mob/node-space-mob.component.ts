@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 
 // Service imports
 import { RtcService } from '../../rtcservice.service';
-import { SpeechService } from '../../speech-service.service';
+import { SpeechService } from './speech-service.service';
 import { DebateAuthService } from 'src/app/home/debate-auth.service';
 import { AvServiceService } from '../av-control-mob/av-service.service';
 import { NodespaceServiceService } from './nodespace-service.service';
@@ -36,6 +36,7 @@ import { ChatSubmitService } from '../chat-submit-mob/chat-submit.service';
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   // View references
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
+  private mediaBlobURL?: string;
 
   // Inputs & Outputs
   @Input() inputdata: any;
@@ -68,7 +69,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Moment: 0, soundClip: null, commentType: 'good' },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Health: 100, Moment: 0, videoClip: null, soundClip: null, commentType: 'good' },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -79,6 +80,21 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   lastSelectedNode = 1;
   private phrasesSubscription: Subscription | null = null;
   private timerId: any;
+
+
+  // video stuff
+  @ViewChild('playbackVideoElement', { static: false }) playbackVideoElement!: ElementRef;
+
+
+  @ViewChild('liveVideo') liveVideoElement!: ElementRef;
+  //@ViewChild('liveVideoElement') liveVideoElement!: ElementRef;
+
+  isRecordingVideo: boolean = false;
+  isPlaying: boolean = false;
+  private shouldPlayAfterLoad: boolean = false;
+  private mediaRecorder!: MediaRecorder;
+  private recordedChunks: any[] = [];
+  private stream!: MediaStream;
 
   constructor(
       private debateSpace: DebateSpaceService,
@@ -97,8 +113,6 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 ngOnInit(): void {
   // Initialize component-level subscriptions and configurations
   
- 
-  
   this.userType = this.debateAuth.getUser();
 
   
@@ -109,6 +123,9 @@ ngOnInit(): void {
       this.submitNode(this.submitText);
     }
   });
+
+
+    
 }
 
 ngAfterViewInit() {
@@ -117,6 +134,7 @@ ngAfterViewInit() {
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
+ 
   if (this.isRanked) {
     this.loadGameRules();
   }
@@ -132,28 +150,41 @@ startTimer() {
    
     this.nodes.forEach(node => {
       const test = this.getSiblingNodeId(node.id);
-        console.log(node.id + "" + node.Moment);
+       
   
-      if (test!=null) {
-        node.Moment += 1;
+      if (test==null) {
+        //if the new node has not been responded too, it gains moment every x seconds
+        const parentTest = this.getParentNodeId(node.id);
+        if (parentTest) {
+          this.nodes.get(parentTest).Health -=1;
+          this.updateNodeHealth(this.nodes.get(parentTest));
+
+        }
+        
     }
+
+
+
     })
     
-  }, 18000);
+  }, 1000);
 }
 
 
 
 private initializeSubscriptions() {
   // Group all the settingsService subscriptions
-
+  this.nodeService.getvideoClip().subscribe (data => {this.playRecordedVideo(data)})
   this.subscriptions.push(
   this.debateSpace.getToggle().subscribe(type => {
     if (type === "play") {
       this.play();
     } else if (type === "toggle") {
       this.toggleRecording();
+    } else if (type === "toggleVideo"){
+      this.toggleVideoRecording();
     }
+
   }),
   this.debateSpace.getEmoji().subscribe(type => {
     if (type === "positive") {
@@ -337,8 +368,11 @@ this.network.on('blurNode', params => {
 
 
   this.network.on('click', params => {
+
+  
     this.nodeService.setNodeId(params.nodes[0]);
     if (params.nodes[0] !== undefined) {
+    
     this.handleNodeClick(params.nodes[0]);
     
     }
@@ -369,24 +403,46 @@ thumbdown(): void {
         }
       nodeData.Moment -= 1;
       this.animationState = 'down';
-      if (nodeData.Moment <= 0) {
-        nodeData.color = {
-          border: 'red',
-          background: nodeData.color?.background || '#FFFFFF'
-        };
-        nodeData.shadow = {
-          enabled: true,
-          color: 'red',
-          size: 20,
-          x: 0,
-          y: 0
-        };
-      }
-      this.nodes.update(nodeData);
+      this.updateNodeHealth(nodeData);
+      
       
     }
   }
 }
+
+updateNodeHealth (node: any) {
+  console.log(node.Moment+node.Health);
+  if (node.Moment+node.Health <= 90) {
+    node.color = {
+      border: 'red',
+      background: node.color?.background || '#FFFFFF'
+    };
+    node.shadow = {
+      enabled: true,
+      color: 'red',
+      size: 20,
+      x: 0,
+      y: 0
+    };
+  }
+  if (node.Moment+node.Health >= 100) {
+    node.color = {
+      border: 'green',
+      background: node.color?.background || '#FFFFFF'
+    };
+    node.shadow = {
+      enabled: true,
+      color: 'green',
+      size: 20,
+      x: 0,
+      y: 0
+    };
+ 
+
+}
+    this.nodes.update(node);
+}
+
 
 thumbup(): void {
  
@@ -410,20 +466,8 @@ thumbup(): void {
       setTimeout(() => {
         this.animationState = 'void';
       }, 500);
-      if (nodeData.Moment >= 5) {
-        nodeData.color = {
-          border: 'green',
-          background: nodeData.color?.background || '#FFFFFF'
-        };
-        nodeData.shadow = {
-          enabled: true,
-          color: 'green',
-          size: 20,
-          x: 0,
-          y: 0
-        };
-      }
-      this.nodes.update(nodeData);
+      this.updateNodeHealth(nodeData);
+     
      
     }
   }
@@ -432,10 +476,11 @@ thumbup(): void {
 
 submitNode(submitText: string): void {
  this.stopRecording();
+
  this.addNode(submitText);
 }
 
-startRecording () : void {
+startRecording (type:boolean=false) : void {
   this.speechService.startListening();
   this.phrasesSubscription = this.speechService.phrases.subscribe(transcript => {
     const nodeToUpdate = this.nodes.get(this.nodetoUpdate) as unknown as { text: string; fullText: string, label?: string; soundClip: Blob | null };
@@ -447,9 +492,12 @@ startRecording () : void {
       this.nodes.update(nodeToUpdate);
   }
   });
-  this.speechService.startRecordingAudio();
+
+
+  this.speechService.startRecording(type);
   this.isRecordingType.emit(false);
   this.isRecording=true;
+  
 }
 
 stopRecording(): void {
@@ -463,16 +511,24 @@ stopRecording(): void {
       this.phrasesSubscription.unsubscribe();
       this.phrasesSubscription = null;
   }
-  this.speechService.stopAndReturnAudio()
-  .then(audioBlob => {
-    
-  this.nodes.get(this.nodetoUpdate).soundClip = audioBlob;
 
-  this.handleNodeClick(this.nodetoUpdate);
-  })
-  .catch(error => {
-    console.error('Error stopping and retrieving audio:', error);
-  });
+  this.speechService.stopAndReturnMedia().then(result => {
+    if (result) {
+        const { blob, type } = result;
+
+        if (type === 'audio') {
+          this.nodes.get(this.nodetoUpdate).soundClip = blob;
+
+          this.handleNodeClick(this.nodetoUpdate);
+        } else if (type === 'video') {
+        
+          this.nodes.get(this.nodetoUpdate).videoClip = blob;
+        }
+    }
+});
+
+
+
 
 
  
@@ -493,6 +549,12 @@ addNode(submitText: string): void {
         this.selectedPicture -= 1;
         selectedName = 'Steve';
     }
+    if (this.selectedNodeIndex!=1) {
+      const parentNode =this.nodes.get(Number(this.getParentNodeId(this.selectedNodeIndex)));
+      parentNode.Health=100;
+      this.updateNodeHealth(parentNode);
+      this.nodes.update(parentNode);
+  }
 
     const newNodeId = this.nodes.length + 1
     this.nodetoUpdate = newNodeId;
@@ -505,7 +567,9 @@ addNode(submitText: string): void {
         image: selectedImage,
         user: selectedName,
         Moment: 0,
-        soundClip: null
+        Health: 100,
+        soundClip: null,
+        videoClip: null
     });
     this.edges.add({
         from: this.selectedNodeIndex,
@@ -547,11 +611,66 @@ toggleRecording(): void {
           
     }
 }
+
+toggleVideoRecording (): void {
+  if (this.selectedNodeIndex !==null) {
+    if (this.isRecordingVideo) {
+     
+      this.speechService.stopListening();
+
+
+  
+      this.isRecording=false;
+      this.isRecordingType.emit(true);
+      if (this.phrasesSubscription) {
+          this.phrasesSubscription.unsubscribe();
+          this.phrasesSubscription = null;
+      }
+      
+      this.stopAndReturnVideo().then(result => {
+        if (result) {
+            const { blob} = result;
+             
+            if (blob) {
+              this.nodes.get(this.nodetoUpdate).videoClip = blob;
+            
+              this.handleNodeClick(this.nodetoUpdate);
+            }
+        }
+    });
+    
+         this.isRecordingVideo = false;
+         
+    } else  {
+      this.isRecordingVideo = true;
+      this.speechService.startListening();
+      this.phrasesSubscription = this.speechService.phrases.subscribe(transcript => {
+        const nodeToUpdate = this.nodes.get(this.nodetoUpdate) as unknown as { text: string; fullText: string, label?: string; soundClip: Blob | null };
+    
+        if (nodeToUpdate) {
+          nodeToUpdate.fullText = transcript;
+          nodeToUpdate.text = this.wrapText(transcript, 20);
+          nodeToUpdate.label = this.wrapText(transcript, 20);
+          this.nodes.update(nodeToUpdate);
+      }
+      });
+    
+    
+     
+      this.isRecordingType.emit(false);
+        this.startRecordingVideo();
+       
+        this.addNode('');    
+    }
+        
+  }
+}
   
 handleNodeClick(params: any): void {
   
   this.network.selectNodes([params]);
   this.selectedNodeIndex = params;
+  
   this.lastSelectedNode = params;
 
 
@@ -862,6 +981,144 @@ ngOnDestroy(): void {
     clearInterval(this.timerId);
   }
 }
+
+
+
+
+
+    //video recording functions
+
+    mediaChunks: any[] = [];
+    mediaBlob: Blob | null = null;
+
+    startRecordingVideo() {
+      // Define media constraints
+      const constraints = {
+        audio: {
+          echoCancellation: true
+      }, 
+      video: true 
+      };
+  
+      
+  
+  
+      navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+          this.mediaRecorder = new MediaRecorder(stream);
+          this.stream = stream;
+          this.liveVideoElement.nativeElement.srcObject = stream;
+        this.liveVideoElement.nativeElement.muted = true;
+          this.liveVideoElement.nativeElement.play();
+          // Common chunks array for both audio and video
+          this.mediaChunks = [];
+  
+          this.mediaRecorder.ondataavailable = (event: BlobEvent) => {
+              this.mediaChunks.push(event.data);
+          };
+  
+          this.mediaRecorder.onstop = () => {
+            const mediaType = 'video/webm';
+            this.mediaBlob = new Blob(this.mediaChunks, { type: mediaType });
+            this.mediaBlobURL = URL.createObjectURL(this.mediaBlob); // Store the URL
+              // Now, you can use this.mediaBlob to play the audio/video, or save it somewhere
+          };
+  
+          this.mediaRecorder.start();
+      }).catch(error => {
+          console.warn("Error accessing media:", error);
+      });
+  }
+  
+  stopAndReturnVideo(): Promise<{ blob: Blob} | null> {
+    return new Promise((resolve, reject) => {
+        if (!this.mediaRecorder) {
+            console.warn("Media recorder is not initialized.");
+            resolve(null);
+            return;
+        }
+  
+        this.mediaRecorder.onstop = () => {
+            const mediaType = this.mediaRecorder.mimeType.startsWith('video/') ? 'video' : 'audio';
+            this.mediaBlob = new Blob(this.mediaChunks, { type: mediaType });
+           
+    
+            // Store the blob URL for later use
+            this.mediaBlobURL = URL.createObjectURL(this.mediaBlob);
+            resolve({ blob: this.mediaBlob});
+        };
+  
+        this.mediaRecorder.onerror = (e: Event) => {
+            reject(e);
+        };
+  
+        this.mediaRecorder.stop();
+    });
+  }
+    
+
+
+   /* startRecordingVideo() {
+     
+      this.isRecordingVideo = true;
+      this.recordedChunks = []; // Clear previous recording
+     
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          this.stream = stream;
+          this.liveVideoElement.nativeElement.srcObject = stream;
+          this.liveVideoElement.nativeElement.play();
+    
+          this.mediaRecorder = new MediaRecorder(stream);
+          this.mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+              this.recordedChunks.push(event.data);
+            }
+          };
+          this.mediaRecorder.start();
+        })
+        .catch(error => {
+          console.error('Error accessing camera:', error);
+        });
+    }*/
+    /*
+    stopRecordingVideo() {
+      this.isRecordingVideo = false;
+      if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+        this.mediaRecorder.stop();
+        this.stream.getTracks().forEach(track => track.stop());
+        
+        //this.nodes.get(this.nodetoUpdate).videoClip = blob;
+        this.handleNodeClick(this.nodetoUpdate);
+      }
+    }*/
+   
+
+   
+   
+    
+    playRecordedVideo(data:number) {
+      this.isPlaying = true;
+   
+          const mediaBlobURL = URL.createObjectURL(this.nodes.get(data).videoClip);
+      
+          setTimeout(() => {
+this.playbackVideoElement.nativeElement.src = mediaBlobURL;
+}, 1000);
+  
+   
+   
+
+    
+          
+  }
+  onVideoLoaded() {
+    this.playbackVideoElement.nativeElement.play();
+  }
+    
+    
+    onPlaybackEnded() {
+      this.isPlaying = false;
+    }
   }
   
   

@@ -15,8 +15,11 @@ export interface Card {
   user: User[]; // The main user
   topic: string[];
   description: string;
+  nodes?: any[];
+  edges?: any[];
   ranked: boolean;
 }
+
 
 export interface Topic {
   name: string;

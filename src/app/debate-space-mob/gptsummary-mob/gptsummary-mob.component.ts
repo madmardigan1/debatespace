@@ -2,7 +2,7 @@ import { Component, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NodespaceServiceService } from '../node-space-mob/nodespace-service.service';
 import { ChatspaceService } from '../chat-space-mob/chatspace.service';
-import { SpeechService } from 'src/app/speech-service.service';
+import { SpeechService } from 'src/app/debate-space-mob/node-space-mob/speech-service.service';
 import { GPTsummaryService } from './gptsummary.service';
 @Component({
   selector: 'app-gptsummary-mob',
@@ -11,7 +11,7 @@ import { GPTsummaryService } from './gptsummary.service';
 })
 export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   
-  public lines: { text: string, fullText: string, id: number, soundClip?: any, expand?: boolean }[] = [];
+  public lines: { text: string, fullText: string, id: number, videoClip?:any, soundClip?: any, expand?: boolean }[] = [];
   private subscription!: Subscription;
   private subscription1!: Subscription;
   private subscription2!: Subscription;
@@ -46,8 +46,8 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     
-    this.subscription = this.nodeService.getNodeText().subscribe((messages: { text: string, fullText: string, id: number, soundClip?: any }[]) => {
-      console.log([messages[messages.length-1]]);
+    this.subscription = this.nodeService.getNodeText().subscribe((messages: { text: string, fullText: string, id: number, videoClip?:any, soundClip?: any }[]) => {
+     
       this.lines = messages;
     
   });
@@ -91,6 +91,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
 
   expand(line: any, index: number): void {
   line.expand = true;
+  if (line.videoClip!=null){console.log("test")};
   if (this.expandedLines.has(index)) {
     this.expandedLines.delete(index);
   } else {
@@ -104,5 +105,9 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  playRecordedVideo (id:number) {
+    this.nodeService.sendVideoClip(id);
   }
 }

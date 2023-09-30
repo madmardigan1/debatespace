@@ -1,4 +1,9 @@
 <div class="container" [ngClass]="{'rotated': isRotated}">
+ 
+    <div style="position:absolute; flex:auto; z-index:99999; ">
+      <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="flex:auto"></video>
+     <video #playbackVideoElement controls (ended)="onPlaybackEnded()" (loadeddata)="onVideoLoaded()" style="flex:auto;" *ngIf="isPlaying"></video>
+    </div>
     <div #visNetwork id="mynetwork" class="nodes" style="height:100%; width:100%;  transition: transform 0.5s;"> 
     </div>
         <!--<div class="d-flex justify-content-center" style="position:absolute;bottom:0px;right:-10px;">
