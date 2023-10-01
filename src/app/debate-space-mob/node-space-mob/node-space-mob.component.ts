@@ -137,7 +137,7 @@ zoomMode(type:number) {
   this.zoomType=type;
   if (this.zoomType===3) {
   this.zoomSwitch=true;
-  this.updateSlidesToShow();
+  //this.updateSlidesToShow();
   }
   else{
     this.zoomSwitch=false;
@@ -155,25 +155,36 @@ this.mySwiper = new Swiper('.swiper-container',
 
 
 
-slidesToShow:any = [];
+slidesToShow:any = [this.nodes.get(1)];
 previousSlideIndex: number = 1; // Add this at the class level
 updateSlidesToShow() {
  
-  const slide1 ='';
-  //const slide1check = this.getAdjacentSiblingNodeIds(this.selectedNodeIndex!)!.previous
-  
  
-  //const slide3 = this.nodes.get(this.getAdjacentSiblingNodeIds(this.selectedNodeIndex!)!.next).label 
-  const slide2:any = this.nodes.get(this.selectedNodeIndex!)
+
+  /*const slide2:any = this.nodes.get(this.selectedNodeIndex!)
 
   this.slidesToShow = [
     slide2,
     slide2,
     slide2,
-  
+];*/
 
+const siblingNodeIds = this.getOrderedSiblingNodeIds(this.selectedNodeIndex!);
+
+if (siblingNodeIds) {
+  const siblingNodes: any= [];
+
+  siblingNodeIds.forEach(nodeId => {
+    const node = this.nodes.get(nodeId);
+    if (node) {
+      siblingNodes.push(node);
+    }
+  });
+  this.slidesToShow = siblingNodes;
+  if (this.mySwiper) {
+    this.mySwiper.update();
+  }
   
-];
 /*
   if (slide1 != null && slide1 != slide3) {
   
@@ -189,6 +200,12 @@ if (slide1==null) {
   this.slidesToShow[0]=slide2;
 }*/
 }
+else {
+  this.slidesToShow = [
+    this.nodes.get(this.selectedNodeIndex!)
+  ]
+}
+}
 
 ngAfterViewInit() {
  
@@ -196,8 +213,8 @@ ngAfterViewInit() {
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
+  
  
-  this.updateSlidesToShow();  // set initial set of slides
 
 
   this.mySwiper = new Swiper('.swiper-container', {
@@ -205,10 +222,10 @@ ngAfterViewInit() {
     loop: true,     // allow infinite looping
     on: {
         slideChangeTransitionStart: () => {
+          
             // Store the current index before the slide change.
             this.previousSlideIndex = this.mySwiper.realIndex;
-            console.log(this.previousSlideIndex);
-            console.log(this.mySwiper.realIndex);
+           
         },
         slideChange: () => {
             if (this.mySwiper.realIndex === 2) {
@@ -219,7 +236,7 @@ ngAfterViewInit() {
                 // Swiped to the left (previous slide)
                 this.previousId();
             }
-           
+         
             
         }
     }
@@ -782,7 +799,9 @@ handleNodeClick(params: any): void {
   
   this.network.selectNodes([params]);
   this.selectedNodeIndex = params;
+  if (this.zoomType!=3) {
   this.updateSlidesToShow();
+  }
   this.lastSelectedNode = params;
 
 
@@ -976,6 +995,41 @@ getSiblingNodeId(nodeId: number): string | null {
   // Return the ID of the first child node.
   return edgesFromGivenNode[0].to;
 }
+
+getOrderedSiblingNodeIds(nodeId: number): number[] | null {
+  // Find the edge where the node is the 'to' (child) node.
+  const edgeToGivenNode = this.edges.get({
+    filter: edge => edge.to === nodeId
+  })[0];
+
+  // If no such edge exists, the node doesn't have a parent and thus no siblings.
+  if (!edgeToGivenNode) return null;
+
+  // Get all child nodes of the parent node.
+  const siblingsEdges = this.edges.get({
+    filter: edge => edge.from === edgeToGivenNode.from
+  });
+  
+  if (siblingsEdges.length === 1) return [nodeId];
+
+  // Extract node IDs of all siblings.
+  const siblingsNodeIds = siblingsEdges.map(edge => edge.to);
+
+  // Find the index of the given node within the siblings.
+  const givenNodeIndex = siblingsNodeIds.indexOf(nodeId);
+
+  // Create the ordered list of sibling IDs.
+  // It starts with the selected node, then its next siblings, and ends with its previous siblings.
+  const orderedSiblings = [
+    nodeId,
+    ...siblingsNodeIds.slice(givenNodeIndex + 1),   // next siblings
+    ...siblingsNodeIds.slice(0, givenNodeIndex)    // previous siblings
+  ];
+
+  return orderedSiblings;
+}
+
+
 
 getAdjacentSiblingNodeIds(nodeId: number): { previous: string, next: string } | null {
   // Find the edge where the node is the 'to' (child) node.

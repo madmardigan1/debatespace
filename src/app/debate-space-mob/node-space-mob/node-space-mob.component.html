@@ -4,7 +4,7 @@
   <div  class="swiper-container" style="display:flex;flex:auto;">
     <div class="swiper-wrapper" style="position:absolute; flex:auto;" [ngStyle]="{'z-index': zoomSwitch ? '6' : '2'}">
       <div *ngFor="let slide of slidesToShow" class="swiper-slide text-white" style="display:flex;justify-content:center;align-items:center;">
-          <div style="width:300px;height:150px; border:1px solid white;">
+          <div style="width:300px;height:150px; border:1px solid white; border-radius:10px;">
             <div class="circular-image-container">
               <img [src]="slide.image" alt="{{ slide.name }}" class="circular-image">
             </div>
