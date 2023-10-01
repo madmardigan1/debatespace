@@ -1,16 +1,24 @@
 
 <div class="container" [ngClass]="{'rotated': isRotated}">
 
-<div *ngIf="zoomType === 3" class="full-screen-overlay bg-black text-white" style="display:flex; width:100%;height:100%; flex-grow:1; position:absolute; z-index:1001;" >
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-        <div class="swiper-slide">Slide 1: Lorem ipsum...</div>
-        <div class="swiper-slide">Slide 2: Some other text...</div>
-        <div class="swiper-slide">Slide 3: More text...</div>
+  <div  class="swiper-container" style="display:flex;flex:auto;">
+    <div class="swiper-wrapper" style="position:absolute; flex:auto;" [ngStyle]="{'z-index': zoomSwitch ? '6' : '2'}">
+      <div *ngFor="let slide of slidesToShow" class="swiper-slide text-white" style="display:flex;justify-content:center;align-items:center;">
+          <div style="width:300px;height:150px; border:1px solid white;">
+            <div class="circular-image-container">
+              <img [src]="slide.image" alt="{{ slide.name }}" class="circular-image">
+            </div>
+            <h1>{{slide.label}}</h1>
+          </div>
+
+    </div>
     </div>
 </div>
 
+<div class="curtain" style="position:absolute;left:0;top:0;display:flex; width:100%;height:100%;  flex:auto; background-color:black; z-index:3;">
 </div>
+
+
 
   <div style="position:absolute;right:2px; bottom:3px; display:flex;margin-right:2px; z-index:1001;">
     <button class="bg-white text-black" (click)="zoomMode(1)">1</button>
@@ -18,7 +26,7 @@
     <button class="bg-transparent text-white" (click)="zoomMode(3)">3</button>
   </div>
 
-<div #visNetwork id="mynetwork" class="nodes" style="height:100%; width:100%;  transition: transform 0.5s; z-index:2;"></div>
+<div #visNetwork id="mynetwork" class="nodes" style="position:absolute; height:100%; width:100%;  transition: transform 0.5s;"[ngStyle]="{'z-index': zoomSwitch ? '2' : '6'}"></div>
 
         <!--<div class="d-flex justify-content-center" style="position:absolute;bottom:0px;right:-10px;">
             <div  class="d-flex">

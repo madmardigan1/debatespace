@@ -64,11 +64,13 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   isRotated = false;
   nodeLeft: any;
   nodeRight: any;
+  zoomSwitch=false;
   public selectedPicture = 0;
   nodeShape = "circularImage";
   private highlightedEdges: any[] = [];
   isPanelExpanded = false;
   nodetoUpdate = 1;
+ 
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
@@ -96,7 +98,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   private mediaRecorder!: MediaRecorder;
   private recordedChunks: any[] = [];
   private stream!: MediaStream;
-
+  private mySwiper!: Swiper;
   constructor(
       private debateSpace: DebateSpaceService,
       private settingsService: AvServiceService, 
@@ -129,17 +131,64 @@ ngOnInit(): void {
     
 }
 
+
+
 zoomMode(type:number) {
   this.zoomType=type;
-
+  if (this.zoomType===3) {
+  this.zoomSwitch=true;
+  this.updateSlidesToShow();
+  }
+  else{
+    this.zoomSwitch=false;
+  }
 }
-panelSets = [
-  ['Slide 1A', 'Slide 1B', 'Slide 1C'],
-  ['Slide 2A', 'Slide 2B', 'Slide 2C'],
-  // Add more sets as needed
-];
+/*
+this.mySwiper = new Swiper('.swiper-container',
+  
+{
+  simulateTouch: true, // enable mouse interactions
+  mousewheel: true     // allow swiper to be controlled by mousewheel
+});*/
 
-currentSetIndex = 0;
+
+
+
+
+slidesToShow:any = [];
+previousSlideIndex: number = 1; // Add this at the class level
+updateSlidesToShow() {
+ 
+  const slide1 ='';
+  //const slide1check = this.getAdjacentSiblingNodeIds(this.selectedNodeIndex!)!.previous
+  
+ 
+  //const slide3 = this.nodes.get(this.getAdjacentSiblingNodeIds(this.selectedNodeIndex!)!.next).label 
+  const slide2:any = this.nodes.get(this.selectedNodeIndex!)
+
+  this.slidesToShow = [
+    slide2,
+    slide2,
+    slide2,
+  
+
+  
+];
+/*
+  if (slide1 != null && slide1 != slide3) {
+  
+  this.slidesToShow = [
+      slide1, 
+      slide2,  
+      slide3
+  ];
+}
+
+if (slide1==null) {
+  this.slidesToShow = [];
+  this.slidesToShow[0]=slide2;
+}*/
+}
 
 ngAfterViewInit() {
  
@@ -147,10 +196,39 @@ ngAfterViewInit() {
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
-  const swiper = new Swiper('.swiper-container', {
-    simulateTouch: true, // enable mouse interactions
-    mousewheel: true     // allow swiper to be controlled by mousewheel
+ 
+  this.updateSlidesToShow();  // set initial set of slides
+
+
+  this.mySwiper = new Swiper('.swiper-container', {
+    initialSlide: 0, // start from the first slide
+    loop: true,     // allow infinite looping
+    on: {
+        slideChangeTransitionStart: () => {
+            // Store the current index before the slide change.
+            this.previousSlideIndex = this.mySwiper.realIndex;
+            console.log(this.previousSlideIndex);
+            console.log(this.mySwiper.realIndex);
+        },
+        slideChange: () => {
+            if (this.mySwiper.realIndex === 2) {
+                // Swiped to the right (next slide)
+                this.nextId();
+                console.log("Swiped right to slide", this.mySwiper.realIndex);
+            } else if (this.mySwiper.realIndex === 0) {
+                // Swiped to the left (previous slide)
+                this.previousId();
+            }
+           
+            
+        }
+    }
 });
+
+
+
+
+  
  
 
   if (this.isRanked) {
@@ -704,7 +782,7 @@ handleNodeClick(params: any): void {
   
   this.network.selectNodes([params]);
   this.selectedNodeIndex = params;
-  
+  this.updateSlidesToShow();
   this.lastSelectedNode = params;
 
 
@@ -986,6 +1064,7 @@ previousId() {
     );
   } else {
     // Handle the scenario when there is no sibling or an error.
+    return;
    
   }
 }
@@ -1001,6 +1080,7 @@ nextId () {
       );
     } else {
       // Handle the scenario when there is no sibling or an error.
+      return;
     }
   }
 }

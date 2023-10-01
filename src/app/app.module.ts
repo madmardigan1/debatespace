@@ -48,9 +48,6 @@ import { MatchMakerComponent } from './home/match-maker/match-maker.component';
 import { SearchComponent } from './search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NodesComponent } from './nodes/nodes.component';
-import { SwiperModule } from 'ngx-swiper-wrapper';
-
-//node
 
 
 @NgModule({
@@ -82,7 +79,7 @@ import { SwiperModule } from 'ngx-swiper-wrapper';
     
   ],
   imports: [
-    
+
     MatDialogModule,
     MatSnackBarModule,
     MatMenuModule,
