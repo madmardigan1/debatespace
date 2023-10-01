@@ -1,6 +1,6 @@
 // Angular Core imports
 import {
-  Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter,
+  Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, HostListener,
   Input, OnInit, NgZone, 
 } from '@angular/core';
 import { trigger, state, style, transition, animate} from '@angular/animations';
@@ -132,14 +132,34 @@ ngOnInit(): void {
 }
 
 
+//drag logic
+
+
 
 zoomMode(type:number) {
   this.zoomType=type;
   if (this.zoomType===3) {
   this.zoomSwitch=true;
-  //this.updateSlidesToShow();
+  this.updateSlidesToShow();
+  this.currentIndex=0;
+  this.shownSlide=this.slidesToShow[0];
   }
-  else{
+
+  if (this.zoomType===2) {
+    this.network.setOptions({
+      interaction: {
+          dragView: false
+      }
+  });
+    this.zoomSwitch=false;
+    this.attachSwipeListeners('mynetwork');
+  }
+  if (this.zoomType===1) {
+    this.network.setOptions({
+      interaction: {
+          dragView: true
+      }
+  });
     this.zoomSwitch=false;
   }
 }
@@ -153,22 +173,15 @@ this.mySwiper = new Swiper('.swiper-container',
 
 
 
-
+private startY: number | null = null;
+private startX: number | null = null;
+currentIndex: number = 0;
+shownSlide=this.nodes.get(1);
 
 slidesToShow:any = [this.nodes.get(1)];
-previousSlideIndex: number = 1; // Add this at the class level
+
 updateSlidesToShow() {
  
- 
-
-  /*const slide2:any = this.nodes.get(this.selectedNodeIndex!)
-
-  this.slidesToShow = [
-    slide2,
-    slide2,
-    slide2,
-];*/
-
 const siblingNodeIds = this.getOrderedSiblingNodeIds(this.selectedNodeIndex!);
 
 if (siblingNodeIds) {
@@ -181,31 +194,82 @@ if (siblingNodeIds) {
     }
   });
   this.slidesToShow = siblingNodes;
-  if (this.mySwiper) {
-    this.mySwiper.update();
-  }
-  
-/*
-  if (slide1 != null && slide1 != slide3) {
-  
-  this.slidesToShow = [
-      slide1, 
-      slide2,  
-      slide3
-  ];
-}
 
-if (slide1==null) {
-  this.slidesToShow = [];
-  this.slidesToShow[0]=slide2;
-}*/
+  
 }
 else {
   this.slidesToShow = [
     this.nodes.get(this.selectedNodeIndex!)
   ]
 }
+
+
 }
+
+showPreviousSlide() {
+  if (this.currentIndex > 0) {
+      this.currentIndex--;  }
+      else {this.currentIndex=this.slidesToShow.length-1}
+      this.shownSlide=this.slidesToShow[this.currentIndex];
+
+}
+
+showNextSlide() {
+  if (this.currentIndex < this.nodes.length - 2) {
+      this.currentIndex++; }
+      else {this.currentIndex=0}
+      this.shownSlide=this.slidesToShow[this.currentIndex];
+      console.log(this.currentIndex)
+}
+
+attachSwipeListeners(elementId: string) {
+  const el = document.getElementById(elementId);
+  el?.addEventListener('touchstart', this.onTouchStart.bind(this));
+  el?.addEventListener('touchend', this.onTouchEnd.bind(this));
+}
+
+onTouchStart(event: Event) {
+  const touchEvent = event as TouchEvent;
+  this.startY = touchEvent.touches[0].clientY;
+  this.startX = touchEvent.touches[0].clientX;
+}
+
+onTouchEnd(event: Event) {
+  const touchEvent = event as TouchEvent;
+  const endY = touchEvent.changedTouches[0].clientY;
+  const endX = touchEvent.changedTouches[0].clientX;
+
+  if (this.startY !== null && this.startX !== null) {
+      const deltaY = endY - this.startY;
+      const deltaX = endX - this.startX;
+
+      if (deltaY > 50) {
+          console.log('Swiped down!');
+          this.down();
+          this.currentIndex=0;
+          this.shownSlide=this.slidesToShow[this.currentIndex];
+      } else if (deltaY < -50) {
+          console.log('Swiped up!');
+          this.up();
+          this.currentIndex=0;
+          this.shownSlide=this.slidesToShow[this.currentIndex];
+      }
+
+      if (deltaX > 50) {
+          console.log('Swiped right!');
+          this.nextId();
+          this.showNextSlide();
+      } else if (deltaX < -50) {
+          console.log('Swiped left!');
+          this.previousId();
+          this.showPreviousSlide();
+      }
+
+      this.startY = null;
+      this.startX = null;
+  }
+}
+
 
 ngAfterViewInit() {
  
@@ -213,35 +277,11 @@ ngAfterViewInit() {
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
-  
+  this.attachSwipeListeners('myDiv');  
+ // Get a reference to your div using its id
  
 
-
-  this.mySwiper = new Swiper('.swiper-container', {
-    initialSlide: 0, // start from the first slide
-    loop: true,     // allow infinite looping
-    on: {
-        slideChangeTransitionStart: () => {
-          
-            // Store the current index before the slide change.
-            this.previousSlideIndex = this.mySwiper.realIndex;
-           
-        },
-        slideChange: () => {
-            if (this.mySwiper.realIndex === 2) {
-                // Swiped to the right (next slide)
-                this.nextId();
-                console.log("Swiped right to slide", this.mySwiper.realIndex);
-            } else if (this.mySwiper.realIndex === 0) {
-                // Swiped to the left (previous slide)
-                this.previousId();
-            }
-         
-            
-        }
-    }
-});
-
+ 
 
 
 
@@ -1085,6 +1125,7 @@ up() {
       this.handleNodeClick(
     adjacentSiblingIds
       );
+      this.updateSlidesToShow();
     } else {
       // Handle the scenario when there is no sibling or an error.
 
@@ -1101,6 +1142,7 @@ down() {
       this.handleNodeClick(
         adjacentSiblingIds
       );
+      this.updateSlidesToShow();
     } else {
       // Handle the scenario when there is no sibling or an error.
     

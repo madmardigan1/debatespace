@@ -64,7 +64,7 @@
               </button>
               <button class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'chat'}"style="padding:4px;margin-right:2px; font-size:15px;" (click)="toggleFirstPanel('chat')">Chat</button>
               <button class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'summary'}" style="padding:4px;margin-right:2px;;font-size:15px;"(click)="toggleFirstPanel('summary')">Summary</button>
-              <button *ngIf="isRanked" class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'scoreboard'}" style="padding:4px;font-size:15px;"(click)="toggleFirstPanel('scoreboard')">Scoreboard</button>
+              
               <button class="btn btn-white text-white padding-right-3" (click)="fullScreen(true)">
                 <i class="fas fa-caret-up"></i>
               </button>
