@@ -115,7 +115,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
    // this.nodeService.sendVideoClip(id);
 
    playRecordedVideo(data:any) {
-  
+  if(data) { 
     this.isPlaying = true;
  
         const mediaBlobURL = URL.createObjectURL(data);
@@ -123,7 +123,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
         setTimeout(() => {
 this.playbackVideoElement.nativeElement.src = mediaBlobURL;
 }, 1000);
-
+}
 }
 onVideoLoaded() {
   this.playbackVideoElement.nativeElement.play();

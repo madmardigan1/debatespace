@@ -45,7 +45,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   @Output() nodeClicked = new EventEmitter<number>();
   @Output() nodeSelected = new EventEmitter<boolean>();
   @Output() notify: EventEmitter<string> = new EventEmitter<string>();
-  @Output() isRecordingType = new EventEmitter<boolean>();
+  @Output() isRecordingType = new EventEmitter<string>();
 
   // Class properties
   
@@ -648,7 +648,7 @@ startRecording (type:boolean=false) : void {
 
 
   this.speechService.startRecording(type);
-  this.isRecordingType.emit(false);
+
   this.isRecording=true;
   
 }
@@ -659,7 +659,7 @@ stopRecording(): void {
 
   
   this.isRecording=false;
-  this.isRecordingType.emit(true);
+
   if (this.phrasesSubscription) {
       this.phrasesSubscription.unsubscribe();
       this.phrasesSubscription = null;
@@ -758,8 +758,10 @@ addNode(submitText: string): void {
 toggleRecording(type:boolean=false): void {
   if (this.selectedNodeIndex !==null) {
       if (this.isRecording) {
+          this.isRecordingType.emit('soundTrue');
           this.stopRecording();
       } else  {
+        this.isRecordingType.emit('soundFalse');
           this.startRecording(type);
           this.addNode('');    
       }
@@ -770,11 +772,13 @@ toggleRecording(type:boolean=false): void {
 toggleVideoRecording (): void {
   if (this.selectedNodeIndex !==null) {
     if (this.isRecordingVideo) {
+      this.isRecordingType.emit('videoTrue');
       this.nodeService.recordingSend(false);
       this.isRecordingVideo=false;
       this.stopRecording();
     }
     else {
+      this.isRecordingType.emit('videoFalse');
       this.isRecordingVideo=true;
       this.startRecording(true);
       this.addNode('');

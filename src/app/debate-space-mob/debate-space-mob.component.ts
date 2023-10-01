@@ -91,7 +91,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     receiveType2 = false;
     selectedNode: boolean = false;
     userType: string = 'host';
-    isRecording = false;
+    isRecording = '';
     nodeState: string = 'shrunk';
     theRestState: string = 'expanded';
     expandShrink=false;
@@ -255,8 +255,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       this.debateSpace.Toggle(buttonType);
     }
 
-    changeIcon(recordType : boolean) {
-      this.isRecording = !recordType;
+    changeIcon(recordType : string) {
+      this.isRecording = recordType;
     }
 
 

@@ -149,13 +149,13 @@
         </div>
         <div class="space-between d-flex">
           <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger rounded-circle" style="width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"(click)="toggle('toggle')">
-            <i *ngIf="!isRecording" class="fa fa-microphone" ></i>        
-            <i *ngIf="isRecording" class="fa fa-stop" ></i>  
+            <i *ngIf="isRecording !=='soundFalse'" class="fa fa-microphone" ></i>        
+            <i *ngIf="isRecording =='soundFalse'" class="fa fa-stop" ></i>  
          </button>
      
          <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger rounded-circle"style="width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"(click)="toggle('toggleVideo')">
-          <i *ngIf="!isRecording" class="fas fa-video" ></i>        
-          <i *ngIf="isRecording" class="fa fa-stop" ></i>  
+          <i *ngIf="isRecording !== 'videoFalse'" class="fas fa-video" ></i>        
+          <i *ngIf="isRecording == 'videoFalse'" class="fa fa-stop" ></i>  
          </button>
         </div>
         
