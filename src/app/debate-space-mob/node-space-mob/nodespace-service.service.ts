@@ -5,7 +5,8 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class NodespaceServiceService {
-  private clickedPost = new Subject<number>(); 
+  private clickedPost = new Subject<number>();
+  private recordingStatus = new BehaviorSubject<boolean>(false);  
   private nodeId = new BehaviorSubject<number | undefined>(1); 
   private SiblingData = new BehaviorSubject<{ previous: string, next: string } | null>({ previous: '1', next: '1' });
   private nodeTextSource = new BehaviorSubject<{ text: string, fullText: string, id: number, soundClip?: any}[]>([{text:'', fullText: '', id:1, soundClip: null}]); // Added initial value as an empty array
@@ -60,5 +61,13 @@ sendVideoClip(level: any): void {
 
 getvideoClip(): Observable<number> {
   return this.clickedPost.asObservable();
+}
+
+recordingSend (type:boolean) {
+  this.recordingStatus.next(type);
+}
+
+recordGet(): Observable<boolean> {
+  return this.recordingStatus.asObservable();
 }
 }

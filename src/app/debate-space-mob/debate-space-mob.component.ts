@@ -1,4 +1,4 @@
-import { Component, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewChecked, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardDataService, Card } from '../space-service.service';
 import { DebateAuthService } from '../home/debate-auth.service';
@@ -10,7 +10,8 @@ import { GPTsummaryService } from './gptsummary-mob/gptsummary.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceTypeService } from '../device-type.service';
-
+import { NodespaceServiceService } from './node-space-mob/nodespace-service.service';
+import { SpeechService } from './node-space-mob/speech-service.service';
 @Component({
   animations: [
     trigger('expandShrink', [
@@ -61,14 +62,15 @@ import { DeviceTypeService } from '../device-type.service';
   templateUrl: './debate-space-mob.component.html',
   styleUrls: ['./debate-space-mob.component.css']
 })
-export class DebateSpaceMobComponent implements AfterViewChecked {
+export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit {
   @ViewChild(ChatSpaceMobComponent, { static: false }) secondChild!: ChatSpaceMobComponent;
   toggleChats:boolean = false;
   toggleChatsText:string = "Type in chat";
   selectedButton: number = -1;
   private subscription! : Subscription;
+  @ViewChild('liveVideo', { static: false }) liveVideoElement!: ElementRef;
   @ViewChild('chatView') private chatContainer!: ElementRef;
-
+  isRecordingVideo=false;
   //game rules
   private intervalId: any;
   debateFeatures=false;
@@ -97,7 +99,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     deviceType=false;
     getLink:string = '';
     isSecondModalOpen = false;
-    constructor (private snackBar: MatSnackBar,private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService, private device:DeviceTypeService){
+    constructor (private speechService:SpeechService,private nodeService: NodespaceServiceService,private snackBar: MatSnackBar,private gptSum:GPTsummaryService,private debateSpace: DebateSpaceService ,private route: ActivatedRoute, private cardService: CardDataService, private router: Router, private debateAuth: DebateAuthService, private chatSubmit:ChatSubmitService, private device:DeviceTypeService){
       this.userType=this.debateAuth.getUser();
 
       this.device.getDevice().subscribe(data => (this.deviceType=data));
@@ -108,7 +110,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     @ViewChild('firstModal') firstModal!: ElementRef;
     @ViewChild('secondModal') secondModal!: ElementRef;
     @ViewChild('thirdModal') thirdModal!: ElementRef;
-    
+    @ViewChild('secondModalContent') secondModalContent!: ElementRef;
     
     openFirstModal() {
       this.firstModal.nativeElement.style.display = 'flex';
@@ -128,16 +130,32 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     openSecondModal() {
     
       this.secondModal.nativeElement.classList.add('open');
+      this.secondModalContent.nativeElement.classList.add('open');
     
     }
     
     
     closeSecondModal() {
       this.isSecondModalOpen = false;
+      this.secondModalContent.nativeElement.classList.remove('open');
       this.secondModal.nativeElement.classList.remove('open');
     }
 
-
+    ngAfterViewInit(): void {
+      this.nodeService.recordGet().subscribe (data => {
+        this.isRecordingVideo=data;
+        if (data) {
+          this.speechService.getStream({ video: true, audio: true })
+          .then(() => {
+            // Bind the stream only after ensuring it's been acquired.
+            this.speechService.bindStreamToVideoElement(this.liveVideoElement.nativeElement);
+          })
+          .catch(error => {
+            console.error('Error accessing camera:', error);
+          });
+        }
+      })
+    }
 
 
     ngAfterViewChecked() {

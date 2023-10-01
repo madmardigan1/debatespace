@@ -1,4 +1,4 @@
-import { Component, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NodespaceServiceService } from '../node-space-mob/nodespace-service.service';
 import { ChatspaceService } from '../chat-space-mob/chatspace.service';
@@ -15,12 +15,15 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   private subscription!: Subscription;
   private subscription1!: Subscription;
   private subscription2!: Subscription;
+  isPlaying=false;
+  @ViewChild('playbackVideoElement', { static: false }) playbackVideoElement!: ElementRef;
   expandedLines: Set<number> = new Set();
    nextNode: any;
    previousNode: any;
    goBackone: any;
   private goBackonemore: any;
   traveled=false;
+  isRecordingVideo=false;
 
   constructor(private gptSum: GPTsummaryService,private nodeService: NodespaceServiceService, private chatSpace:ChatspaceService, private speechService: SpeechService) {
   this.subscription1 = this.nodeService.getSiblingData().subscribe((message: { previous: string, next: string }|null) => {
@@ -35,8 +38,10 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
       }
     });
     
+
     this.subscription2 =this.nodeService.getNodeId().subscribe((message: number | undefined) => {
       this.goBackone=message;
+     
     });
 
     
@@ -47,7 +52,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     
     this.subscription = this.nodeService.getNodeText().subscribe((messages: { text: string, fullText: string, id: number, videoClip?:any, soundClip?: any }[]) => {
-     
+      
       this.lines = messages;
     
   });
@@ -91,7 +96,6 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
 
   expand(line: any, index: number): void {
   line.expand = true;
-  if (line.videoClip!=null){console.log("test")};
   if (this.expandedLines.has(index)) {
     this.expandedLines.delete(index);
   } else {
@@ -107,7 +111,25 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
     this.subscription.unsubscribe();
   }
 
-  playRecordedVideo (id:number) {
-    this.nodeService.sendVideoClip(id);
-  }
+ 
+   // this.nodeService.sendVideoClip(id);
+
+   playRecordedVideo(data:any) {
+  
+    this.isPlaying = true;
+ 
+        const mediaBlobURL = URL.createObjectURL(data);
+    
+        setTimeout(() => {
+this.playbackVideoElement.nativeElement.src = mediaBlobURL;
+}, 1000);
+
 }
+onVideoLoaded() {
+  this.playbackVideoElement.nativeElement.play();
+}
+  onPlaybackEnded() {
+    this.isPlaying = false;
+  }
+  }
+

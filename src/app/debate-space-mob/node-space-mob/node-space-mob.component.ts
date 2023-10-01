@@ -8,6 +8,7 @@ import { trigger, state, style, transition, animate} from '@angular/animations';
 // External library imports
 import { DataSet, Network } from 'vis-network/standalone';
 import { Subscription } from 'rxjs';
+import Swiper from 'swiper';
 
 // Service imports
 import { RtcService } from '../../rtcservice.service';
@@ -47,10 +48,12 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   @Output() isRecordingType = new EventEmitter<boolean>();
 
   // Class properties
+  
   animationState: 'up' | 'down' | 'void' = 'void';
   currentNode: any;
   previousNode: any;
   siblingChecker: any;
+  zoomType=1
   thumbsPosition: { x: number, y: number } = { x: 0, y: 0 };
   isRecording = false;
   @Input() isRanked = false;
@@ -83,10 +86,8 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
 
   // video stuff
-  @ViewChild('playbackVideoElement', { static: false }) playbackVideoElement!: ElementRef;
 
 
-  @ViewChild('liveVideo') liveVideoElement!: ElementRef;
   //@ViewChild('liveVideoElement') liveVideoElement!: ElementRef;
 
   isRecordingVideo: boolean = false;
@@ -128,13 +129,30 @@ ngOnInit(): void {
     
 }
 
+zoomMode(type:number) {
+  this.zoomType=type;
+
+}
+panelSets = [
+  ['Slide 1A', 'Slide 1B', 'Slide 1C'],
+  ['Slide 2A', 'Slide 2B', 'Slide 2C'],
+  // Add more sets as needed
+];
+
+currentSetIndex = 0;
+
 ngAfterViewInit() {
  
- 
+  
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
+  const swiper = new Swiper('.swiper-container', {
+    simulateTouch: true, // enable mouse interactions
+    mousewheel: true     // allow swiper to be controlled by mousewheel
+});
  
+
   if (this.isRanked) {
     this.loadGameRules();
   }
@@ -174,7 +192,7 @@ startTimer() {
 
 private initializeSubscriptions() {
   // Group all the settingsService subscriptions
-  this.nodeService.getvideoClip().subscribe (data => {this.playRecordedVideo(data)})
+
   this.subscriptions.push(
   this.debateSpace.getToggle().subscribe(type => {
     if (type === "play") {
@@ -411,7 +429,7 @@ thumbdown(): void {
 }
 
 updateNodeHealth (node: any) {
-  console.log(node.Moment+node.Health);
+  
   if (node.Moment+node.Health <= 90) {
     node.color = {
       border: 'red',
@@ -519,12 +537,14 @@ stopRecording(): void {
         if (type === 'audio') {
           this.nodes.get(this.nodetoUpdate).soundClip = blob;
 
-          this.handleNodeClick(this.nodetoUpdate);
+          
         } else if (type === 'video') {
         
           this.nodes.get(this.nodetoUpdate).videoClip = blob;
         }
+        this.handleNodeClick(this.nodetoUpdate);
     }
+
 });
 
 
@@ -600,12 +620,12 @@ addNode(submitText: string): void {
 
 }
 
-toggleRecording(): void {
+toggleRecording(type:boolean=false): void {
   if (this.selectedNodeIndex !==null) {
       if (this.isRecording) {
           this.stopRecording();
       } else  {
-          this.startRecording();
+          this.startRecording(type);
           this.addNode('');    
       }
           
@@ -615,8 +635,21 @@ toggleRecording(): void {
 toggleVideoRecording (): void {
   if (this.selectedNodeIndex !==null) {
     if (this.isRecordingVideo) {
-     
-      this.speechService.stopListening();
+      this.nodeService.recordingSend(false);
+      this.isRecordingVideo=false;
+      this.stopRecording();
+    }
+    else {
+      this.isRecordingVideo=true;
+      this.startRecording(true);
+      this.addNode('');
+      // Adjusted sequence:
+      this.nodeService.recordingSend(true);
+    
+    
+    
+    }
+    /*  this.speechService.stopListening();
 
 
   
@@ -661,10 +694,11 @@ toggleVideoRecording (): void {
         this.startRecordingVideo();
        
         this.addNode('');    
-    }
-        
+    }*/
   }
-}
+
+  }
+
   
 handleNodeClick(params: any): void {
   
@@ -701,7 +735,7 @@ private handleNodeSelected(params: any): void {
   if (this.selectedNodeIndex !== null) {
       this.nodeClicked.emit(clickedNodeId);
       const node = this.nodes.get(this.selectedNodeIndex);
-
+    
       if (node !== null && this.selectedNodeIndex !== null) {
           this.emitNodeInformation(clickedNodeId);
       }
@@ -714,6 +748,7 @@ private handleNodeSelected(params: any): void {
 private emitNodeInformation(nodeId: any): void {
   this.nodeClicked.emit(nodeId);
   const combinedObjects = this.traverseToOriginal(nodeId, 1, this.nodes, this.edges);
+
   this.nodeService.changeNodeText(combinedObjects);
   this.nodeService.setNodeId(nodeId);
   this.nodeService.SetSiblingData(this.getAdjacentSiblingNodeIds(nodeId));
@@ -809,9 +844,9 @@ private resetHighlightedEdges(): void {
 }
 
 
-  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; fullText: string, id: number; soundClip?: any }[] {
+  traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; fullText: string, id: number; videoClip?:any,soundClip?: any }[] {
     let nodeData = nodes.get(nodeId);
-    let textObj = { text: `${nodeData.user}: ${nodeData.text}`, fullText: `${nodeData.user}: ${nodeData.fullText}`, id: nodeId, soundClip: nodeData.soundClip };  // <-- Updated to be an object
+    let textObj = { text: `${nodeData.user}: ${nodeData.text}`, fullText: `${nodeData.user}: ${nodeData.fullText}`, id: nodeId, soundClip: nodeData.soundClip, videoClip: nodeData.videoClip };  // <-- Updated to be an object
 
     // Base condition: if we reach the original node, stop
     if (nodeId === originalNodeId) {
@@ -988,72 +1023,10 @@ ngOnDestroy(): void {
 
     //video recording functions
 
-    mediaChunks: any[] = [];
-    mediaBlob: Blob | null = null;
-
-    startRecordingVideo() {
-      // Define media constraints
-      const constraints = {
-        audio: {
-          echoCancellation: true
-      }, 
-      video: true 
-      };
-  
+   
       
   
   
-      navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-          this.mediaRecorder = new MediaRecorder(stream);
-          this.stream = stream;
-          this.liveVideoElement.nativeElement.srcObject = stream;
-        this.liveVideoElement.nativeElement.muted = true;
-          this.liveVideoElement.nativeElement.play();
-          // Common chunks array for both audio and video
-          this.mediaChunks = [];
-  
-          this.mediaRecorder.ondataavailable = (event: BlobEvent) => {
-              this.mediaChunks.push(event.data);
-          };
-  
-          this.mediaRecorder.onstop = () => {
-            const mediaType = 'video/webm';
-            this.mediaBlob = new Blob(this.mediaChunks, { type: mediaType });
-            this.mediaBlobURL = URL.createObjectURL(this.mediaBlob); // Store the URL
-              // Now, you can use this.mediaBlob to play the audio/video, or save it somewhere
-          };
-  
-          this.mediaRecorder.start();
-      }).catch(error => {
-          console.warn("Error accessing media:", error);
-      });
-  }
-  
-  stopAndReturnVideo(): Promise<{ blob: Blob} | null> {
-    return new Promise((resolve, reject) => {
-        if (!this.mediaRecorder) {
-            console.warn("Media recorder is not initialized.");
-            resolve(null);
-            return;
-        }
-  
-        this.mediaRecorder.onstop = () => {
-            const mediaType = this.mediaRecorder.mimeType.startsWith('video/') ? 'video' : 'audio';
-            this.mediaBlob = new Blob(this.mediaChunks, { type: mediaType });
-           
-    
-            // Store the blob URL for later use
-            this.mediaBlobURL = URL.createObjectURL(this.mediaBlob);
-            resolve({ blob: this.mediaBlob});
-        };
-  
-        this.mediaRecorder.onerror = (e: Event) => {
-            reject(e);
-        };
-  
-        this.mediaRecorder.stop();
-    });
-  }
     
 
 
@@ -1093,32 +1066,6 @@ ngOnDestroy(): void {
     }*/
    
 
-   
-   
-    
-    playRecordedVideo(data:number) {
-      this.isPlaying = true;
-   
-          const mediaBlobURL = URL.createObjectURL(this.nodes.get(data).videoClip);
-      
-          setTimeout(() => {
-this.playbackVideoElement.nativeElement.src = mediaBlobURL;
-}, 1000);
-  
-   
-   
-
-    
-          
-  }
-  onVideoLoaded() {
-    this.playbackVideoElement.nativeElement.play();
-  }
-    
-    
-    onPlaybackEnded() {
-      this.isPlaying = false;
-    }
   }
   
   

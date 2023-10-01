@@ -5,6 +5,9 @@
   <button class="btn btn-primary"(click)="simulate('ranked')">Simulate ranked</button>
   <button class="btn btn-primary"(click)="simulate('normal')">Simulate normal mode</button>
 </div>
+<div  [ngClass]="{'slidemobile':deviceType,'slidedesktop':!deviceType}" class="slide-in-modal" #secondModal (click)="closeSecondModal()">
+
+</div>
 
 <div class="modal1" [ngClass]="{'modal1mobile':deviceType,'modal1desktop':!deviceType}" #firstModal (click)="closeFirstModal()">
   
@@ -38,63 +41,6 @@
 
   </div>
 </div>
-
-
-<div  [ngClass]="{'slidemobile':deviceType,'slidedesktop':!deviceType}" class="slide-in-modal" #secondModal (click)="closeSecondModal()">
-  <div  [ngClass]="{'slidecontentmobile':deviceType,'slidecontentdesk':!deviceType}" class="modal-content1 bg-black text-white"#secondModal (mousedown)="startDrag($event)"(click)="$event.stopPropagation()">
-    <div class="d-flex justify-content-center mt-3">  
-    
-      <button class="btn btn-outline-white text-white" style="position:absolute; top:10px; left:10px; z-index: 500;" (click)="togglePanel(-1)">
-        <i class="fas fa-times"></i>
-      </button>
-      
-      <div *ngIf="deviceType" class="drag-handle centered" ></div>
-    </div>
-    
-    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; width:390px; height:25vh;">
-     
-      <div style="display:flex; justify-content: center;">
-      <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggle')">
-        <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>        
-        <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>  
-     </button>
-     <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggleVideo')">
-      <i *ngIf="!isRecording" class="fas fa-video" style="font-size: 20px;"></i>        
-      <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>  
-     </button>
-      </div>
-
-    
-    
-   
-
-        <div style="position:absolute; bottom:0; display:flex; justify-content: center; width:100%;">
-        <form (submit)="onSubmitit($event)">
-      
-              <div style="position: relative; bottom:0; flex-grow: 1">      
-                  <input 
-                      type="text" 
-                      class="form-control" 
-                      placeholder='Respond to speaker'
-                      aria-label="value" 
-                      aria-describedby="button-addon2" 
-                      [(ngModel)]="value" 
-                      name="inputValue" 
-                      style="padding-right: 40px;"  
-                  >
-              </div>
-              
-         </form>
-         <button *ngIf="value.length > 0" style="position:absolute; right:5px;" class="btn btn-outline-light bg-black rounded-circle" type="submit" id="button-addon2">
-          <i class="fas fa-arrow-right"></i>
-        </button> 
-        </div>
-      </div>
-
-      
-  </div>
-</div>
-
 
 
 <div  class="bg-black d-flex justify-content-center" style="width:100%;height:100%;">
@@ -132,7 +78,11 @@
               </button>
             </div>
           </div>
-        
+          <div style="position:relative; flex:auto; display: flex; overflow-y:hidden; flex-direction: column;">
+          <div style="flex: auto;position:absolute; bottom:60px; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:3000;">
+            <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="flex:auto"></video>
+         
+          </div>
           <div *ngIf="panelType=='chat'" class="chat-output-area text-white" style="position: relative; display:flex; flex: auto; flex-direction: column;  overflow:auto;
           overflow-wrap: break-word; /* Modern browsers */">
             
@@ -156,9 +106,64 @@
             <app-rank-tab></app-rank-tab>
           
           </div>
-         
+        </div>
           
          
+
+  <div  [ngClass]="{'slidecontentmobile':deviceType,'slidecontentdesk':!deviceType}" #secondModalContent class="modal-content1 text-white" style="background-color:  #333;" #secondModal (mousedown)="startDrag($event)"(click)="$event.stopPropagation()">
+     
+    
+      <button class="btn btn-outline-white text-white" style="position:absolute; top:0px; left:0px; z-index: 500;" (click)="closeSecondModal()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+  
+    
+    <div *ngIf="selectedButton===1" style="overflow-x:hidden;position:relative; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px;">
+     
+ 
+
+    
+    
+   
+
+        <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
+        <form (submit)="onSubmitit($event)">
+      
+              <div style="position: relative; bottom:0; flex-grow: 1">      
+                  <input 
+                      type="text" 
+                      class="form-control" 
+                      placeholder='Respond to speaker'
+                      aria-label="value" 
+                      aria-describedby="button-addon2" 
+                      [(ngModel)]="value" 
+                      name="inputValue" 
+                      
+                  >
+              </div>
+              
+         </form>
+         <button *ngIf="value.length > 0" style="position:absolute; right:5%;" class="btn btn-outline-light bg-black rounded-circle" type="submit" id="button-addon2">
+          <i class="fas fa-arrow-right"></i>
+        </button> 
+        </div>
+        <div class="space-between d-flex">
+          <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger rounded-circle" style="width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"(click)="toggle('toggle')">
+            <i *ngIf="!isRecording" class="fa fa-microphone" ></i>        
+            <i *ngIf="isRecording" class="fa fa-stop" ></i>  
+         </button>
+     
+         <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger rounded-circle"style="width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"(click)="toggle('toggleVideo')">
+          <i *ngIf="!isRecording" class="fas fa-video" ></i>        
+          <i *ngIf="isRecording" class="fa fa-stop" ></i>  
+         </button>
+        </div>
+        
+      </div>
+
+      
+  </div>
+
 
             <mat-menu #menu="matMenu" xPosition="before">
               <button mat-menu-item (click)="togglePanel(6)">About</button>

@@ -24,6 +24,7 @@
     flex-direction: column;
     position:relative;
     bottom:0;
+    overflow-x:hidden;
   }
   .darken {
     background-color: black;
@@ -180,7 +181,6 @@
 /* Slide-In Modal Styling */
 .slide-in-modal {
   background-color: transparent;
-  transition: transform 0.2s ease-in;
   z-index: 1500; /* Updated z-index */
 }
 
@@ -202,41 +202,47 @@
 
 .slidedesktop {
 
+  display:flex;
   position: fixed;
-  bottom:20px;
+  bottom: 0;
+  left: 0;
   right:0;
-  width: 400px;
-  height: 25vh;
+  width: 100%;
+  height: 100%;
   justify-content: center;
-
-  z-index: 1500; /* Updated z-index */
+  align-items: end;
  
-  transform: translateX(100%);
+  z-index: 1500; /* Updated z-index */
+  transform: translateY(100%);
 
 }
 
 .slidecontentmobile {
  
-    position: relative;
+    position: absolute;;
     border-top-left-radius:10px;
     border-top-right-radius:10px;
     bottom:0;
-    left:0;
-    
-    width: 390px;
+    right:0;
+    transition: width 0.5s;
+    width: 0%;
     height: auto;
-    padding-bottom:20px;
+    overflow:hidden;
+    z-index:1600;
 
 }
 
 .slidecontentdesk {
-  position: absolute;
+  position: absolute;;
   border-top-left-radius:10px;
   border-top-right-radius:10px;
-  right:0;
   bottom:0;
-  width: 400px;
-  height: 100%;
+  right:0;
+  transition: width 0.5s;
+  width: 0%;
+  height: auto;
+  overflow:hidden;
+  z-index:1600;
  
 }
 
@@ -247,4 +253,7 @@
   transform: translateY(0);
 }
 
+.modal-content1.open {
+  width:100%;
+}
 

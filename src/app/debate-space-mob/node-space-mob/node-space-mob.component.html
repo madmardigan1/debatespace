@@ -1,11 +1,25 @@
+
 <div class="container" [ngClass]="{'rotated': isRotated}">
- 
-    <div style="position:absolute; flex:auto; z-index:99999; ">
-      <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="flex:auto"></video>
-     <video #playbackVideoElement controls (ended)="onPlaybackEnded()" (loadeddata)="onVideoLoaded()" style="flex:auto;" *ngIf="isPlaying"></video>
+
+<div *ngIf="zoomType === 3" class="full-screen-overlay bg-black text-white" style="display:flex; width:100%;height:100%; flex-grow:1; position:absolute; z-index:1001;" >
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">Slide 1: Lorem ipsum...</div>
+        <div class="swiper-slide">Slide 2: Some other text...</div>
+        <div class="swiper-slide">Slide 3: More text...</div>
     </div>
-    <div #visNetwork id="mynetwork" class="nodes" style="height:100%; width:100%;  transition: transform 0.5s;"> 
-    </div>
+</div>
+
+</div>
+
+  <div style="position:absolute;right:2px; bottom:3px; display:flex;margin-right:2px; z-index:1001;">
+    <button class="bg-white text-black" (click)="zoomMode(1)">1</button>
+    <button class="bg-white text-black" (click)="zoomMode(2)">2</button>
+    <button class="bg-transparent text-white" (click)="zoomMode(3)">3</button>
+  </div>
+
+<div #visNetwork id="mynetwork" class="nodes" style="height:100%; width:100%;  transition: transform 0.5s; z-index:2;"></div>
+
         <!--<div class="d-flex justify-content-center" style="position:absolute;bottom:0px;right:-10px;">
             <div  class="d-flex">
               <button [disabled]="!siblingChecker"class="btn btn-outline-white rounded-circle" style="margin-left:2px; margin-right:2px;"  type="submit"  (click)="previousId()">

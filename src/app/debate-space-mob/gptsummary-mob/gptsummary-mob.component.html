@@ -1,5 +1,9 @@
 
   <div style="position:absolute; flex:auto;width:100%; display:flex;flex-direction:column; height:100%;">
+    <div style="position:absolute; flex:auto; z-index:99999; ">
+    
+     <video #playbackVideoElement controls (ended)="onPlaybackEnded()" (loadeddata)="onVideoLoaded()" style="flex:auto;" *ngIf="isPlaying"></video>
+    </div>
   <div *ngIf="lines" style="flex: auto; position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%;">
     <div *ngFor="let line of lines; let i = index">
         <div class="summary-container d-flex" style="flex:auto;position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
@@ -25,7 +29,7 @@
 <button  class="btn rounded-circle d-flex align-items-center justify-content-center"
 style="width:30px; height:30px; border-radius:50%; background-color: rgb(152, 5, 152); border: none; padding: 0; margin-left:2px; margin-right:2px;" 
 type="submit" 
-(click)="playRecordedVideo(line.id)">
+(click)="playRecordedVideo(line.videoClip)">
 <i class="fa fa-play" style="color: white; margin: 0;"></i>
 </button>
      

@@ -92,7 +92,9 @@ export class SpeechService {
   startRecording(includeVideo: boolean = false) {
     // Define media constraints
     const constraints = {
-        audio: true,
+      audio: {
+        echoCancellation: true
+    }, 
         video: includeVideo
     };
 
@@ -233,6 +235,23 @@ stopAndReturnMedia(): Promise<{ blob: Blob, type: 'audio' | 'video' } | null> {
 
 
 
+
+private stream: MediaStream | null = null;
+
+  getStream(constraints: MediaStreamConstraints): Promise<MediaStream> {
+    return navigator.mediaDevices.getUserMedia(constraints).then(s => {
+      this.stream = s;
+      return s;
+    });
+  }
+
+  bindStreamToVideoElement(videoElement: HTMLVideoElement): void {
+    if (this.stream) {
+      videoElement.srcObject = this.stream;
+      videoElement.muted = true;
+      videoElement.play();
+    }
+  }
   
 }
 
