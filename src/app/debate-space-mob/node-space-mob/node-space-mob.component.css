@@ -27,6 +27,7 @@
   bottom: 40%; /* adjust as needed */
   left: 25%;  /* adjust as needed */
   color:green;
+  z-index:10;
 }
 
 .fas.fa-arrow-down {
@@ -35,6 +36,7 @@
   top:40%; /* adjust as needed */
   right: 25%;  /* adjust as needed */
   color:red;
+  z-index:10;
 }
 
 

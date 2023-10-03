@@ -129,7 +129,12 @@ onVideoLoaded() {
   this.playbackVideoElement.nativeElement.play();
 }
   onPlaybackEnded() {
-    this.isPlaying = false;
-  }
+   // this.isPlaying = false;
   }
 
+  closeVideo(event:Event) {
+    event.stopPropagation
+    this.isPlaying = false;
+   
+  }
+}

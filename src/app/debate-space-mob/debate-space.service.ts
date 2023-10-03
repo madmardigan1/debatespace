@@ -6,17 +6,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class DebateSpaceService {
 
-  private buttonType = new BehaviorSubject<string>(''); 
+  private buttonType = new BehaviorSubject<string[]>(['','']); 
   private emojiType = new BehaviorSubject<string>(''); 
  
   constructor() { }
 
 
-  Toggle(level: string): void {
-    this.buttonType.next(level);
+  Toggle(level: string, reaction:string): void {
+    this.buttonType.next([level,reaction]);
   }
 
-  getToggle(): Observable<string> {
+  getToggle(): Observable<string[]> {
     return this.buttonType.asObservable();
   }
 

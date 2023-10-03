@@ -28,7 +28,7 @@ export class ChatSubmitMobComponent {
           this.value = '';
       }
       if (this.value && this.toggleChatsText == "Respond to speaker") {
-        this.chatSubmit.sendNodeText(this.value);
+        this.chatSubmit.sendNodeText(this.value,'');
         this.value = '';
       }
     }

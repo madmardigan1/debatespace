@@ -79,7 +79,7 @@
             </div>
           </div>
           <div style="position:relative; flex:auto; display: flex; overflow-y:hidden; flex-direction: column;">
-          <div style="flex: auto;position:absolute; bottom:60px; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:3000;">
+          <div style="flex: auto;position:absolute; bottom:60px; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:200;">
             <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="flex:auto"></video>
          
           </div>
@@ -129,7 +129,7 @@
         <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
         <form (submit)="onSubmitit($event)">
       
-              <div style="position: relative; bottom:0; flex-grow: 1">      
+              <div style="position: relative; bottom:0; flex-grow: 1; border-radius:999px;">      
                   <input 
                       type="text" 
                       class="form-control" 
@@ -143,7 +143,7 @@
               </div>
               
          </form>
-         <button *ngIf="value.length > 0" style="position:absolute; right:5%;" class="btn btn-outline-light bg-black rounded-circle" type="submit" id="button-addon2">
+         <button *ngIf="value.length > 0" style="position:absolute; right:20px;" class="btn btn-black bg-white rounded-circle" type="submit" id="button-addon2">
           <i class="fas fa-arrow-right"></i>
         </button> 
         </div>
@@ -178,11 +178,11 @@
           <button class="btn btn-outline-white text-white" (click)="togglePanel(3)" style="position:absolute; bottom:10px;left:10px;border-radius:50%; width:50px;height:50px;z-index:1000;">
             <i class="fas fa-users"></i>
           </button>
-          <button mat-icon-button [matMenuTriggerFor]="emoji" class="btn btn-outline-white text-white text-center mt-0 p-0" style="position:absolute;align-items:center; border-radius:50%;bottom:10px;right:10px; width:50px;height:50px;z-index:1000;">
+          <button mat-icon-button [matMenuTriggerFor]="emoji" class="btn btn-outline-white text-white text-center mt-0 p-0" style="position:absolute;align-items:center; border-radius:50%;bottom:10px;right:10px; width:50px;height:50px;z-index:900;">
             <i class="far fa-smile"></i>
           </button>
-          <mat-menu #emoji="matMenu" xPosition="before">
-            <div class="emoji-grid">
+          <mat-menu #emoji="matMenu" xPosition="before" style="z-index:2000;">
+            <div class="emoji-grid" style="z-index:2000;">
               <!-- Positive Emojis - Green icons -->
               <div class="emoji-cell">
                 <button class="emoji-button text-green" (click)="sendEmoji('positive')">
@@ -213,13 +213,32 @@
          <!-- <button class="btn btn-outline-light bg-black" (click)="togglePanel(2)" style="opacity:.8;position:absolute; bottom:10px;right:10px;border-radius:50%; width:50px;height:50px;z-index:1000;">
           
           </button>-->
-          <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen" style="position:absolute; bottom:70px;right:10px;">
-          <button (click)="togglePanel(1)" class="btn btn-outline-light bg-danger" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:1000;">
+          <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen && !isRanked" style="position:absolute; bottom:70px;right:10px; z-index:1000;">
+          <button (click)="togglePanel(1)" class="btn btn-outline-light bg-danger" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:2;">
           <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i> 
           <i *ngIf="isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>   
           </button>
 
           </div>
+
+          <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen && isRanked" style="display:flex; position:absolute; bottom:70px;right:10px; z-index:1000;">
+            <button (click)="togglePanelReaction('negative')" class="btn btn-outline-light bg-black mr-2" style="opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
+              <span class="fa-stack">
+                <i class="fas fa-microphone fa-stack-1x" style="padding-right:30px;"></i>
+                <i class="fas fa-minus fa-stack-1x" style="color: red; bottom:10px; padding-right:10px; font-size:12px; "></i>
+              </span>
+              
+            </button>
+            <button (click)="togglePanelReaction('positive')" class="btn btn-outline-light bg-black" style="position:relative; opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
+              <span class="fa-stack">
+                <i class="fas fa-microphone fa-stack-1x" style=" padding-right:30px;"></i>
+                <i class="fas fa-plus fa-stack-1x" style="color:green; bottom:10px; padding-right:10px; font-size:12px; "></i>
+              </span>
+              
+              </button>
+  
+            </div>
+
           </div>
             
    </div>

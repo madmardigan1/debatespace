@@ -70,11 +70,11 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   private highlightedEdges: any[] = [];
   isPanelExpanded = false;
   nodetoUpdate = 1;
- 
+ nodeIdCounter = 1;
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", user: "Steve", Health: 100, Moment: 0, videoClip: null, soundClip: null, commentType: 'good' },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, Moment: 0, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -121,9 +121,11 @@ ngOnInit(): void {
   
 
   this.subscription = this.chatSubmit.getNodeText().subscribe(text => {
-    this.submitText = text;
+    this.submitText = text[0];
     if (this.submitText !== '') {
-      this.submitNode(this.submitText);
+      
+      this.submitNode(this.submitText, text[1]);
+      
     }
   });
 
@@ -244,23 +246,23 @@ onTouchEnd(event: Event) {
       const deltaX = endX - this.startX;
 
       if (deltaY > 50) {
-          console.log('Swiped down!');
+        
           this.down();
           this.currentIndex=0;
           this.shownSlide=this.slidesToShow[this.currentIndex];
       } else if (deltaY < -50) {
-          console.log('Swiped up!');
+     
           this.up();
           this.currentIndex=0;
           this.shownSlide=this.slidesToShow[this.currentIndex];
       }
 
       if (deltaX > 50) {
-          console.log('Swiped right!');
+       
           this.nextId();
           this.showNextSlide();
       } else if (deltaX < -50) {
-          console.log('Swiped left!');
+       
           this.previousId();
           this.showPreviousSlide();
       }
@@ -302,25 +304,61 @@ startTimer() {
   this.timerId = setInterval(() => {
    
     this.nodes.forEach(node => {
-      const test = this.getSiblingNodeId(node.id);
-       
-  
-      if (test==null) {
-        //if the new node has not been responded too, it gains moment every x seconds
-        const parentTest = this.getParentNodeId(node.id);
-        if (parentTest) {
-          this.nodes.get(parentTest).Health -=1;
-          this.updateNodeHealth(this.nodes.get(parentTest));
+      node.label= "Health: "+String(node.Health) + "\n" + "Moment: "+String(node.Moment);
+      if (node.CounterStatus.length>0) {
+        node.Health = 100;
+        node.CounterStatus.forEach((element: any) => {
+            if (element.status==='active') {
+              const x = this.nodes.get(Number(element.id));
+              const y = x.Moment;
+              element.value-= 1*(y/10)*Math.log10(x.Positive+x.Negative+1);
+            }
+          
+            node.Health = node.Health + element.value;
+        });
 
-        }
-        
+
+      }
+      if (node.CounterStatus.length === 0) {
+        node.Health = 100;
     }
-
-
-
+    
+    if (node.Health > 95) {
+        node.color = {
+            background: 'black',
+            border: 'white'
+        };
+        node.borderWidth = 2;
+        node.shadow = {
+            enabled: true,
+            color: 'green',
+            size: 30,
+            x: 5,
+            y: 5
+        };
+    } else if (node.Health >= 50 && node.Health <= 95) {
+        node.shadow = {
+            enabled: false
+        };
+    } else if (node.Health < 50) {
+        node.shadow = {
+            enabled: true,
+            color: 'red',
+            size: 30,
+            x: 5,
+            y: 5
+        };
+    }
+    node.Health = parseFloat(node.Health.toFixed(2));
+    this.nodes.update(node);
+    
+      if (node.Health<=0) {
+        this.deleteNodeAndDescendants(node.id);
+      
+      }
     })
     
-  }, 1000);
+  }, 300);
 }
 
 
@@ -330,12 +368,12 @@ private initializeSubscriptions() {
 
   this.subscriptions.push(
   this.debateSpace.getToggle().subscribe(type => {
-    if (type === "play") {
+    if (type[0] === "play") {
       this.play();
-    } else if (type === "toggle") {
-      this.toggleRecording();
-    } else if (type === "toggleVideo"){
-      this.toggleVideoRecording();
+    } else if (type[0] === "toggle") {
+      this.toggleRecording(false,type[1]);
+    } else if (type[0] === "toggleVideo"){
+      this.toggleVideoRecording(type[1]);
     }
 
   }),
@@ -402,7 +440,7 @@ private initNetwork() {
       hierarchical: { direction: "UD", sortMethod: "directed", shakeTowards: "roots" }
     },
     nodes: {
-      physics: true,
+      physics: false,
       shadow: true,
       shape: this.nodeShape,
       borderWidth: 2,
@@ -455,69 +493,7 @@ private initNetwork() {
 }
 
 private addEventListeners() {
-  // Event listeners for the network
-  /*
-  this.network.on('hoverNode', params => {
-    this.network.setOptions({ physics: false });
-    
-    const nodeId = params.node;
-    const node: any = this.nodes.get(nodeId);
-
-    
-    
- 
-  
-    
-    if (node && node.shape === "circularImage") {
-      // Store the current position of the node
-      node.storedX = node.x;
-      node.storedY = node.y;
-
-      node.originalImage = node.image;
-      node.shape = 'circle';
-      node.size = 20;
-      node.image = undefined;
-      node.borderWidth = 2;
-      node.color = {
-        border: 'white',
-        background: 'black',
-        highlight: {
-          background: 'black',
-        }
-      };
-      this.nodes.update(node);
-      this.network.redraw();
-    }
-});
-
-this.network.on('blurNode', params => {
-    const nodeId = params.node;
-    const node: any = this.nodes.get(nodeId);
-
-    if (node && node.originalImage && node.shape == 'circle') {
-      node.image = node.originalImage;
-      node.shape = 'circularImage';
-      node.borderWidth = 2;
-      node.color = {
-        border: 'white',
-        background: 'black'
-      };
-
-      // Restore the original position of the node
-      if (node.storedX !== undefined && node.storedY !== undefined) {
-        node.x = node.storedX;
-        node.y = node.storedY;
-
-        // Remove the stored coordinates to clean up
-        delete node.storedX;
-        delete node.storedY;
-      }
-
-      this.nodes.update(node);
-    }
-    
-    this.network.setOptions({ physics: true });
-});*/
+  // Add event listeners for network events
 
 
   this.network.on('click', params => {
@@ -554,47 +530,19 @@ thumbdown(): void {
           this.thumbsPosition.x = domPos.x + 40; 
           this.thumbsPosition.y = domPos.y;
         }
-      nodeData.Moment -= 1;
-      this.animationState = 'down';
-      this.updateNodeHealth(nodeData);
+        this.animationState = 'down';
+        setTimeout(() => {
+          this.animationState = 'void';
+        }, 500);
+      nodeData.Negative +=1;
+      nodeData.Moment = Math.abs(nodeData.Positive/nodeData.Negative);
+      this.nodes.update(nodeData);
       
       
     }
   }
 }
 
-updateNodeHealth (node: any) {
-  
-  if (node.Moment+node.Health <= 90) {
-    node.color = {
-      border: 'red',
-      background: node.color?.background || '#FFFFFF'
-    };
-    node.shadow = {
-      enabled: true,
-      color: 'red',
-      size: 20,
-      x: 0,
-      y: 0
-    };
-  }
-  if (node.Moment+node.Health >= 100) {
-    node.color = {
-      border: 'green',
-      background: node.color?.background || '#FFFFFF'
-    };
-    node.shadow = {
-      enabled: true,
-      color: 'green',
-      size: 20,
-      x: 0,
-      y: 0
-    };
- 
-
-}
-    this.nodes.update(node);
-}
 
 
 thumbup(): void {
@@ -614,23 +562,28 @@ thumbup(): void {
          this.thumbsPosition.y = domPos.y;
        }
       
-      nodeData.Moment += 1;
+     
       this.animationState = 'up';
       setTimeout(() => {
         this.animationState = 'void';
       }, 500);
-      this.updateNodeHealth(nodeData);
-     
-     
+      nodeData.Positive +=1;
+      if (nodeData.Negative !=0) {
+      nodeData.Moment = Math.abs(nodeData.Positive/nodeData.Negative);
+      }
+      else {
+        nodeData.Moment =nodeData.Positive;
+      }
+      this.nodes.update(nodeData);
     }
   }
 }
 
 
-submitNode(submitText: string): void {
+submitNode(submitText: string, Reaction:string): void {
  this.stopRecording();
 
- this.addNode(submitText);
+ this.addNode(submitText, Reaction);
 }
 
 startRecording (type:boolean=false) : void {
@@ -690,7 +643,7 @@ stopRecording(): void {
 }
 
 
-addNode(submitText: string): void {
+addNode(submitText: string, reaction:string): void {
   if (this.selectedNodeIndex !== null) {
     let selectedImage: string;
     let selectedName: string;
@@ -704,25 +657,44 @@ addNode(submitText: string): void {
         this.selectedPicture -= 1;
         selectedName = 'Steve';
     }
-    if (this.selectedNodeIndex!=1) {
-      const parentNode =this.nodes.get(Number(this.getParentNodeId(this.selectedNodeIndex)));
-      parentNode.Health=100;
-      this.updateNodeHealth(parentNode);
-      this.nodes.update(parentNode);
-  }
-
-    const newNodeId = this.nodes.length + 1
+   
+    this.nodeIdCounter+=1;
+    const newNodeId = this.nodeIdCounter;
+    
     this.nodetoUpdate = newNodeId;
+     if (reaction === 'negative') {
+      const parentNode= this.nodes.get(this.selectedNodeIndex);
+
+      if(parentNode && parentNode.CounterStatus) {
+        parentNode.CounterStatus.push({id: this.nodetoUpdate, value: 0, status: 'active'});
+        console.log("test");
+    }
+    if (parentNode.id !=1){
+    const parentParentNode = this.nodes.get(Number(this.getParentNodeId(parentNode.id)));
+    if (parentParentNode && parentParentNode.CounterStatus) {
+        const item = parentParentNode.CounterStatus.find((item:any) => item.id === parentNode.id);
+        if (item) {
+            item.status = 'inactive';
+        }
+    }
+  }
+     }
+     
     this.nodes.add({
         id: newNodeId,
         label: this.wrapText(submitText, 20),
+       
         text: this.wrapText(submitText , 20),
         fullText: submitText,
         shape: this.nodeShape,
         image: selectedImage,
         user: selectedName,
         Moment: 0,
+        Positive: 0,
+        Negative: 0,
+        CounterStatus: [],
         Health: 100,
+        Reaction: reaction,
         soundClip: null,
         videoClip: null
     });
@@ -752,10 +724,10 @@ addNode(submitText: string): void {
         }, 1);
     });
 }
-
+  
 }
 
-toggleRecording(type:boolean=false): void {
+toggleRecording(type:boolean=false, reaction:string): void {
   if (this.selectedNodeIndex !==null) {
       if (this.isRecording) {
           this.isRecordingType.emit('soundTrue');
@@ -763,13 +735,13 @@ toggleRecording(type:boolean=false): void {
       } else  {
         this.isRecordingType.emit('soundFalse');
           this.startRecording(type);
-          this.addNode('');    
+          this.addNode('', reaction);    
       }
           
     }
 }
 
-toggleVideoRecording (): void {
+toggleVideoRecording (reaction:string): void {
   if (this.selectedNodeIndex !==null) {
     if (this.isRecordingVideo) {
       this.isRecordingType.emit('videoTrue');
@@ -781,7 +753,7 @@ toggleVideoRecording (): void {
       this.isRecordingType.emit('videoFalse');
       this.isRecordingVideo=true;
       this.startRecording(true);
-      this.addNode('');
+      this.addNode('', reaction);
       // Adjusted sequence:
       this.nodeService.recordingSend(true);
     
@@ -1073,6 +1045,25 @@ getOrderedSiblingNodeIds(nodeId: number): number[] | null {
   return orderedSiblings;
 }
 
+deleteNodeAndDescendants(nodeId: number) {
+  // First, find all children of the node.
+  const childrenEdges = this.edges.get({
+      filter: edge => edge.from === nodeId
+  });
+  
+  // For each child, recursively call the function
+  for (const edge of childrenEdges) {
+      this.deleteNodeAndDescendants(edge.to);
+  }
+  
+  // After all children (and their descendants) are deleted, delete the node itself.
+  this.nodes.remove(nodeId);
+
+  // Also remove all edges associated with this node
+  this.edges.remove({
+      filter: (edge:any) => edge.from === nodeId || edge.to === nodeId
+  });
+}
 
 
 getAdjacentSiblingNodeIds(nodeId: number): { previous: string, next: string } | null {

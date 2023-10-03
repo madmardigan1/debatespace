@@ -14,13 +14,15 @@
           <div class="main body d-flex">
             <p>{{shownSlide.text}}</p>
           </div>
-          <div  class="buttons" style="position:absolute; right:5px;bottom:5px;">
+          <div  class="buttons d-flex align-items-center"  style="position:absolute; right:5px;bottom:5px;">
             <button class="emoji-button text-green mr-3" (click)="thumbup()">
               <i class="fa fa-thumbs-up"></i>
             </button>
-            <button class="emoji-button text-green mr-2" (click)="thumbdown()">
+            <p style="padding:0;margin:0;"><b>{{shownSlide.Positive}}</b></p>
+            <button class="ml-2 emoji-button text-green mr-2" (click)="thumbdown()">
               <i class="fa fa-thumbs-down"></i>
             </button>
+            <p style="padding:0;margin:0;"><b>{{shownSlide.Negative}}</b></p>
           </div>
           <div  class="icons" style="position:absolute; right:5px;top:5px;">
             <i class="fas fa-chart-line"></i> {{shownSlide.Health}}

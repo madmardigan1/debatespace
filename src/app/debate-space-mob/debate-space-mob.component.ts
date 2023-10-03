@@ -75,11 +75,13 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
   private intervalId: any;
   debateFeatures=false;
   isRanked = true;
+  reactionType='neutral';
  
 
 
 
   //other variables
+    commentType=null;
     firstDarkenPane = false;
     secondDarkenPane = false;
     text: string = '';
@@ -134,7 +136,14 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     
     }
     
+    togglePanelReaction(type: string) {
+      this.selectedButton=1
+     
+          this.reactionType=type;
+          this.isSecondModalOpen = true;
+          this.openSecondModal();
     
+    }
     closeSecondModal() {
       this.isSecondModalOpen = false;
       this.secondModalContent.nativeElement.classList.remove('open');
@@ -252,7 +261,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
 
 
     toggle(buttonType: string): void {
-      this.debateSpace.Toggle(buttonType);
+      this.debateSpace.Toggle(buttonType, this.reactionType);
     }
 
     changeIcon(recordType : string) {
@@ -267,6 +276,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       this.selectedButton=togglenumber;
       if (this.selectedButton!=-1){
         if (this.selectedButton==1) {
+          this.reactionType='neutral';
           this.isSecondModalOpen = true;
           this.openSecondModal();
         }
@@ -325,7 +335,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       event.preventDefault(); 
      
        if (this.value) {
-        this.chatSubmit.sendNodeText(this.value);
+        this.chatSubmit.sendNodeText(this.value, this.reactionType);
         this.value = '';
       }
     }
@@ -342,11 +352,6 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     }
 
 
-
-    
-toggleVideo () {
- 
-}
   }
 
   

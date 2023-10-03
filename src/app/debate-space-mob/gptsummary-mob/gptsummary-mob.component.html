@@ -1,9 +1,15 @@
 
   <div style="position:absolute; flex:auto;width:100%; display:flex;flex-direction:column; height:100%;">
-    <div style="position:absolute; flex:auto; z-index:99999; ">
-    
-     <video #playbackVideoElement controls (ended)="onPlaybackEnded()" (loadeddata)="onVideoLoaded()" style="flex:auto;" *ngIf="isPlaying"></video>
-    </div>
+    <div *ngIf="isPlaying" style="position:absolute; flex:auto; z-index:500;">
+      <button class="btn btn-dark rounded-circle" 
+              style="border-radius:50%; width:30px; height:30px; position:absolute; top:5px; left:5px; z-index:501;" 
+              (click)="closeVideo($event)">
+          <i class="fas fa-times" 
+             style="position:absolute;right:0;bottom:2px;color:white; font-size: 20px; width: 100%;"></i>
+      </button>
+      <video #playbackVideoElement controls (ended)="onPlaybackEnded()" (loadeddata)="onVideoLoaded()" style="flex:auto;"></video>
+  </div>
+  
   <div *ngIf="lines" style="flex: auto; position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%;">
     <div *ngFor="let line of lines; let i = index">
         <div class="summary-container d-flex" style="flex:auto;position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
@@ -18,19 +24,26 @@
 
     <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)" *ngIf="!line.expand">{{ line.text }}</button>
     <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)" *ngIf="line.expand">{{ line.fullText }}</button>
-    <div class="d-flex" style="position:relative; right:0;">
+    <div class="d-flex" style="position:relative; right:5;">
     
-      <button *ngIf="line.soundClip" class="btn rounded-circle d-flex align-items-center justify-content-center"
-      style="width:30px; height:30px; border-radius:50%; background-color: rgb(152, 5, 152); border: none; padding: 0; margin-left:2px; margin-right:2px;" 
+      <button *ngIf="line.soundClip" 
+      class="btn btn-outline d-flex align-items-center bg-black" 
+      style=" border-radius: 9999px; border: 1px solid white;" 
       type="submit" 
       (click)="playRecording(line.soundClip)">
-  <i class="fa fa-play" style="color: white; margin: 0;"></i>
+
+  <p class="text-white m-0 mr-4" style="font-size:10px;">Audio</p>
+  <i class="fa fa-play" style="margin-left:2px; color: white; font-size: 12px;"></i>
 </button>
-<button  class="btn rounded-circle d-flex align-items-center justify-content-center"
-style="width:30px; height:30px; border-radius:50%; background-color: rgb(152, 5, 152); border: none; padding: 0; margin-left:2px; margin-right:2px;" 
+
+<button *ngIf="line.videoClip"
+class="btn btn-outline d-flex align-items-center bg-black" 
+style=" border-radius: 9999px; border: 1px solid white;" 
 type="submit" 
 (click)="playRecordedVideo(line.videoClip)">
-<i class="fa fa-play" style="color: white; margin: 0;"></i>
+
+<p class="text-white m-0 mr-4" style="font-size:10px;">Video</p>
+<i class="fa fa-play" style="margin-left:2px; color: white; font-size: 12px;"></i>
 </button>
      
 </div>
