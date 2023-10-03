@@ -74,7 +74,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, Moment: 0, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -196,9 +196,9 @@ if (siblingNodeIds) {
     }
   });
   this.slidesToShow = siblingNodes;
-
   
 }
+
 else {
   this.slidesToShow = [
     this.nodes.get(this.selectedNodeIndex!)
@@ -311,14 +311,16 @@ startTimer() {
             if (element.status==='active') {
               const x = this.nodes.get(Number(element.id));
               const y = x.Moment;
-              element.value-= 1*(y/10)*Math.log10(x.Positive+x.Negative+1);
+
+              element.value-= 1*(y/10)*Math.log10(x.totalPositive + x.Positive +x.Negative+2);
+           
             }
           
             node.Health = node.Health + element.value;
         });
-
-
       }
+        
+
       if (node.CounterStatus.length === 0) {
         node.Health = 100;
     }
@@ -353,9 +355,18 @@ startTimer() {
     this.nodes.update(node);
     
       if (node.Health<=0) {
+           const parentNode= this.nodes.get(this.getParentNodeId(node.id)!);
+        if (node.Reaction === 'positive') {
+          parentNode.totalPositive = 0;
+        }
+          if(parentNode && parentNode.CounterStatus) {
+            parentNode.CounterStatus.splice({id: node.id, value: 0, status: 'active'});
+            console.log("test");
+        }
         this.deleteNodeAndDescendants(node.id);
+        
       
-      }
+    }
     })
     
   }, 300);
@@ -535,7 +546,7 @@ thumbdown(): void {
           this.animationState = 'void';
         }, 500);
       nodeData.Negative +=1;
-      nodeData.Moment = Math.abs(nodeData.Positive/nodeData.Negative);
+      nodeData.Moment = Math.abs((nodeData.Positive+nodeData.totalPositive+1)/nodeData.Negative);
       this.nodes.update(nodeData);
       
       
@@ -569,11 +580,12 @@ thumbup(): void {
       }, 500);
       nodeData.Positive +=1;
       if (nodeData.Negative !=0) {
-      nodeData.Moment = Math.abs(nodeData.Positive/nodeData.Negative);
+      nodeData.Moment = Math.abs((nodeData.Positive+nodeData.totalPositive+1)/nodeData.Negative);
       }
       else {
-        nodeData.Moment =nodeData.Positive;
+        nodeData.Moment =nodeData.Positive + nodeData.totalPositive+1;
       }
+      this.nodes.get(this.getParentNodeId(this.selectedNodeIndex)!).totalPositive +=1;
       this.nodes.update(nodeData);
     }
   }
@@ -689,7 +701,8 @@ addNode(submitText: string, reaction:string): void {
         shape: this.nodeShape,
         image: selectedImage,
         user: selectedName,
-        Moment: 0,
+        Moment: 1,
+        totalPositive: 0,
         Positive: 0,
         Negative: 0,
         CounterStatus: [],
