@@ -14,6 +14,7 @@ import { NodespaceServiceService } from './node-space-mob/nodespace-service.serv
 import { SpeechService } from './node-space-mob/speech-service.service';
 @Component({
   animations: [
+    
     trigger('expandShrink', [
       state('expanded', style({
         height: '100%',

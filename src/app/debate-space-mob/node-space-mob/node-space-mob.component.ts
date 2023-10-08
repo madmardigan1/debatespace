@@ -265,22 +265,26 @@ onTouchEnd(event: Event) {
         
           this.down();
           this.currentIndex=0;
-          this.shownSlide=this.slidesToShow[this.currentIndex];
+         // this.shownSlide=this.slidesToShow[this.currentIndex];
+         this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
       } else if (deltaY < -50) {
      
           this.up();
           this.currentIndex=0;
-          this.shownSlide=this.slidesToShow[this.currentIndex];
+        //  this.shownSlide=this.slidesToShow[this.currentIndex];
+          this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
       }
 
       if (deltaX > 50) {
        
           this.nextId();
-          this.showNextSlide();
+         // this.showNextSlide();
+          this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
       } else if (deltaX < -50) {
        
           this.previousId();
-          this.showPreviousSlide();
+         // this.showPreviousSlide();
+         this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
       }
 
       this.startY = null;
@@ -1239,8 +1243,10 @@ previousId() {
     this.handleNodeClick(
       adjacentSiblingIds.previous
     );
-    this.updateSlidesToShow();
+    
     this.currentIndex=0;
+    this.shownSlide=this.slidesToShow[0];
+  
   } else {
     // Handle the scenario when there is no sibling or an error.
     return;
@@ -1257,8 +1263,10 @@ nextId () {
       this.handleNodeClick(
         adjacentSiblingIds.next
       );
-      this.updateSlidesToShow();
+   
       this.currentIndex=0;
+      this.shownSlide=this.slidesToShow[0];
+     
     } else {
       // Handle the scenario when there is no sibling or an error.
       return;
