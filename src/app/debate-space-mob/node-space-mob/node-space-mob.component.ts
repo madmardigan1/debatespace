@@ -1146,6 +1146,7 @@ deleteNodeAndDescendants(nodeId: number) {
   this.edges.remove({
       filter: (edge:any) => edge.from === nodeId || edge.to === nodeId
   });
+  this.cardService.deleteNode(this.cardId, nodeId);
 }
 
 

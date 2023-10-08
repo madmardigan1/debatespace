@@ -243,6 +243,34 @@ updateCardNode(id: string, node: any, edge: any): void {
   }
 }
 
+deleteNode(cardId: string, nodeId: number): void {
+  // Find the card with the matching id
+  const cardToUpdate = this.cards.getValue().find(card => card.id === cardId);
+
+  if (cardToUpdate) {
+      if (cardToUpdate.nodes) {
+          // Check if the node exists
+          const nodeExists = cardToUpdate.nodes.some(node => node.id === nodeId);
+
+          if (nodeExists) {
+              // Remove the node
+              cardToUpdate.nodes = cardToUpdate.nodes.filter(node => node.id !== nodeId);
+
+              // Remove the associated edges
+              cardToUpdate.edges = cardToUpdate.edges!.filter(edge => edge.from !== nodeId && edge.to !== nodeId);
+
+              // Optionally, you can update the BehaviorSubject with the updated list of cards
+              const updatedCards = this.cards.getValue();
+              this.cards.next(updatedCards);
+          } else {
+              console.error(`Node with id ${nodeId} not found in card ${cardId}!`);
+          }
+      }
+  } else {
+      console.error(`Card with id ${cardId} not found!`);
+  }
+}
+
 
 
 
