@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ChatSubmitService {
 
   private chatInfo = new BehaviorSubject<string>(''); 
-  private nodeInfo = new BehaviorSubject<string[]>(['','']); 
+  private nodeInfo = new Subject<string[]>(); 
   private linkId = new BehaviorSubject<number>(0);
  
   constructor() { }
@@ -29,8 +29,8 @@ export class ChatSubmitService {
  getLinkId(): Observable<number> {
     return this.linkId.asObservable();
   }
-  sendNodeText(text: string, reaction:string): void {
-    this.nodeInfo.next([text, reaction]);
+  sendNodeText(text: string, reaction:string, tag: string): void {
+    this.nodeInfo.next([text, reaction, tag]);
     
   }
 

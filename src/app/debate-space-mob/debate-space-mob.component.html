@@ -50,35 +50,34 @@
     overflow-y:hidden;">
    
     
-    <div class="nodeArea"  [@expandShrink]="nodeState" >
-      <app-node-space-mob #nodeSpace [userType]="userType" [isRanked]="isRanked" [inputdata]="card.description" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
+    <div class="nodeArea">
+      <app-node-space-mob #nodeSpace [userType]="userType" [isRanked]="isRanked" [inputdata]="card.description" [cardId]="card.id" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
      </div>
   
-     <div class="theRest" [@expandShrinkrest]="theRestState">
+     <div class="theRest" [@expandShrinkrest]="theRestState" >
      
          <div class="viewsecond bg-black">
           <div class="d-flex bg-dark justify-content-between" style="height:auto;">
+            <button class="btn btn-outline-white text-white" (click)="togglePanel(3)">
+              <i class="fas fa-users" style="font-size:15px;"></i>
+            </button>
             <div class="d-flex">
-              <button class="btn btn-white text-white padding-right-3" (click)="receiveValue(false)">
-                <i class="fas fa-caret-down"></i>
+              <button  [ngClass]="{'btn-danger': panelType === 'nodes'}" class="btn btn-white text-white padding-right-3" (click)="toggleFirstPanel('nodes')">
+                Nodes
               </button>
               <button class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'chat'}"style="padding:4px;margin-right:2px; font-size:15px;" (click)="toggleFirstPanel('chat')">Chat</button>
               <button class="btn btn-white text-white padding-right-3" [ngClass]="{'btn-danger': panelType === 'summary'}" style="padding:4px;margin-right:2px;;font-size:15px;"(click)="toggleFirstPanel('summary')">Summary</button>
               
-              <button class="btn btn-white text-white padding-right-3" (click)="fullScreen(true)">
-                <i class="fas fa-caret-up"></i>
-              </button>
             </div>
             <div class="d-flex align-items-center" style="position:relative;">
-              <button mat-icon-button [matMenuTriggerFor]="shareMenu" class="btn btn-outline-white bg-dark text-center mt-0 p-0">
-                <i class="far fa-share-square text-white" style="font-size:15px;"></i>
-              </button>
+            
+             
               <button mat-icon-button [matMenuTriggerFor]="menu" class="btn btn-outline-white bg-dark text-center mt-0 p-0">
                 <i class="fas fa-ellipsis-h text-white" style="font-size:15px;"></i>
               </button>
             </div>
           </div>
-          <div style="position:relative; flex:auto; display: flex; overflow-y:hidden; flex-direction: column;">
+          <div  style="position:relative; flex:auto; display: flex; overflow-y:hidden; flex-direction: column;">
           <div style="flex: auto;position:absolute; bottom:60px; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:200;">
             <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="flex:auto"></video>
          
@@ -117,8 +116,31 @@
         <i class="fas fa-chevron-right"></i>
       </button>
   
-    
-    <div *ngIf="selectedButton===1" style="overflow-x:hidden;position:relative; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px;">
+    <div *ngIf="tagStatus===false" style="overflow-x:hidden;position:relative; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px;">
+      <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
+        <form (submit)="addTag($event)">
+      
+              <div style="position: relative; bottom:0; flex-grow: 1; border-radius:999px;">      
+                  <input 
+                      type="text" 
+                      class="form-control" 
+                      placeholder='Custom Tag'
+                      aria-label="value" 
+                      aria-describedby="button-addon2" 
+                      [(ngModel)]="tagvalue" 
+                      name="inputValue" 
+                      
+                  >
+              </div>
+              
+         </form>
+         <button *ngIf="value.length > 0" style="position:absolute; right:20px;" class="btn btn-black bg-white rounded-circle" type="submit" id="button-addon2">
+          <i class="fas fa-arrow-right"></i>
+        </button> 
+        </div>
+
+    </div>
+    <div *ngIf="tagStatus===true" style="overflow-x:hidden;position:relative; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px;">
      
  
 
@@ -167,20 +189,17 @@
 
             <mat-menu #menu="matMenu" xPosition="before">
               <button mat-menu-item (click)="togglePanel(6)">About</button>
+              <button mat-menu-item (click)="copyLinkToClipboard()">Share Node</button>
               <button mat-menu-item (click)="togglePanel(5)">Adjust Settings</button>
               <button mat-menu-item (click)="togglePanel(7)">Report this space</button>
+             
             </mat-menu>
             
-<mat-menu #shareMenu="matMenu" xPosition="before">
-  <button mat-menu-item (click)="copyLinkToClipboard()">Copy Link</button>
-  <button mat-menu-item (click)="post()">Post</button>
-            </mat-menu>
-          <button class="btn btn-outline-white text-white" (click)="togglePanel(3)" style="position:absolute; bottom:10px;left:10px;border-radius:50%; width:50px;height:50px;z-index:1000;">
-            <i class="fas fa-users"></i>
-          </button>
-          <button mat-icon-button [matMenuTriggerFor]="emoji" class="btn btn-outline-white text-white text-center mt-0 p-0" style="position:absolute;align-items:center; border-radius:50%;bottom:10px;right:10px; width:50px;height:50px;z-index:900;">
+        
+       <!--   <button mat-icon-button [matMenuTriggerFor]="emoji" class="btn btn-outline-white text-white text-center mt-0 p-0" style="position:absolute;align-items:center; border-radius:50%;bottom:10px;right:10px; width:50px;height:50px;z-index:900;">
             <i class="far fa-smile"></i>
           </button>
+        -->
           <mat-menu #emoji="matMenu" xPosition="before" style="z-index:2000;">
             <div class="emoji-grid" style="z-index:2000;">
               <!-- Positive Emojis - Green icons -->
@@ -210,34 +229,8 @@
           </mat-menu>
           
           
-         <!-- <button class="btn btn-outline-light bg-black" (click)="togglePanel(2)" style="opacity:.8;position:absolute; bottom:10px;right:10px;border-radius:50%; width:50px;height:50px;z-index:1000;">
-          
-          </button>-->
-          <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen && !isRanked" style="position:absolute; bottom:70px;right:10px; z-index:1000;">
-          <button (click)="togglePanel(1)" class="btn btn-outline-light bg-danger" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:2;">
-          <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i> 
-          <i *ngIf="isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>   
-          </button>
-
-          </div>
-
-          <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen && isRanked" style="display:flex; position:absolute; bottom:70px;right:10px; z-index:1000;">
-            <button (click)="togglePanelReaction('negative')" class="btn btn-outline-light bg-black mr-2" style="opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
-              <span class="fa-stack">
-                <i class="fas fa-microphone fa-stack-1x" style="padding-right:30px;"></i>
-                <i class="fas fa-minus fa-stack-1x" style="color: red; bottom:10px; padding-right:10px; font-size:12px; "></i>
-              </span>
-              
-            </button>
-            <button (click)="togglePanelReaction('positive')" class="btn btn-outline-light bg-black" style="position:relative; opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
-              <span class="fa-stack">
-                <i class="fas fa-microphone fa-stack-1x" style=" padding-right:30px;"></i>
-                <i class="fas fa-plus fa-stack-1x" style="color:green; bottom:10px; padding-right:10px; font-size:12px; "></i>
-              </span>
-              
-              </button>
-  
-            </div>
+       
+        
 
           </div>
             
@@ -245,67 +238,31 @@
   
      
   </div>
-<!--
 
-  <div class="slide-panel bg-black" style="position:absolute; width:390px;display:flex; flex-direction: column;" [@slideUpDown]="panelState" (mousedown)="startDrag($event)">
-    
-    <div [ngClass]="{'active': blurState>0}" class="d-flex justify-content-center mt-3"> 
-      
-      <button class="btn btn-outline-white text-white" style="position:absolute; top:10px; left:10px; z-index: 500;" (click)="togglePanel(-1)">
-        <i class="fas fa-times"></i>
+  <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen && !isRanked" style="position:absolute; bottom:70px;right:10px; z-index:1000;">
+    <button (click)="togglePanel(1)" class="btn btn-outline-light bg-danger" style="opacity:.8;border-radius:50%; width:50px;height:50px;z-index:2;">
+    <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i> 
+    <i *ngIf="isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>   
+    </button>
+
+    </div>
+
+    <div *ngIf="(userType==='host'||userType==='speaker') && !isSecondModalOpen && isRanked" style="display:flex; position:absolute; bottom:70px;right:10px; z-index:1000;">
+      <button (click)="togglePanelReaction('negative')" class="btn btn-outline-light bg-black mr-2" style="opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
+        <span class="fa-stack">
+          <i class="fas fa-microphone fa-stack-1x" style="padding-right:30px;"></i>
+          <i class="fas fa-minus fa-stack-1x" style="color: red; bottom:10px; padding-right:10px; font-size:12px; "></i>
+        </span>
+        
       </button>
-      
-      <div class="drag-handle centered"></div>
-    </div>
-    <div *ngIf="selectedButton===1" style="position:relative; justify-content: center; display:flex; flex-direction: column; flex: auto; margin-bottom: 10px; height:25vh;">
-     
-      <div style="display:flex; justify-content: center;">
-      <button *ngIf="userType==='host'||userType==='speaker'"class="btn btn-outline-light bg-danger" style="border-radius:50%; width:70px;height:70px;" (click)="toggle('toggle')">
-        <i *ngIf="!isRecording" class="fa fa-microphone" style="font-size: 20px;"></i>        
-        <i *ngIf="isRecording" class="fa fa-stop" style="font-size: 20px;"></i>  
-     </button>
-     
-      </div>
-        <div style="position:absolute; bottom:0; display:flex; justify-content: center; width:100%;">
-        <form (submit)="onSubmitit($event)">
-      
-              <div style="position: relative; bottom:0; flex-grow: 1">      
-                  <input 
-                      type="text" 
-                      class="form-control" 
-                      placeholder='Respond to speaker'
-                      aria-label="value" 
-                      aria-describedby="button-addon2" 
-                      [(ngModel)]="value" 
-                      name="inputValue" 
-                      style="padding-right: 40px;"  
-                  >
-              </div>
-              
-         </form>
-         <button *ngIf="value.length > 0" style="position:absolute; right:5px;" class="btn btn-outline-light bg-black rounded-circle" type="submit" id="button-addon2">
-          <i class="fas fa-arrow-right"></i>
-        </button> 
-        </div>
-      </div>
-    
-    
-    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:60vh;" >
-      <app-user-summary-mob  (numberEmitter)="panelBlur($event)" [userType]="this.userType" [card]="this.card.id"></app-user-summary-mob> 
-      
-  </div>
-    <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;height:50vh;" >
+      <button (click)="togglePanelReaction('positive')" class="btn btn-outline-light bg-black" style="position:relative; opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
+        <span class="fa-stack">
+          <i class="fas fa-microphone fa-stack-1x" style=" padding-right:30px;"></i>
+          <i class="fas fa-plus fa-stack-1x" style="color:green; bottom:10px; padding-right:10px; font-size:12px; "></i>
+        </span>
+        
+        </button>
 
-      <app-av-control-mob></app-av-control-mob>     
-      
-    </div>
-    <div *ngIf="selectedButton===6" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
-      <app-about-nodes></app-about-nodes>    
-    </div>
-    <div *ngIf="selectedButton===7"  class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;" >
-      <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(0)"></app-report-form>  
-    </div>
-    </div>
-  -->
+      </div>
   </div>
   

@@ -27,10 +27,7 @@ export class ChatSubmitMobComponent {
           this.chatSubmit.sendChat(this.value);
           this.value = '';
       }
-      if (this.value && this.toggleChatsText == "Respond to speaker") {
-        this.chatSubmit.sendNodeText(this.value,'');
-        this.value = '';
-      }
+    
     }
 
     // This function gets triggered when the link icon is clicked.

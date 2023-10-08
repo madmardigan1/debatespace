@@ -95,14 +95,17 @@ get isToggled1(): boolean {
   totalUsers?: number; 
 
  
-  
+
 
     submit() {
       const formData = this.form.value;
       const id = Date.now().toString();
       const number = 1;
       const ranked = this.form.get('isToggled2')?.value;
-      this.cardService.addCard({ ...formData,user: [{name:"steve",role:'host',rank:3,photoUrl:'/assets/Steve.jpeg'}],topic:this.topic, id: id, ranked:ranked });
+      this.cardService.addCard({ ...formData,user: [{name:"steve",role:'host',rank:3,photoUrl:'/assets/Steve.jpeg'}],topic:this.topic, id: id, ranked:ranked,
+      nodes:  { id: 1, label: this.topic, text: this.topic, fullText: this.topic, shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
+      edges: []
+    });
       this.cardService.addTag(this.topic);
       this.debateAuth.setUser('host');
       this.router.navigate(['/debateMob',id]);

@@ -7,10 +7,11 @@
 
 
   .nodeArea {
-    height: 40%;
+    height: 100%;
     width:100%;
-    position:relative;
+    position:absolute;
     top:0px;
+    z-index:1;
   }
   .btn {
     transition: background-color 0.3s;
@@ -22,9 +23,11 @@
     flex:auto;
     display: flex;
     flex-direction: column;
-    position:relative;
+    position:absolute;
     bottom:0;
     overflow-x:hidden;
+    z-index:2;
+    width:100%;
   }
   .darken {
     background-color: black;
@@ -181,7 +184,7 @@
 /* Slide-In Modal Styling */
 .slide-in-modal {
   background-color: transparent;
-  z-index: 1500; /* Updated z-index */
+  z-index: 2; /* Updated z-index */
 }
 
 .slidemobile {
@@ -195,7 +198,7 @@
   justify-content: center;
   align-items: end;
  
-  z-index: 1500; /* Updated z-index */
+  z-index: 2; /* Updated z-index */
   transform: translateY(100%);
 
 }
@@ -212,7 +215,7 @@
   justify-content: center;
   align-items: end;
  
-  z-index: 1500; /* Updated z-index */
+  z-index: 2; /* Updated z-index */
   transform: translateY(100%);
 
 }

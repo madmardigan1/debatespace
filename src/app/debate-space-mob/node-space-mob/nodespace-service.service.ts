@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 })
 export class NodespaceServiceService {
   private clickedPost = new Subject<number>();
-  private recordingStatus = new BehaviorSubject<boolean>(false);  
+  private recordingStatus = new Subject<boolean>();  
   private nodeId = new BehaviorSubject<number | undefined>(1); 
   private SiblingData = new BehaviorSubject<{ previous: string, next: string } | null>({ previous: '1', next: '1' });
   private nodeTextSource = new BehaviorSubject<{ text: string, fullText: string, id: number, soundClip?: any}[]>([{text:'', fullText: '', id:1, soundClip: null}]); // Added initial value as an empty array

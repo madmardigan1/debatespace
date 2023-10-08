@@ -33,7 +33,7 @@ import { SpeechService } from './node-space-mob/speech-service.service';
         height: '60%',
       })),
       state('shrunk', style({
-        height: '0%',
+        height: '50px',
       })),
       state('fully-expanded', style({
         height: '100%',
@@ -86,16 +86,18 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     secondDarkenPane = false;
     text: string = '';
     card!: Card;
+    tagStatus=true;
     cards!: any[];
+    tagvalue='';
     blurState = 0;
-    panelType = "chat";
+    panelType = "nodes";
     receiveType = true;
     receiveType2 = false;
     selectedNode: boolean = false;
     userType: string = 'host';
     isRecording = '';
-    nodeState: string = 'shrunk';
-    theRestState: string = 'expanded';
+    nodeState: string = 'expanded';
+    theRestState: string = 'shrunk';
     expandShrink=false;
     value = '';
     deviceType=false;
@@ -138,7 +140,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     
     togglePanelReaction(type: string) {
       this.selectedButton=1
-     
+        this.tagStatus=false;
           this.reactionType=type;
           this.isSecondModalOpen = true;
           this.openSecondModal();
@@ -171,10 +173,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       this.scrollToBottom();
     }
 
-    panelBlur (number:number) {
-      this.blurState=number;
-     
-    }
+  
     ngOnInit() {
       const id = this.route.snapshot.paramMap.get('id');
       this.cardService.cards$.subscribe((cards) => {
@@ -219,7 +218,12 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     
     }
 
+   addTag(event: Event) {
    
+     
+      event.preventDefault(); 
+      this.tagStatus=true;
+   }
 
     post() {
       //this should direct to the sequitur post form with the getLink data
@@ -257,11 +261,19 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
 
     toggleFirstPanel (panelType:string): void {
       this.panelType = panelType;
+      if (panelType == 'nodes') {
+        this.nodeState = 'expanded';
+        this.theRestState = 'shrunk';
+      }
+      else {
+        this.nodeState = 'shrunk';
+        this.theRestState = 'expanded';
+      }
     }
 
 
     toggle(buttonType: string): void {
-      this.debateSpace.Toggle(buttonType, this.reactionType);
+      this.debateSpace.Toggle(buttonType, this.reactionType, this.tagvalue);
     }
 
     changeIcon(recordType : string) {
@@ -335,7 +347,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       event.preventDefault(); 
      
        if (this.value) {
-        this.chatSubmit.sendNodeText(this.value, this.reactionType);
+        this.chatSubmit.sendNodeText(this.value, this.reactionType, this.tagvalue);
         this.value = '';
       }
     }

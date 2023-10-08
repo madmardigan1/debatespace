@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DebateSpaceService {
 
-  private buttonType = new BehaviorSubject<string[]>(['','']); 
+  private buttonType = new Subject<string[]>(); 
   private emojiType = new BehaviorSubject<string>(''); 
  
   constructor() { }
 
 
-  Toggle(level: string, reaction:string): void {
-    this.buttonType.next([level,reaction]);
+  Toggle(level: string, reaction:string, tag:string): void {
+    this.buttonType.next([level,reaction, tag]);
   }
 
   getToggle(): Observable<string[]> {

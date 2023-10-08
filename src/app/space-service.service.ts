@@ -19,7 +19,10 @@ export interface Card {
   edges?: any[];
   ranked: boolean;
 }
-
+/*
+public nodes = new DataSet<any>([
+  { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
+]);*/
 
 export interface Topic {
   name: string;
@@ -63,7 +66,8 @@ export class CardDataService {
       ],
       topic: ["Politics", "Ukraine", "Corruption", "Trump", "ProTrump", "#trump@", "War"], 
       description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", 
-      ranked: true
+      ranked: true,
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '2', 
@@ -73,7 +77,8 @@ export class CardDataService {
       ], 
       topic: ["Technology", "AI", "Innovation"], 
       description: "Latest breakthroughs in AI", 
-      ranked: true
+      ranked: true,
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '3', 
@@ -83,7 +88,8 @@ export class CardDataService {
       ], 
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
-      ranked: false
+      ranked: false,
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '4', 
@@ -93,7 +99,8 @@ export class CardDataService {
       ], 
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
-      ranked: false
+      ranked: false,
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '5', 
@@ -103,7 +110,8 @@ export class CardDataService {
       ], 
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
-      ranked: false
+      ranked: false,
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     // ... Continue in this manner for at least 8 lines.
   ]);
@@ -207,6 +215,34 @@ updateCard(id: string, name:string, role:string,rank:number, photoUrl:string): v
   });
   this.cards.next(updatedCards);
 }
+
+updateCardNode(id: string, node: any, edge: any): void {
+  // Find the card with the matching id
+  const cardToUpdate = this.cards.getValue().find(card => card.id === id);
+
+  if (cardToUpdate) {
+      // If the card has no nodes array, initialize it
+      if (!cardToUpdate.nodes) {
+          cardToUpdate.nodes = [];
+      }
+
+      // If the card has no edges array, initialize it
+      if (!cardToUpdate.edges) {
+          cardToUpdate.edges = [];
+      }
+
+      // Push the new node and edge
+      cardToUpdate.nodes.push(node);
+      cardToUpdate.edges.push(edge);
+
+      // Optionally, you can update the BehaviorSubject with the updated list of cards
+      const updatedCards = this.cards.getValue();
+      this.cards.next(updatedCards);
+  } else {
+      console.error(`Card with id ${id} not found!`);
+  }
+}
+
 
 
 

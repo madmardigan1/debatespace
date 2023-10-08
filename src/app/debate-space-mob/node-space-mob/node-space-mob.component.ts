@@ -19,6 +19,7 @@ import { NodespaceServiceService } from './nodespace-service.service';
 import { DebateSpaceService } from '../debate-space.service';
 import { ChatspaceService } from '../chat-space-mob/chatspace.service';
 import { ChatSubmitService } from '../chat-submit-mob/chat-submit.service';
+import { CardDataService } from 'src/app/space-service.service';
 
 @Component({
   selector: 'app-node-space-mob',
@@ -53,9 +54,10 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   currentNode: any;
   previousNode: any;
   siblingChecker: any;
-  zoomType=1
+  zoomType=2
   thumbsPosition: { x: number, y: number } = { x: 0, y: 0 };
   isRecording = false;
+  @Input () cardId!:string;
   @Input() isRanked = false;
   network!: Network;
   zoomscale = 1.0;
@@ -71,10 +73,11 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   isPanelExpanded = false;
   nodetoUpdate = 1;
  nodeIdCounter = 1;
+ edgesAdd: any;
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -100,6 +103,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   private stream!: MediaStream;
   private mySwiper!: Swiper;
   constructor(
+      private cardService: CardDataService,
       private debateSpace: DebateSpaceService,
       private settingsService: AvServiceService, 
       private rtcService: RtcService, 
@@ -119,12 +123,32 @@ ngOnInit(): void {
   this.userType = this.debateAuth.getUser();
 
   
+ 
+    this.cardService.cards$.subscribe((cards) => {
+      const id = this.cardId;
+      const card = cards.find((card) => card.id === id);
+      if (card !== undefined) { // Check if card is not undefined
+        if (card) { 
+          // Assuming card.nodes and card.edges are arrays
+          this.nodes.clear();
+          this.nodes.add(card.nodes);
+          console.log(this.nodes);
+          this.edges.clear();
+          this.edges.add(card.edges);
+        }
+      
+      } else {
+        // Handle case when card is not found, e.g., redirect or show a message
+      }
+    });
+
+
 
   this.subscription = this.chatSubmit.getNodeText().subscribe(text => {
     this.submitText = text[0];
     if (this.submitText !== '') {
       
-      this.submitNode(this.submitText, text[1]);
+      this.submitNode(this.submitText, text[1], text[2]);
       
     }
   });
@@ -154,7 +178,7 @@ zoomMode(type:number) {
       }
   });
     this.zoomSwitch=false;
-    this.attachSwipeListeners('mynetwork');
+   
   }
   if (this.zoomType===1) {
     this.network.setOptions({
@@ -165,14 +189,6 @@ zoomMode(type:number) {
     this.zoomSwitch=false;
   }
 }
-/*
-this.mySwiper = new Swiper('.swiper-container',
-  
-{
-  simulateTouch: true, // enable mouse interactions
-  mousewheel: true     // allow swiper to be controlled by mousewheel
-});*/
-
 
 
 private startY: number | null = null;
@@ -279,6 +295,7 @@ ngAfterViewInit() {
   this.initNetwork();
   this.initializeSubscriptions();
   this.addEventListeners();
+  this.attachSwipeListeners('mynetwork');
   this.attachSwipeListeners('myDiv');  
  // Get a reference to your div using its id
  
@@ -382,9 +399,9 @@ private initializeSubscriptions() {
     if (type[0] === "play") {
       this.play();
     } else if (type[0] === "toggle") {
-      this.toggleRecording(false,type[1]);
+      this.toggleRecording(false,type[1],type[2]);
     } else if (type[0] === "toggleVideo"){
-      this.toggleVideoRecording(type[1]);
+      this.toggleVideoRecording(type[1], type[2]);
     }
 
   }),
@@ -407,12 +424,7 @@ private initializeSubscriptions() {
         animation: false
       });
     }),
-    /*this.settingsService.getPOV().subscribe(pov => {
-      // Do something with the updated POV
-    }),
-    this.settingsService.getAudio().subscribe(audio => {
-      // Do something with the updated audio setting
-    }),*/
+ 
     this.settingsService.getView().subscribe(view => {
       if (view == "detailed") {
         this.nodeShape = "box";
@@ -474,22 +486,24 @@ private initNetwork() {
     },
     interaction: {
       hover: true,
-      hoverConnectedEdges: false,
+      selectConnectedEdges: false,
       dragNodes: false,
       keyboard: true,
-        dragView: true
-      
-    },
+      dragView: false,
+    
+  },
+  
     edges: {
-      color: {
-        color: "rgba(255,255,255,0.3)",
-        highlight: "rgba(255,255,255,0.3)",
-        hover: "rgba(255,255,255,0.5)"
-      },
       width: 2,
       shadow: true,
       smooth: false,
+      color: {
+        inherit: true,  // This will ensure the edge color is determined by the original data or connected nodes
+        highlight: 'false',  // The highlight color will match the original edge color
+       
     }
+  }
+    
   };
 
   this.network = new Network(this.visNetwork.nativeElement, data, options);
@@ -518,8 +532,8 @@ private addEventListeners() {
     }
     else {
       this.network.selectNodes([this.selectedNodeIndex!]);
-      this.isPanelExpanded = !this.isPanelExpanded;
-      this.nodeSelected.emit(false);
+   //   this.isPanelExpanded = !this.isPanelExpanded;
+     // this.nodeSelected.emit(false);
     }
   });
 }
@@ -592,10 +606,10 @@ thumbup(): void {
 }
 
 
-submitNode(submitText: string, Reaction:string): void {
+submitNode(submitText: string, Reaction:string, tag:string): void {
  this.stopRecording();
 
- this.addNode(submitText, Reaction);
+ this.addNode(submitText, Reaction, tag);
 }
 
 startRecording (type:boolean=false) : void {
@@ -655,7 +669,7 @@ stopRecording(): void {
 }
 
 
-addNode(submitText: string, reaction:string): void {
+addNode(submitText: string, reaction:string, tag:string): void {
   if (this.selectedNodeIndex !== null) {
     let selectedImage: string;
     let selectedName: string;
@@ -678,8 +692,8 @@ addNode(submitText: string, reaction:string): void {
       const parentNode= this.nodes.get(this.selectedNodeIndex);
 
       if(parentNode && parentNode.CounterStatus) {
-        parentNode.CounterStatus.push({id: this.nodetoUpdate, value: 0, status: 'active'});
-        console.log("test");
+        parentNode.CounterStatus.push({id: this.nodetoUpdate, value: 0, status: 'active', tag:tag});
+    
     }
     if (parentNode.id !=1){
     const parentParentNode = this.nodes.get(Number(this.getParentNodeId(parentNode.id)));
@@ -692,7 +706,7 @@ addNode(submitText: string, reaction:string): void {
   }
      }
      
-    this.nodes.add({
+    const nodeAdd ={
         id: newNodeId,
         label: this.wrapText(submitText, 20),
        
@@ -709,13 +723,39 @@ addNode(submitText: string, reaction:string): void {
         Health: 100,
         Reaction: reaction,
         soundClip: null,
-        videoClip: null
-    });
-    this.edges.add({
+        videoClip: null,
+        tag: tag,
+    };
+
+    if (reaction === 'negative') {
+       this.edgesAdd ={
         from: this.selectedNodeIndex,
         to: newNodeId,
-        opacity: 0.1
-    });
+        opacity: 0.1,
+        arrows: {
+            from: true // This adds an arrow pointing from the new node to the previous node
+        },
+        color: {
+            color: 'red', // This sets the edge color to red
+            inherit: 'false' // This ensures the edge color doesn't inherit from the connected nodes
+        }
+      };
+    }
+
+    else {
+       this.edgesAdd ={
+        from: this.selectedNodeIndex,
+        to: newNodeId,
+        opacity: 0.1,
+        color: {
+            color: 'green', // This sets the edge color to red
+            inherit: 'false' // This ensures the edge color doesn't inherit from the connected nodes
+        }
+      };
+    }
+    
+
+    this.cardService.updateCardNode(this.cardId, nodeAdd, this.edgesAdd);
 
     this.network.once("initRedraw", () => {
         this.network.storePositions();
@@ -740,7 +780,7 @@ addNode(submitText: string, reaction:string): void {
   
 }
 
-toggleRecording(type:boolean=false, reaction:string): void {
+toggleRecording(type:boolean=false, reaction:string, tag:string): void {
   if (this.selectedNodeIndex !==null) {
       if (this.isRecording) {
           this.isRecordingType.emit('soundTrue');
@@ -748,13 +788,13 @@ toggleRecording(type:boolean=false, reaction:string): void {
       } else  {
         this.isRecordingType.emit('soundFalse');
           this.startRecording(type);
-          this.addNode('', reaction);    
+          this.addNode('', reaction, tag);    
       }
           
     }
 }
 
-toggleVideoRecording (reaction:string): void {
+toggleVideoRecording (reaction:string, tag:string): void {
   if (this.selectedNodeIndex !==null) {
     if (this.isRecordingVideo) {
       this.isRecordingType.emit('videoTrue');
@@ -766,7 +806,7 @@ toggleVideoRecording (reaction:string): void {
       this.isRecordingType.emit('videoFalse');
       this.isRecordingVideo=true;
       this.startRecording(true);
-      this.addNode('', reaction);
+      this.addNode('', reaction, tag);
       // Adjusted sequence:
       this.nodeService.recordingSend(true);
     
@@ -828,9 +868,10 @@ handleNodeClick(params: any): void {
   
   this.network.selectNodes([params]);
   this.selectedNodeIndex = params;
-  if (this.zoomType!=3) {
+ 
   this.updateSlidesToShow();
-  }
+  this.currentIndex=0;
+  this.shownSlide=this.slidesToShow[0];
   this.lastSelectedNode = params;
 
 
@@ -840,7 +881,7 @@ handleNodeClick(params: any): void {
 
 
   // Reset highlighted edges
-  this.resetHighlightedEdges();
+  //this.resetHighlightedEdges();
 
   // Highlight the path from the initial node to the clicked node
 
@@ -851,7 +892,7 @@ handleNodeClick(params: any): void {
 private handleNodeSelected(params: any): void {
   
   this.nodeSelected.emit(true);
-  this.isPanelExpanded = true;
+ // this.isPanelExpanded = true;
   const clickedNodeId = params;
   this.siblingChecker = this.getAdjacentSiblingNodeIds(clickedNodeId);
   this.previousNode = this.currentNode;
@@ -961,13 +1002,14 @@ play(): void {
     }
   }
 }
+/*
 private resetHighlightedEdges(): void {
   const resetEdges = this.highlightedEdges.map(edgeId => {
       return { id: edgeId, color: "rgba(255,255,255, 0.1"}; // Assuming '000000' is the original color
   });
   this.edges.update(resetEdges);
   this.highlightedEdges = [];
-}
+}*/
 
 
   traverseToOriginal(nodeId: number, originalNodeId: number, nodes: any, edges: any): { text: string; fullText: string, id: number; videoClip?:any,soundClip?: any }[] {
@@ -991,7 +1033,7 @@ private resetHighlightedEdges(): void {
         const previousTexts = this.traverseToOriginal(predecessorNodeId, originalNodeId, nodes, edges);
 
         // Highlight the edge (this could be done in a different function if preferred)
-        this.edges.update([{ id: connectedEdges[0].id, color: "rgba(0,100,255,0.7)" }]);
+      //  this.edges.update([{ id: connectedEdges[0].id, color: "rgba(0,100,255,0.7)" }]);
 
         return [...previousTexts, textObj]; // appending current node's text to the result from predecessors
     }
