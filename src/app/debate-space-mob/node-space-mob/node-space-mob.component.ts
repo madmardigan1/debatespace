@@ -77,7 +77,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   // Arrays for nodes and edges
   public nodes = new DataSet<any>([
-      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
+      { id: 1, label: '', text: '', fullText: '', shape: this.nodeShape, image: "assets/Steve.jpeg",  user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' },
   ]);
   private edges = new DataSet<any>([]);
   private subscriptions: Subscription[] = [];
@@ -373,12 +373,17 @@ startTimer() {
     
       if (node.Health<=0) {
            const parentNode= this.nodes.get(this.getParentNodeId(node.id)!);
+           const parentParent = this.nodes.get(this.getParentNodeId(parentNode.id)!);
         if (node.Reaction === 'positive') {
           parentNode.totalPositive = 0;
         }
+        if (parentNode.Reaction === 'negative') {
+          parentParent.CounterStatus.find((item:any) => item.id === parentNode.id).status = 'active';
+        }
+
           if(parentNode && parentNode.CounterStatus) {
             parentNode.CounterStatus.splice({id: node.id, value: 0, status: 'active'});
-            console.log("test");
+            
         }
         this.deleteNodeAndDescendants(node.id);
         

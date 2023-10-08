@@ -67,7 +67,7 @@ export class CardDataService {
       topic: ["Politics", "Ukraine", "Corruption", "Trump", "ProTrump", "#trump@", "War"], 
       description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", 
       ranked: true,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '2', 
@@ -78,7 +78,7 @@ export class CardDataService {
       topic: ["Technology", "AI", "Innovation"], 
       description: "Latest breakthroughs in AI", 
       ranked: true,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '3', 
@@ -89,7 +89,7 @@ export class CardDataService {
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
       ranked: false,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '4', 
@@ -100,7 +100,7 @@ export class CardDataService {
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
       ranked: false,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
       id: '5', 
@@ -111,7 +111,7 @@ export class CardDataService {
       topic: ["Science", "Space", "Mars"], 
       description: "Mars rover finds something interesting", 
       ranked: false,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [{id:0, value:0, status: 'inactive'}], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     // ... Continue in this manner for at least 8 lines.
   ]);

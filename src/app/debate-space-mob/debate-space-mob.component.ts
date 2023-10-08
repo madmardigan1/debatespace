@@ -96,6 +96,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     selectedNode: boolean = false;
     userType: string = 'host';
     isRecording = '';
+    toggleRecording = false;
     nodeState: string = 'expanded';
     theRestState: string = 'shrunk';
     expandShrink=false;
@@ -143,6 +144,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
         this.tagStatus=false;
           this.reactionType=type;
           this.isSecondModalOpen = true;
+          this.tagvalue='';
           this.openSecondModal();
     
     }
@@ -150,6 +152,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       this.isSecondModalOpen = false;
       this.secondModalContent.nativeElement.classList.remove('open');
       this.secondModal.nativeElement.classList.remove('open');
+      this.toggleRecording=false;
     }
 
     ngAfterViewInit(): void {
@@ -274,6 +277,10 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
 
     toggle(buttonType: string): void {
       this.debateSpace.Toggle(buttonType, this.reactionType, this.tagvalue);
+      this.toggleRecording = !this.toggleRecording;
+      if (!this.toggleRecording) {
+      this.closeSecondModal();
+      }
     }
 
     changeIcon(recordType : string) {
@@ -350,6 +357,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
         this.chatSubmit.sendNodeText(this.value, this.reactionType, this.tagvalue);
         this.value = '';
       }
+      this.closeSecondModal();
     }
 
     sendEmoji(emoji: string): void {
