@@ -563,7 +563,7 @@ thumbdown(): void {
           this.animationState = 'void';
         }, 500);
       nodeData.Negative +=1;
-      nodeData.Moment = Math.abs((nodeData.Positive+nodeData.totalPositive+1)/nodeData.Negative);
+      nodeData.Moment = parseFloat(Math.abs((nodeData.Positive+nodeData.totalPositive+1)/nodeData.Negative).toFixed(2));
       this.nodes.update(nodeData);
       
       
@@ -597,8 +597,10 @@ thumbup(): void {
       }, 500);
       nodeData.Positive +=1;
       if (nodeData.Negative !=0) {
-      nodeData.Moment = Math.abs((nodeData.Positive+nodeData.totalPositive+1)/nodeData.Negative);
+      nodeData.Moment = parseFloat(Math.abs((nodeData.Positive+nodeData.totalPositive+1)/nodeData.Negative).toFixed(2));
       }
+
+    
       else {
         nodeData.Moment =nodeData.Positive + nodeData.totalPositive+1;
       }
