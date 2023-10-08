@@ -17,7 +17,7 @@
           <div class="d-flex" style="position:absolute; left:5px;bottom:5px;">
            
             <div *ngFor="let slide of shownSlide.CounterStatus" class="buttons d-flex align-items-center" style="margin:0;margin-right:2px; padding:0;">
-              <button *ngIf="slide.tag!=''" (click)="handleNodeClick(slide.id)" class="btn btn-danger text-white" style="height:auto; width:auto; margin:0; padding-top:1px;padding-bottom:1px;padding-left:3px;padding-right:3px; border-radius:999px; font-size:12px;">{{slide.tag}}
+              <button *ngIf="slide.tag!=''" (click)="handleNodeClick(slide.id)" class="btn btn-danger text-white" style="height:auto; width:auto; margin:0; padding-top:1px;padding-bottom:1px;padding-left:3px;padding-right:3px; border-radius:999px; font-size:12px;">{{slide.tag}} {{slide.totalMoment}}
               </button>
             </div>
             </div>

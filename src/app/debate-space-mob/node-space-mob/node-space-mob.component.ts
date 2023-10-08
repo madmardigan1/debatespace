@@ -330,6 +330,8 @@ startTimer() {
               const y = x.Moment;
 
               element.value-= 1*(y/10)*Math.log10(x.totalPositive + x.Positive +x.Negative+2);
+              element.totalMoment = Math.abs(parseInt(element.value));
+
            
             }
           
@@ -697,7 +699,7 @@ addNode(submitText: string, reaction:string, tag:string): void {
       const parentNode= this.nodes.get(this.selectedNodeIndex);
 
       if(parentNode && parentNode.CounterStatus) {
-        parentNode.CounterStatus.push({id: this.nodetoUpdate, value: 0, status: 'active', tag:tag});
+        parentNode.CounterStatus.push({id: this.nodetoUpdate, value: 0, status: 'active', tag:tag, totalMoment: 0});
     
     }
     if (parentNode.id !=1){
