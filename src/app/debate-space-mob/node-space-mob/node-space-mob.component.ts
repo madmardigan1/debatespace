@@ -499,14 +499,12 @@ private initNetwork() {
   },
   
     edges: {
-      width: 2,
+      width: 1,
       shadow: true,
-      smooth: false,
-      color: {
-        inherit: true,  // This will ensure the edge color is determined by the original data or connected nodes
-        highlight: 'false',  // The highlight color will match the original edge color
-       
-    }
+      dashes: true,
+      hover: false,
+      
+     
   }
     
   };
@@ -741,8 +739,8 @@ addNode(submitText: string, reaction:string, tag:string): void {
             from: true // This adds an arrow pointing from the new node to the previous node
         },
         color: {
-            color: 'red', // This sets the edge color to red
-            inherit: 'false' // This ensures the edge color doesn't inherit from the connected nodes
+          color: 'rgba(255,0,0,0.5)', // This sets the edge color to red
+         
         }
       };
     }
@@ -868,12 +866,35 @@ toggleVideoRecording (reaction:string, tag:string): void {
 
   }
 
+preserveEdgeColors(nodeId: number) {
+    const connectedEdges = this.network.getConnectedEdges(nodeId);
+  
+    // Store updates for edges
+    const edgeUpdates = [];
+  
+    for (const edgeId of connectedEdges) {
+      const edge = this.edges.get(edgeId);
+      if (edge) {
+        edgeUpdates.push({
+          id: edgeId,
+          color: {
+            color: edge.color.color,
+            highlight: edge.color.color
+          }
+        });
+      }
+    }
+  
+    // Apply edge updates
+    this.edges.update(edgeUpdates);
+  }
+  
   
 handleNodeClick(params: any): void {
   
   this.network.selectNodes([params]);
   this.selectedNodeIndex = params;
- 
+  this.preserveEdgeColors(this.selectedNodeIndex!);
   this.updateSlidesToShow();
   this.currentIndex=0;
   this.shownSlide=this.slidesToShow[0];
@@ -1213,6 +1234,8 @@ previousId() {
     this.handleNodeClick(
       adjacentSiblingIds.previous
     );
+    this.updateSlidesToShow();
+    this.currentIndex=0;
   } else {
     // Handle the scenario when there is no sibling or an error.
     return;
@@ -1229,6 +1252,8 @@ nextId () {
       this.handleNodeClick(
         adjacentSiblingIds.next
       );
+      this.updateSlidesToShow();
+      this.currentIndex=0;
     } else {
       // Handle the scenario when there is no sibling or an error.
       return;
