@@ -325,7 +325,7 @@ startTimer() {
   this.timerId = setInterval(() => {
    
     this.nodes.forEach(node => {
-      node.label= "Health: "+String(node.Health) + "\n" + "Moment: "+String(node.Moment);
+      node.label= '';
       if (node.CounterStatus.length>0) {
         node.Health = 100;
         node.CounterStatus.forEach((element: any) => {
@@ -749,6 +749,14 @@ addNode(submitText: string, reaction:string, tag:string): void {
         color: {
           color: 'rgba(255,0,0,0.5)', // This sets the edge color to red
          
+        },
+        label: tag,
+        font: {
+          color: 'white',
+          size: 12,
+          background: 'black',
+          strokeWidth: .5,
+          align: 'top'
         }
       };
     }
