@@ -71,6 +71,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
   private subscription! : Subscription;
   @ViewChild('liveVideo', { static: false }) liveVideoElement!: ElementRef;
   @ViewChild('chatView') private chatContainer!: ElementRef;
+  @ViewChild('inputTag') inputTag!: ElementRef;
+  @ViewChild('inputReply') inputReply!: ElementRef;
   isRecordingVideo=false;
   //game rules
   private intervalId: any;
@@ -136,7 +138,11 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
     openSecondModal() {
     
       this.secondModal.nativeElement.classList.add('open');
+      
       this.secondModalContent.nativeElement.classList.add('open');
+      setTimeout(() => {
+        this.inputTag.nativeElement.focus();
+      }, 50);  // Delay of 50 milliseconds
     
     }
     
@@ -227,6 +233,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
      
       event.preventDefault(); 
       this.tagStatus=true;
+      setTimeout(() => {
+        this.inputReply.nativeElement.focus();
+      }, 50);  // Delay of 50 milliseconds
    }
 
     post() {

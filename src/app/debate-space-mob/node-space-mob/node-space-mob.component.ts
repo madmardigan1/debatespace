@@ -244,6 +244,21 @@ attachSwipeListeners(elementId: string) {
   const el = document.getElementById(elementId);
   el?.addEventListener('touchstart', this.onTouchStart.bind(this));
   el?.addEventListener('touchend', this.onTouchEnd.bind(this));
+
+  el?.addEventListener('wheel', (event) => {
+    if (event.deltaY > 0) {
+        console.log('Scrolled down');
+        this.down();
+        this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+
+        // Handle scroll down
+    } else if (event.deltaY < 0) {
+        console.log('Scrolled up');
+        // Handle scroll up
+        this.up();
+        this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+    }
+});
 }
 
 onTouchStart(event: Event) {
@@ -501,6 +516,7 @@ private initNetwork() {
       dragNodes: false,
       keyboard: true,
       dragView: false,
+      zoomView: false,
     
   },
   
@@ -736,6 +752,8 @@ addNode(submitText: string, reaction:string, tag:string): void {
         soundClip: null,
         videoClip: null,
         tag: tag,
+
+      
     };
 
     if (reaction === 'negative') {
@@ -756,7 +774,16 @@ addNode(submitText: string, reaction:string, tag:string): void {
           size: 12,
           background: 'black',
           strokeWidth: .5,
-          align: 'top'
+          align: 'top',
+          distance: 200,
+          vadjust: -4
+        },
+        scaling: {
+          label: {
+            enabled: true,
+            min: 12,
+            max:20
+          }
         }
       };
     }
@@ -767,8 +794,17 @@ addNode(submitText: string, reaction:string, tag:string): void {
         to: newNodeId,
         opacity: 0.1,
         color: {
-            color: 'green', // This sets the edge color to red
-            inherit: 'false' // This ensures the edge color doesn't inherit from the connected nodes
+          color: 'rgba(144,238,144,0.5)', // This sets the edge color to red
+         
+        },
+        label: tag,
+        font: {
+          color: 'white',
+          size: 12,
+          background: 'black',
+          strokeWidth: .5,
+          align: 'top',
+          distance: 20
         }
       };
     }
