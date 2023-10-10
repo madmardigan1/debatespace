@@ -32,6 +32,7 @@ export class ChatSubmitService {
   sendNodeText(text: string, reaction:string, tag: string): void {
     this.nodeInfo.next([text, reaction, tag]);
     
+    
   }
 
  getNodeText(): Observable<string[]> {

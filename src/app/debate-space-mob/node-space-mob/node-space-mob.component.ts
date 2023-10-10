@@ -264,6 +264,7 @@ attachSwipeListeners(elementId: string) {
 });
 }
 
+//this function finds the top 3 positive and negative tags based on moment score and stores them in negative and positive array
 updateSlide () {
 
   this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
@@ -285,7 +286,7 @@ this.positivetagArray = positiveCounterStatus.slice(0, 3);
 }
 
 
-
+//detects touch event
 }
 onTouchStart(event: Event) {
   const touchEvent = event as TouchEvent;
@@ -293,6 +294,7 @@ onTouchStart(event: Event) {
   this.startX = touchEvent.touches[0].clientX;
 }
 
+//detects when touch event ends and determines which direction the swipe occured.  This will trigger the node map to traverse in the direction of swipe and for the slide to update.
 onTouchEnd(event: Event) {
   const touchEvent = event as TouchEvent;
   const endY = touchEvent.changedTouches[0].clientY;
@@ -305,14 +307,12 @@ onTouchEnd(event: Event) {
       if (deltaY > 50) {
         
           this.down();
-          this.currentIndex=0;
-         // this.shownSlide=this.slidesToShow[this.currentIndex];
+         
          this.updateSlide();
       } else if (deltaY < -50) {
      
           this.up();
-          this.currentIndex=0;
-        //  this.shownSlide=this.slidesToShow[this.currentIndex];
+     
         this.updateSlide();
       }
 
@@ -342,7 +342,7 @@ ngAfterViewInit() {
   this.addEventListeners();
   this.attachSwipeListeners('mynetwork');
   this.attachSwipeListeners('myDiv');  
- // Get a reference to your div using its id
+
  
 
  
@@ -661,7 +661,7 @@ thumbup(): void {
 
 submitNode(submitText: string, Reaction:string, tag:string): void {
  this.stopRecording();
-
+  
  this.addNode(submitText, Reaction, tag);
 }
 
@@ -844,7 +844,7 @@ addNode(submitText: string, reaction:string, tag:string): void {
       };
     }
     
-
+    
     this.cardService.updateCardNode(this.cardId, nodeAdd, this.edgesAdd);
 
     this.network.once("initRedraw", () => {

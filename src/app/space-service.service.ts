@@ -197,6 +197,7 @@ getcards(): Observable<Card[]> {
 }
 
 updateCard(id: string, name:string, role:string,rank:number, photoUrl:string): void {
+  console.log(id, "", name, "", role, "", rank, "", photoUrl)
   const updatedCards = this.cards.getValue().map(card => {
     if (card.id === id) {
       card.user.push({
@@ -218,6 +219,9 @@ updateCard(id: string, name:string, role:string,rank:number, photoUrl:string): v
 
 updateCardNode(id: string, node: any, edge: any): void {
   // Find the card with the matching id
+  console.log(id);
+  console.log(node);
+  console.log(edge);
   const cardToUpdate = this.cards.getValue().find(card => card.id === id);
 
   if (cardToUpdate) {
