@@ -195,7 +195,8 @@ private startY: number | null = null;
 private startX: number | null = null;
 currentIndex: number = 0;
 shownSlide=this.nodes.get(1);
-tagArray:any = [];
+negativetagArray:any = [];
+positivetagArray:any = [];
 
 slidesToShow:any = [this.nodes.get(1)];
 
@@ -269,13 +270,22 @@ updateSlide () {
   // Assuming this.shownSlide contains the node data
 if (this.shownSlide && this.shownSlide.CounterStatus) {
 // Sort CounterStatus array by totalMoment in descending order
-let sortedCounterStatus = [...this.shownSlide.CounterStatus].sort((a, b) => b.totalMoment - a.totalMoment);
+let sortedCounterStatus = [...this.shownSlide.CounterStatus]
+.filter(item => item.status != 'positive')
+.sort((a, b) => b.totalMoment - a.totalMoment);
 
 // Take the first three items from the sorted array
-this.tagArray = sortedCounterStatus.slice(0, 3);
+this.negativetagArray = sortedCounterStatus.slice(0, 3);
 
+let positiveCounterStatus = [...this.shownSlide.CounterStatus]
+.filter(item => item.status === 'positive')
+.sort((a, b) => b.totalMoment - a.totalMoment);
+
+this.positivetagArray = positiveCounterStatus.slice(0, 3);
 }
-console.log(this.tagArray)
+
+
+
 }
 onTouchStart(event: Event) {
   const touchEvent = event as TouchEvent;
@@ -731,6 +741,15 @@ addNode(submitText: string, reaction:string, tag:string): void {
     const newNodeId = this.nodeIdCounter;
     
     this.nodetoUpdate = newNodeId;
+    if (reaction === 'positive') {
+      const parentNode= this.nodes.get(this.selectedNodeIndex);
+
+      if(parentNode && parentNode.CounterStatus) {
+        parentNode.CounterStatus.push({id: this.nodetoUpdate, value: 0, status: 'positive', tag:tag, totalMoment: 0});
+    
+    }
+  }
+
      if (reaction === 'negative') {
       const parentNode= this.nodes.get(this.selectedNodeIndex);
 
@@ -963,9 +982,7 @@ handleNodeClick(params: any): void {
   this.network.selectNodes([params]);
   this.selectedNodeIndex = params;
   this.preserveEdgeColors(this.selectedNodeIndex!);
-  this.updateSlidesToShow();
-  this.currentIndex=0;
-  this.shownSlide=this.slidesToShow[0];
+  this.updateSlide();
   this.lastSelectedNode = params;
 
 
