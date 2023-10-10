@@ -195,6 +195,7 @@ private startY: number | null = null;
 private startX: number | null = null;
 currentIndex: number = 0;
 shownSlide=this.nodes.get(1);
+tagArray:any = [];
 
 slidesToShow:any = [this.nodes.get(1)];
 
@@ -249,18 +250,33 @@ attachSwipeListeners(elementId: string) {
     if (event.deltaY > 0) {
         console.log('Scrolled down');
         this.down();
-        this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+        this.updateSlide();
+
 
         // Handle scroll down
     } else if (event.deltaY < 0) {
         console.log('Scrolled up');
         // Handle scroll up
         this.up();
-        this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+        this.updateSlide();
     }
 });
 }
 
+updateSlide () {
+
+  this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+  // Assuming this.shownSlide contains the node data
+if (this.shownSlide && this.shownSlide.CounterStatus) {
+// Sort CounterStatus array by totalMoment in descending order
+let sortedCounterStatus = [...this.shownSlide.CounterStatus].sort((a, b) => b.totalMoment - a.totalMoment);
+
+// Take the first three items from the sorted array
+this.tagArray = sortedCounterStatus.slice(0, 3);
+
+}
+console.log(this.tagArray)
+}
 onTouchStart(event: Event) {
   const touchEvent = event as TouchEvent;
   this.startY = touchEvent.touches[0].clientY;
@@ -281,25 +297,25 @@ onTouchEnd(event: Event) {
           this.down();
           this.currentIndex=0;
          // this.shownSlide=this.slidesToShow[this.currentIndex];
-         this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+         this.updateSlide();
       } else if (deltaY < -50) {
      
           this.up();
           this.currentIndex=0;
         //  this.shownSlide=this.slidesToShow[this.currentIndex];
-          this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+        this.updateSlide();
       }
 
       if (deltaX > 50) {
        
           this.nextId();
          // this.showNextSlide();
-          this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+         this.updateSlide();
       } else if (deltaX < -50) {
        
           this.previousId();
          // this.showPreviousSlide();
-         this.shownSlide=this.nodes.get(this.selectedNodeIndex!);
+         this.updateSlide();
       }
 
       this.startY = null;
