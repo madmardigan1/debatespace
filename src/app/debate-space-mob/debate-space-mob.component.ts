@@ -65,18 +65,18 @@ import { SpeechService } from './node-space-mob/speech-service.service';
 })
 export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit {
   @ViewChild(ChatSpaceMobComponent, { static: false }) secondChild!: ChatSpaceMobComponent;
-  toggleChats:boolean = false;
-  toggleChatsText:string = "Type in chat";
-  selectedButton: number = -1;
-  private subscription! : Subscription;
   @ViewChild('liveVideo', { static: false }) liveVideoElement!: ElementRef;
   @ViewChild('chatView') private chatContainer!: ElementRef;
   @ViewChild('inputTag') inputTag!: ElementRef;
   @ViewChild('inputReply') inputReply!: ElementRef;
+  toggleChats:boolean = false;
+  toggleChatsText:string = "Type in chat";
+  selectedButton: number = -1;
+  private subscription! : Subscription;
+
   isRecordingVideo=false;
   //game rules
-  private intervalId: any;
-  debateFeatures=false;
+
   isRanked = true;
   reactionType='neutral';
  
@@ -192,9 +192,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
         if (card !== undefined) { // Check if card is not undefined
           this.card = card;
           this.isRanked = this.card.ranked!;
-          if (this.isRanked) {
-            this.loadGameRules();
-          }
+         
         } else {
           // Handle case when card is not found, e.g., redirect or show a message
         }
@@ -220,13 +218,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       });
       
     }
-    loadGameRules() : void {
-      this.debateFeatures = true;
-      this.intervalId = setInterval(() => {
-    
-      }, 3000)
-    
-    }
+   
 
    addTag(event: Event) {
    
@@ -238,9 +230,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       }, 50);  // Delay of 50 milliseconds
    }
 
-    post() {
-      //this should direct to the sequitur post form with the getLink data
-    }
+   
     updateText(newText: string) {
       this.text = newText;
       this.scrollToBottom();
@@ -264,7 +254,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       }
     }
 
-    private scrollToBottom(): void {
+    // This function is called whenever the chat container is updated and ensures that the chat container is scrolled to the bottom
+    scrollToBottom(): void {
       try {
         this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
       } catch (err) {
@@ -272,6 +263,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked, AfterViewInit 
       }
     }
 
+    
     toggleFirstPanel (panelType:string): void {
       this.panelType = panelType;
       if (panelType == 'nodes') {

@@ -53,9 +53,9 @@
     <div class="nodeArea">
       <app-node-space-mob #nodeSpace [userType]="userType" [isRanked]="isRanked" [inputdata]="card.description" [cardId]="card.id" (nodeSelected)="receiveValue($event)" (isRecordingType)="changeIcon($event)" ></app-node-space-mob>
      </div>
-  
+    
      <div class="theRest" [@expandShrinkrest]="theRestState" style="opacity:.8;">
-     
+   
          <div class="viewsecond bg-black">
           <div class="d-flex bg-black justify-content-between" style="height:auto;">
             <button class="btn btn-outline-white text-white" (click)="togglePanel(3)">
@@ -79,10 +79,7 @@
             </div>
           </div>
           <div  style="position:relative; flex:auto; display: flex; overflow-y:hidden; flex-direction: column;">
-          <div style="flex: auto;position:absolute; bottom:60px; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:200;">
-            <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="flex:auto"></video>
          
-          </div>
           <div *ngIf="panelType=='chat'" class="chat-output-area text-white" style="position: relative; display:flex; flex: auto; flex-direction: column;  overflow:auto;
           overflow-wrap: break-word; /* Modern browsers */">
             
@@ -133,13 +130,16 @@
    </div>
   
    <div  [ngClass]="{'slidecontentmobile':deviceType,'slidecontentdesk':!deviceType}" #secondModalContent class="modal-content1 text-white" style="background-color:  #333;" #secondModal (mousedown)="startDrag($event)"(click)="$event.stopPropagation()">
+    <div style="display:flex; flex-direction:column; flex: auto;position:relative; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:20000;">
      
-    
+      <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo" style="position:relative;flex:auto;width:100%;"></video>
+    </div>
+   
     <button class="btn btn-outline-white text-white" style="position:absolute; top:0px; left:0px; z-index: 500;" (click)="closeSecondModal()">
       <i class="fas fa-chevron-right"></i>
     </button>
 
-  <div *ngIf="tagStatus===false" style="overflow-x:hidden;position:relative; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px ">
+  <div *ngIf="tagStatus===false" style="overflow-x:hidden;position:relative ;align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px ">
     <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
       <form (submit)="addTag($event)">
     
@@ -167,7 +167,7 @@
       </div>
 
   </div>
-  <div *ngIf="tagStatus===true" style="overflow-x:hidden;position:relative; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px;">
+  <div *ngIf="tagStatus===true" style="overflow-x:hidden;position:relative;top:0;left:0; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; padding:10px;">
    
 
 
@@ -175,7 +175,7 @@
   
  
 
-      <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
+      <div style="position:relative; bottom:60; display:flex; justify-content: center; flex:auto;">
       <form (submit)="onSubmitit($event)">
     
             <div style="position: relative; bottom:0; flex-grow: 1; border-radius:999px;">      
@@ -197,7 +197,7 @@
        <button *ngIf="value.length > 0" style="position:absolute; right:20px;" class="btn btn-black bg-white rounded-circle" type="submit" id="button-addon2">
         <i class="fas fa-arrow-right"></i>
       </button> 
-      </div>
+    </div>
       <div class="space-between d-flex">
         <button class="btn btn-outline-light bg-danger rounded-circle" style="width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"(click)="toggle('toggle')">
           <i *ngIf="isRecording !=='soundFalse'" class="fa fa-microphone" ></i>        
@@ -209,8 +209,8 @@
         <i *ngIf="isRecording == 'videoFalse'" class="fa fa-stop" ></i>  
        </button>
       </div>
-      
     </div>
+   
 
     
 </div>
