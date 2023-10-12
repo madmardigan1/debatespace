@@ -8,7 +8,7 @@ import { CardDataService, Card, User } from 'src/app/space-service.service';
   templateUrl: './user-summary-mob.component.html',
   styleUrls: ['./user-summary-mob.component.css'],
   animations: [
-    
+
     [
       trigger('slideUpDown', [
         state('hidden', style({

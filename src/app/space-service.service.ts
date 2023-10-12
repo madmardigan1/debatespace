@@ -53,65 +53,65 @@ export interface Topics {
 export class CardDataService {
   private cards = new BehaviorSubject<Card[]>([
     {
-      id: '1', 
+      id: '1',
       user: [
-        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'},
-        {name: 'Jared', role: 'spectator', rank: 2, photoUrl: '/assets/Jared.jpeg'}
+        { name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' },
+        { name: 'Jared', role: 'spectator', rank: 2, photoUrl: '/assets/Jared.jpeg' }
       ],
-      topic: ["Politics", "Ukraine", "Corruption", "Trump", "ProTrump", "#trump@", "War"], 
-      description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption", 
+      topic: ["Politics", "Ukraine", "Corruption", "Trump", "ProTrump", "#trump@", "War"],
+      description: "Follow me for the latest updates on Ukraine.  We're digging deep into recent government corruption",
       ranked: true,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: 'America should not be supporting Ukraine any longer', fullText: 'America should not be supporting Ukraine any longer', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
-      id: '2', 
+      id: '2',
       user: [
-        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
-      ], 
-      topic: ["Technology", "AI", "Innovation"], 
-      description: "Latest breakthroughs in AI", 
+        { name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' }
+      ],
+      topic: ["Technology", "AI", "Innovation"],
+      description: "Latest breakthroughs in AI",
       ranked: true,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: 'Latest breakthroughs in AI', fullText: 'Latest breakthroughs in AI', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
-      id: '3', 
+      id: '3',
       user: [
-        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
-      ], 
-      topic: ["Science", "Space", "Mars"], 
-      description: "Mars rover finds something interesting", 
+        { name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' }
+      ],
+      topic: ["Science", "Space", "Mars"],
+      description: "Mars rover finds something interesting",
       ranked: false,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: 'Mars rover finds something interesting', fullText: 'Mars rover finds something interesting', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
-      id: '4', 
+      id: '4',
       user: [
-        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
-      ], 
-      topic: ["Science", "Space", "Mars"], 
-      description: "Mars rover finds something interesting", 
+        { name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' }
+      ],
+      topic: ["Science", "Space", "Mars"],
+      description: "Mars rover finds something interesting",
       ranked: false,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
-      id: '5', 
+      id: '5',
       user: [
-        {name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg'},
-        {name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg'}
-      ], 
-      topic: ["Science", "Space", "Mars"], 
-      description: "Mars rover finds something interesting", 
+        { name: 'Steve', role: 'host', rank: 1, photoUrl: '/assets/Steve.jpeg' },
+        { name: 'Jared', role: 'speaker', rank: 2, photoUrl: '/assets/Jared.jpeg' }
+      ],
+      topic: ["Science", "Space", "Mars"],
+      description: "Mars rover finds something interesting",
       ranked: false,
-      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive:0, Negative:0, videoClip: null, soundClip: null, commentType: 'good' }]
+      nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     // ... Continue in this manner for at least 8 lines.
   ]);
@@ -181,58 +181,97 @@ export class CardDataService {
       { name: "Resources", tally: 24 },
       { name: "Innovations", tally: 20 },
     ]
-});
+  });
 
-getcards(): Observable<Card[]> {
-  return this.cards.asObservable();
-}
+  getcards(): Observable<Card[]> {
+    return this.cards.asObservable();
+  }
   cards$ = this.cards.asObservable();
 
   addCard(card: Card) {
     const currentCards = this.cards.getValue();
     this.cards.next([...currentCards, card]);
-   
+
     // Here, operate on 'currentCards' directly after updating it
 
-}
+  }
 
-updateCard(id: string, name:string, role:string,rank:number, photoUrl:string): void {
-  console.log(id, "", name, "", role, "", rank, "", photoUrl)
-  const updatedCards = this.cards.getValue().map(card => {
-    if (card.id === id) {
-      card.user.push({
-        name: name,
-        role: role,
-        rank: rank,
-        photoUrl: photoUrl
-      });
+  updateCard(id: string, name: string, role: string, rank: number, photoUrl: string): void {
+    console.log(id, "", name, "", role, "", rank, "", photoUrl)
+    const updatedCards = this.cards.getValue().map(card => {
+      if (card.id === id) {
+        card.user.push({
+          name: name,
+          role: role,
+          rank: rank,
+          photoUrl: photoUrl
+        });
 
-      return {
-        ...card,
+        return {
+          ...card,
+
+        };
+      }
+      return card;
+    });
+    this.cards.next(updatedCards);
+  }
+
+  updateCardMoment(id: string, nodeId: number, type: string, parentId?: any): void {
+    // Find the card with the matching id
+    const cardToUpdate = this.cards.getValue().find(card => card.id === id);
+
+    if (cardToUpdate) {
+      // Find the node with the matching id
+      const nodeToUpdate = cardToUpdate.nodes!.find(node => node.id === nodeId);
+     
+      if (nodeToUpdate) {
+        // Update the node's moment
+        if (type === 'negative') {
+          nodeToUpdate.Negative += 1;
+          nodeToUpdate.Moment = parseFloat(Math.abs((nodeToUpdate.Positive + nodeToUpdate.totalPositive + 1) / nodeToUpdate.Negative).toFixed(2));
+         
+        }
+        else {
+          nodeToUpdate.Positive += 1;
+          if (nodeToUpdate.Negative != 0) {
+            nodeToUpdate.Moment = parseFloat(Math.abs((nodeToUpdate.Positive + nodeToUpdate.totalPositive + 1) / nodeToUpdate.Negative).toFixed(2));
+          }
+          else {
+            nodeToUpdate.Moment = nodeToUpdate.Positive + nodeToUpdate.totalPositive + 1;
+          }
+          if (parentId) {
+            const parentToUpdate = cardToUpdate.nodes!.find(node => node.id === parentId);
+            parentToUpdate.totalPositive += 1;
+            }
         
-      };
+        }
+        console.log(nodeToUpdate);
+        // Optionally, you can update the BehaviorSubject with the updated list of cards
+        const updatedCards = this.cards.getValue();
+        this.cards.next(updatedCards);
+      } else {
+        console.error(`Node with id ${nodeId} not found in card ${id}!`);
+      }
+    } else {
+      console.error(`Card with id ${id} not found!`);
     }
-    return card;
-  });
-  this.cards.next(updatedCards);
-}
+  }
 
-updateCardNode(id: string, node: any, edge: any): void {
-  // Find the card with the matching id
-  console.log(id);
-  console.log(node);
-  console.log(edge);
-  const cardToUpdate = this.cards.getValue().find(card => card.id === id);
+  updateCardNode(id: string, node: any, edge: any): void {
+    // Find the card with the matching id
 
-  if (cardToUpdate) {
+    const cardToUpdate = this.cards.getValue().find(card => card.id === id);
+    node[0]=cardToUpdate!.nodes!.length+1;
+    if (cardToUpdate) {
       // If the card has no nodes array, initialize it
       if (!cardToUpdate.nodes) {
-          cardToUpdate.nodes = [];
+        cardToUpdate.nodes = [];
       }
 
       // If the card has no edges array, initialize it
       if (!cardToUpdate.edges) {
-          cardToUpdate.edges = [];
+        cardToUpdate.edges = [];
       }
 
       // Push the new node and edge
@@ -242,91 +281,91 @@ updateCardNode(id: string, node: any, edge: any): void {
       // Optionally, you can update the BehaviorSubject with the updated list of cards
       const updatedCards = this.cards.getValue();
       this.cards.next(updatedCards);
-  } else {
+    } else {
       console.error(`Card with id ${id} not found!`);
+    }
   }
-}
 
-deleteNode(cardId: string, nodeId: number): void {
-  // Find the card with the matching id
-  const cardToUpdate = this.cards.getValue().find(card => card.id === cardId);
+  deleteNode(cardId: string, nodeId: number): void {
+    // Find the card with the matching id
+    const cardToUpdate = this.cards.getValue().find(card => card.id === cardId);
 
-  if (cardToUpdate) {
+    if (cardToUpdate) {
       if (cardToUpdate.nodes) {
-          // Check if the node exists
-          const nodeExists = cardToUpdate.nodes.some(node => node.id === nodeId);
+        // Check if the node exists
+        const nodeExists = cardToUpdate.nodes.some(node => node.id === nodeId);
 
-          if (nodeExists) {
-              // Remove the node
-              cardToUpdate.nodes = cardToUpdate.nodes.filter(node => node.id !== nodeId);
+        if (nodeExists) {
+          // Remove the node
+          cardToUpdate.nodes = cardToUpdate.nodes.filter(node => node.id !== nodeId);
 
-              // Remove the associated edges
-              cardToUpdate.edges = cardToUpdate.edges!.filter(edge => edge.from !== nodeId && edge.to !== nodeId);
+          // Remove the associated edges
+          cardToUpdate.edges = cardToUpdate.edges!.filter(edge => edge.from !== nodeId && edge.to !== nodeId);
 
-              // Optionally, you can update the BehaviorSubject with the updated list of cards
-              const updatedCards = this.cards.getValue();
-              this.cards.next(updatedCards);
-          } else {
-              console.error(`Node with id ${nodeId} not found in card ${cardId}!`);
-          }
+          // Optionally, you can update the BehaviorSubject with the updated list of cards
+          const updatedCards = this.cards.getValue();
+          this.cards.next(updatedCards);
+        } else {
+          console.error(`Node with id ${nodeId} not found in card ${cardId}!`);
+        }
       }
-  } else {
+    } else {
       console.error(`Card with id ${cardId} not found!`);
+    }
   }
-}
 
 
 
 
-addTag(newTagNames: string[]): void {
-  const currentTopics = this.topicsInstance.getValue();
+  addTag(newTagNames: string[]): void {
+    const currentTopics = this.topicsInstance.getValue();
 
-  for (let newTagName of newTagNames) {
-    let tagFound = false; // To track if we found the tag in any category
+    for (let newTagName of newTagNames) {
+      let tagFound = false; // To track if we found the tag in any category
 
-    // Iterate over each category to search for the tag
-    for (let category in currentTopics) {
-      const existingTag = currentTopics[category].find(tag => tag.name === newTagName);
+      // Iterate over each category to search for the tag
+      for (let category in currentTopics) {
+        const existingTag = currentTopics[category].find(tag => tag.name === newTagName);
 
-      if (existingTag) {
-        existingTag.tally += 1;
-        tagFound = true;
-        break; // Break the inner loop as we've found the tag
+        if (existingTag) {
+          existingTag.tally += 1;
+          tagFound = true;
+          break; // Break the inner loop as we've found the tag
+        }
+      }
+
+      // If the tag wasn't found in any category, add it to 'usertopics' with a tally of 1
+      if (!tagFound) {
+        currentTopics.usertopics.push({ name: newTagName, tally: 1 });
       }
     }
 
-    // If the tag wasn't found in any category, add it to 'usertopics' with a tally of 1
-    if (!tagFound) {
-      currentTopics.usertopics.push({ name: newTagName, tally: 1 });
-    }
+    // Update the BehaviorSubject with the modified topics data
+    this.topicsInstance.next(currentTopics);
   }
 
-  // Update the BehaviorSubject with the modified topics data
-  this.topicsInstance.next(currentTopics);
-}
 
+  getTopics(): Observable<Topics> {
+    return this.topicsInstance.asObservable();
+  }
 
-getTopics(): Observable<Topics> {
-  return this.topicsInstance.asObservable();
-}
+  findMatches(userTopics: string[], userRanked: boolean): Card[] {
+    // Extract the current cards from the BehaviorSubject
+    const allCards = this.cards.getValue();
 
-findMatches(userTopics: string[], userRanked: boolean): Card[] {
-  // Extract the current cards from the BehaviorSubject
-  const allCards = this.cards.getValue();
+    // Filter cards that match the user's criteria
+    const matchedCards = allCards.filter(card => {
+      // Check if at least one topic matches
+      const hasCommonTopic = card.topic.some(topic => userTopics.includes(topic));
 
-  // Filter cards that match the user's criteria
-  const matchedCards = allCards.filter(card => {
-    // Check if at least one topic matches
-    const hasCommonTopic = card.topic.some(topic => userTopics.includes(topic));
-    
-    // Check if the ranked type matches
-    const hasSameRankType = card.ranked === userRanked;
+      // Check if the ranked type matches
+      const hasSameRankType = card.ranked === userRanked;
 
-    return hasCommonTopic && hasSameRankType;
-  });
+      return hasCommonTopic && hasSameRankType;
+    });
 
-  return matchedCards;
-}
+    return matchedCards;
+  }
 
 
 }

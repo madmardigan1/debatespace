@@ -11,7 +11,7 @@ export class ChatSubmitMobComponent {
     private nodeSelected: number | undefined;
     value = '';
     @Output() submitit = new EventEmitter<string>();
-  @Input() toggleChatsText:string = '';
+ 
     constructor (private nodeService: NodespaceServiceService, private chatSubmit: ChatSubmitService) {
       
       this.nodeService.getNodeId().subscribe(data => {
@@ -23,7 +23,7 @@ export class ChatSubmitMobComponent {
     onSubmitit(event: Event) {
      
       event.preventDefault(); 
-      if (this.value && this.toggleChatsText == "Type in chat") {
+      if (this.value) {
           this.chatSubmit.sendChat(this.value);
           this.value = '';
       }

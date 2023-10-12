@@ -6,27 +6,19 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 })
 export class DebateSpaceService {
 
-  private buttonType = new Subject<string[]>(); 
+  private buttonType = new Subject<any[]>(); 
   private emojiType = new BehaviorSubject<string>(''); 
  
   constructor() { }
 
+//toggle and getToggle send and receive the entered text, reaction type, and tag when the user clicks the reaction button
+  Toggle(level: string, soundClip:any, videoClip:any, reaction:string, tag:string): void {
+    this.buttonType.next([level,soundClip,videoClip,reaction, tag]);
+   
+  } 
 
-  Toggle(level: string, reaction:string, tag:string): void {
-    this.buttonType.next([level,reaction, tag]);
-  }
-
-  getToggle(): Observable<string[]> {
+  getToggle(): Observable<any[]> {
     return this.buttonType.asObservable();
   }
-
-  sendEmoji(level: string): void {
-    this.emojiType.next(level);
-  }
-
-  getEmoji(): Observable<string> {
-    return this.emojiType.asObservable();
-  }
-
 
 }

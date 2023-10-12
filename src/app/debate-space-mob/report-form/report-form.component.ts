@@ -6,8 +6,10 @@ import { ReportFormService } from './report-form.service';
   styleUrls: ['./report-form.component.css']
 })
 export class ReportFormComponent implements OnInit{
-  constructor (private reportServ: ReportFormService) {
 
+  //This component creates a user report form that is sent to the server for further processing
+
+  constructor (private reportServ: ReportFormService) {
   }
   ngOnInit(): void {
     this.formData.reportLink = this.getLink;

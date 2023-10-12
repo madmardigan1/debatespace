@@ -9,7 +9,8 @@
     border: none;
     cursor: pointer;
     font-size: 1.5em;
-    transform: rotate(180deg); /* makes the arrow point sideways (leftwards) */
+    transform: rotate(180deg);
+    /* makes the arrow point sideways (leftwards) */
 }
 
 
@@ -18,25 +19,25 @@
 
 .summary-container:hover {
     background-color: rgb(175, 175, 175);
-    color:black;
+    color: black;
 
 }
 
 .sumButton:hover {
-    color:inherit
+    color: inherit
 }
 
-.fas fa-angle-down{
-    color:white;
+.fas fa-angle-down {
+    color: white;
 }
+
 .rotated {
     transform: rotate(90deg);
-  }
+}
 
-  button:disabled {
+button:disabled {
     background-color: gray;
     color: transparent;
-    border-color:black;
+    border-color: black;
 
-  }
-  
+}

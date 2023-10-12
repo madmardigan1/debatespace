@@ -41,9 +41,7 @@ import { UserSearchComponent } from './user-search/user-search.component';
 import { UserCardComponent } from './debate-space-mob/user-summary-mob/user-card/user-card.component';
 import { AboutNodesComponent } from './home/about-nodes/about-nodes.component';
 import { ReportFormComponent } from './debate-space-mob/report-form/report-form.component';
-
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RankTabComponent } from './debate-space-mob/rank-tab/rank-tab.component';
 import { MatchMakerComponent } from './home/match-maker/match-maker.component';
 import { SearchComponent } from './search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -71,7 +69,6 @@ import { NodesComponent } from './nodes/nodes.component';
     UserCardComponent,
     AboutNodesComponent,
     ReportFormComponent,
-    RankTabComponent,
     MatchMakerComponent,
     SearchComponent,
     NodesComponent,

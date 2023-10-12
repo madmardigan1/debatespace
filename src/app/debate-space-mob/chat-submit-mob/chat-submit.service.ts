@@ -7,10 +7,10 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 export class ChatSubmitService {
 
-  private chatInfo = new BehaviorSubject<string>(''); 
-  private nodeInfo = new Subject<string[]>(); 
+  private chatInfo = new BehaviorSubject<string>('');
+  private nodeInfo = new Subject<string[]>();
   private linkId = new BehaviorSubject<number>(0);
- 
+
   constructor() { }
 
 
@@ -18,25 +18,23 @@ export class ChatSubmitService {
     this.chatInfo.next(text);
   }
 
- getChat(): Observable<string> {
+  getChat(): Observable<string> {
     return this.chatInfo.asObservable();
   }
-  
+
   sendLinkId(Id: number): void {
     this.linkId.next(Id);
   }
 
- getLinkId(): Observable<number> {
+  getLinkId(): Observable<number> {
     return this.linkId.asObservable();
   }
-  sendNodeText(text: string, reaction:string, tag: string): void {
+  sendNodeText(text: string, reaction: string, tag: string): void {
     this.nodeInfo.next([text, reaction, tag]);
-    
-    
   }
 
- getNodeText(): Observable<string[]> {
+  getNodeText(): Observable<string[]> {
     return this.nodeInfo.asObservable();
-    
+
   }
 }

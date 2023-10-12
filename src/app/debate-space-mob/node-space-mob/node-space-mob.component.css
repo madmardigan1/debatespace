@@ -1,58 +1,41 @@
-
 .container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    padding:0;
-    display:flex;
-  }
-  .hidden {
-    display: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
 }
 
-.small-button {
-  transform: scale(0.7);
-}
-.test{ 
-  
-    position: fixed;
-    bottom: 80px; /* adjust as needed */
-    left: 50px;  /* adjust as needed */
-
-}
 .fas.fa-arrow-up {
   position: absolute;
-  font-size:40px;
-  bottom: 40%; /* adjust as needed */
-  left: 25%;  /* adjust as needed */
-  color:green;
-  z-index:10;
+  font-size: 40px;
+  bottom: 40%;
+  left: 25%;
+  color: green;
+  z-index: 10;
 }
 
 .fas.fa-arrow-down {
   position: absolute;
-  font-size:40px;
-  top:40%; /* adjust as needed */
-  right: 25%;  /* adjust as needed */
-  color:red;
-  z-index:10;
+  font-size: 40px;
+  top: 40%;
+  right: 25%;
+  color: red;
+  z-index: 10;
 }
-
-
 
 .circular-image-container {
   width: 40px;
   height: 40px;
   border-radius: 50%;
- 
-  left:15px;
-  top:15px;
+  left: 15px;
+  top: 15px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right:3px;
+  margin-right: 3px;
 }
 
 .circular-image {

@@ -1,5 +1,4 @@
   import { Component, Input } from '@angular/core';
-  import { SafeUrl } from '@angular/platform-browser';
   import { Subscription } from 'rxjs';
   import { ChatspaceService } from './chatspace.service';
   import { ChatSubmitService } from '../chat-submit-mob/chat-submit.service';
@@ -12,7 +11,6 @@
   export class ChatSpaceMobComponent {
     scrollChat: Array<{ sender: string, text: string, color: string, id?: number }> = [];
     private idSubscription: Subscription; 
-    @Input() displayText: string = '';
     private subscription: Subscription;
 
     constructor(
@@ -40,18 +38,6 @@
       }
       });
     }
-
-/*
-    let counter = 0;
-    const intervalId = setInterval(() => {
-      const randomMessage = this.getRandomMessage();
-      this.updateChat(randomMessage);
-      counter++;
-      if (counter >= 40) {
-        clearInterval(intervalId);
-      }
-    }, 10000);*/
-  
 
   updateChat(message: { sender: string, text: string, color: string, id?: number }): void {
     this.scrollChat.push(message);
