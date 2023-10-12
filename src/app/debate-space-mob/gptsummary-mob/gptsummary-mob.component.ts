@@ -15,15 +15,13 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   public children: { text: string, fullText: string, id: number, videoClip?: any, soundClip?: any, expand?: boolean }[] = [];
   private subscriptions: Subscription[] = [];
   @ViewChild('playbackVideoElement', { static: false }) playbackVideoElement!: ElementRef;
-  expandedLines: Set<number> = new Set();
+  expandedLineIndices: Set<number> = new Set();
+  expandedChildIndices: Set<number> = new Set();
 
   // State management properties
   isPlaying = false;
   traveled = false;
   isRecordingVideo = false;
-  nextNode: any;
-  previousNode: any;
-  goBackone: any;
   private goBackonemore: any;
 
   constructor(
@@ -34,19 +32,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-     // Handle sibling data
-     this.subscriptions.push(
-      this.nodeService.getSiblingData().subscribe(message => {
-        [this.previousNode, this.nextNode] = message ? [message.previous, message.next] : [null, null];
-      })
-    );
-
-    // Handle node ID
-    this.subscriptions.push(
-      this.nodeService.getNodeId().subscribe(message => {
-        this.goBackone = message;
-      })
-    );
+ 
     this.subscriptions.push(
       this.nodeService.getNodeText().subscribe(messages => {
         this.lines = messages;
@@ -65,31 +51,9 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  // Navigation methods
-  goBack(): void {
-    this.chatSpace.sendLink(this.goBackonemore);
-    this.traveled = false;
-  }
-
-  previousId(): void {
-    if (this.previousNode) {
-      this.goBackone = this.previousNode;
-      this.chatSpace.sendLink(this.previousNode);
-    }
-  }
-
-  nextId(): void {
-    if (this.nextNode) {
-      this.goBackone = this.nextNode;
-      this.chatSpace.sendLink(this.nextNode);
-    }
-  }
 
   logNodeId(nodeId: number): void {
-    this.goBackonemore = this.goBackone;
-    this.traveled = true;
     this.chatSpace.sendLink(nodeId);
-    this.goBackone = nodeId;
   }
 
   // Audio & Video playback methods
@@ -124,16 +88,29 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   }
 
   // Utility methods for UI
-  expand(line: any, index: number): void {
-    line.expand = true;
-    if (this.expandedLines.has(index)) {
-      this.expandedLines.delete(index);
+  expandLine(line: any, index: number): void {
+    line.expand = !line.expand; // Toggle the expansion
+    if (this.expandedLineIndices.has(index)) {
+      this.expandedLineIndices.delete(index);
     } else {
-      this.expandedLines.add(index);
+      this.expandedLineIndices.add(index);
     }
   }
 
-  isExpanded(index: number): boolean {
-    return this.expandedLines.has(index);
+  isLineExpanded(index: number): boolean {
+    return this.expandedLineIndices.has(index);
+  }
+
+  expandChild(child: any, index: number): void {
+    child.expand = !child.expand; // Toggle the expansion
+    if (this.expandedChildIndices.has(index)) {
+      this.expandedChildIndices.delete(index);
+    } else {
+      this.expandedChildIndices.add(index);
+    }
+  }
+
+  isChildExpanded(index: number): boolean {
+    return this.expandedChildIndices.has(index);
   }
 }

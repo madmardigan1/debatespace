@@ -601,7 +601,6 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     this.nodeService.changeNodeText(combinedObjects);
     this.nodeService.SendAllChildren(children);
     this.nodeService.setNodeId(nodeId);
-    this.nodeService.SetSiblingData(this.getAdjacentSiblingNodeIds(nodeId));
   }
 
   private zoomToNode(nodeId: any): void {
@@ -768,12 +767,6 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         return;
       }
     }
-  }
-
-  goBack() {
-    this.handleNodeClick(
-      this.previousNode
-    );
   }
 
   ngOnDestroy(): void {

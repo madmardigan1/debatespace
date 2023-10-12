@@ -32,16 +32,11 @@
         [card]="this.card.id"></app-user-summary-mob>
 
     </div>
-    <div *ngIf="selectedButton===5" class="bg-black text-white" style="overflow-y:scroll;height:50vh;">
-
-      <app-av-control-mob></app-av-control-mob>
-
-    </div>
     <div *ngIf="selectedButton===6" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;">
       <app-about-nodes></app-about-nodes>
     </div>
     <div *ngIf="selectedButton===7" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;">
-      <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(0)"></app-report-form>
+      <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(-1)"></app-report-form>
     </div>
 
   </div>
@@ -67,6 +62,7 @@
         <div class="d-flex bg-black justify-content-between" style="height:auto;">
           <button class="btn btn-outline-white text-white" (click)="togglePanel(3)">
             <i class="fas fa-users" style="font-size:15px;"></i>
+            {{card.user.length}}
           </button>
           <div class="d-flex align-items-center">
             <button [ngClass]="{'btn btn-light': panelType === 'nodes', 'text-black': panelType === 'nodes'}"
@@ -111,7 +107,6 @@
         <mat-menu #menu="matMenu" xPosition="before">
           <button mat-menu-item (click)="togglePanel(6)">About</button>
           <button mat-menu-item (click)="copyLinkToClipboard()">Share Node</button>
-          <button mat-menu-item (click)="togglePanel(5)">Adjust Settings</button>
           <button mat-menu-item (click)="togglePanel(7)">Report this space</button>
         </mat-menu>
       </div>
