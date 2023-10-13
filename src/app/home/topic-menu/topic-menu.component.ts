@@ -15,6 +15,7 @@ import { DeviceTypeService } from 'src/app/device-type.service';
 export class TopicMenuComponent implements OnInit {
   cards: Card[] = [];
   currentTopics!: Topics;
+  trendingTopics:any=[];
   topicSelection = false;
   joinState = false;
   savedTopics: string[] = [];
@@ -31,8 +32,16 @@ export class TopicMenuComponent implements OnInit {
       this.cards = data;
     });
     this.cardService.getTopics().subscribe(data => {
-      this.currentTopics = data;
-    });
+  
+        this.currentTopics = data;
+        // Flatten the topics and sort by tally
+        const flattenedTopics: Topic[] = ([] as Topic[]).concat(...Object.values(data));
+        const sortedTopics = flattenedTopics.sort((a, b) => b.tally - a.tally);
+        // Return the top 10 topics
+        this.trendingTopics = sortedTopics.slice(0, 10);
+      });
+    
+  
 
     this.device.getDevice().subscribe(data => { this.deviceType = data })
 

@@ -5,7 +5,7 @@
       overflow-y:hidden;">
       <div *ngIf="isMobile" style="position:absolute; left:10px;top:10px;z-index: 3;">
         <button class="btn btn-outline-white text-white" (click)="goBack()">
-          <i class="fas fa-times"></i>
+          <i class="fas fa-arrow-left"></i>
         </button>
       </div>
       <form [formGroup]="form" (ngSubmit)="submit()" class="form-container bg-black p-4 rounded"
@@ -13,8 +13,8 @@
         <h2 class="text-center text-white mb-4">Create a Node!</h2>
   
         <!-- Topic Input -->
-        <div class="d-flex mb-7" style="justify-content: space-between; overflow-y: scroll;">
-          <div class="form-group d-flex flex-column align-items-center">
+        <div class="d-flex mb-7" style="overflow-y: scroll; width:100%;">
+          <div class="form-group d-flex flex-column align-items-center justify-content-center" style="width:100px;">
             <label for="topic" class="text-white mr-2">Add Topics</label> <!-- Separation between label and button -->
             <button type="button" class="btn btn-outline-white text-white" style="border:1px solid white; border-radius:50%;"
             [routerLink]="['/home/topicMenu', 'true']">
@@ -23,7 +23,7 @@
           </div>
           <div class="bg-black" style="display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-gap: 10px; background-color: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; overflow-y: hidden; overflow-x: auto; max-height: 150px; white-space: nowrap;">
           <div *ngFor="let list of topic">
-            <div class="d-flex bg-danger text-white" style=" padding: 3px 8px; border-radius: 9999px; font-size: 11px; margin-left:3px;margin-right: 2px;">{{list}}</div>
+            <div class="d-flex bg-danger text-white" style="width:auto; padding: 3px 8px; border-radius: 9999px; font-size: 11px; margin-left:3px;margin-right: 2px;">{{list}}</div>
           </div>
         </div>
         </div>
@@ -74,7 +74,7 @@
   
         <!-- Create Space Button -->
         <div class="text-center mb-3"> <!-- Centered button -->
-          <button type="submit" [disabled]="form.invalid" class="btn btn-danger btn-lg mt-3">Create Node</button>
+          <button type="submit" [disabled]="form.invalid" class="btn btn-danger btn-lg mt-3" style="border-radius:999px">Create Node</button>
         </div>
       </form>
     
