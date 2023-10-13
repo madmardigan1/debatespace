@@ -1,7 +1,7 @@
-import { Component, OnChanges, OnInit, Output,EventEmitter} from '@angular/core';
+import { Component, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
 import { TopicMenuService } from './topic-menu.service';
 import { CardDataService, Topics } from 'src/app/space-service.service';
-import { Card,Topic,  } from 'src/app/space-service.service';
+import { Card, Topic, } from 'src/app/space-service.service';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -12,21 +12,21 @@ import { DeviceTypeService } from 'src/app/device-type.service';
   templateUrl: './topic-menu.component.html',
   styleUrls: ['./topic-menu.component.css']
 })
-export class TopicMenuComponent implements OnInit{
-  cards: Card[] =[];
-  currentTopics!: Topics; 
-  topicSelection=false;
-  joinState=false;
+export class TopicMenuComponent implements OnInit {
+  cards: Card[] = [];
+  currentTopics!: Topics;
+  topicSelection = false;
+  joinState = false;
   savedTopics: string[] = [];
   expandedStates: { [key: number]: boolean } = {};
-  expandPane:any = [];
-  deviceType=false;
+  expandPane: any = [];
+  deviceType = false;
   addTopic = 'false';
-  searchTerm: string = ''; 
+  searchTerm: string = '';
   @Output() closeTopics = new EventEmitter<void>();
-  matchedTopics: any[] = []; 
+  matchedTopics: any[] = [];
   parameterValue: string = '';
-  constructor(private location: Location,private topicServ:TopicMenuService, private cardService:CardDataService, private route:ActivatedRoute, private device:DeviceTypeService) {
+  constructor(private location: Location, private topicServ: TopicMenuService, private cardService: CardDataService, private route: ActivatedRoute, private device: DeviceTypeService) {
     this.cardService.cards$.subscribe((data) => {
       this.cards = data;
     });
@@ -34,16 +34,16 @@ export class TopicMenuComponent implements OnInit{
       this.currentTopics = data;
     });
 
-    this.device.getDevice().subscribe(data => {this.deviceType=data})
-    
+    this.device.getDevice().subscribe(data => { this.deviceType = data })
+
   }
   ngOnInit(): void {
     this.parameterValue = this.route.snapshot.paramMap.get('myParam') || 'defaultValue';
 
 
-      this.addTopic = this.parameterValue;
-  
-   
+    this.addTopic = this.parameterValue;
+
+
   }
 
   objectKeys(obj: any) {
@@ -61,62 +61,62 @@ export class TopicMenuComponent implements OnInit{
         );
       }
     }
- 
-  }
-  
 
-  selectTopics () : void {
+  }
+
+
+  selectTopics(): void {
     this.topicSelection = !this.topicSelection;
   }
-  
-  closeMenu () : void {
+
+  closeMenu(): void {
     this.topicSelection = !this.topicSelection;
     this.savedTopics = [];
     this.closeTopics.emit();
   }
-  
-  expand (select:number) : void {
-   
+
+  expand(select: number): void {
+
     this.expandPane[select] = !this.expandPane[select];
     this.expandedStates[select] = !this.expandedStates[select];
 
 
   }
-  
-  saveTopic (list:string) : void {
+
+  saveTopic(list: string): void {
     this.savedTopics.push(list);
   }
-  
-  addTopics ():void{
+
+  addTopics(): void {
     this.topicServ.addTopics(this.savedTopics);
     this.cardService.addTag(this.savedTopics);
-    
-    if (this.addTopic=='true') {
+
+    if (this.addTopic == 'true') {
       this.location.back();
-      }
+    }
 
   }
   goBack(): void {
-    this.savedTopics=[];
+    this.savedTopics = [];
     this.closeTopics.emit();
-    if (this.addTopic=='true') {
-   
-    this.location.back();
+    if (this.addTopic == 'true') {
+
+      this.location.back();
     }
- 
+
   }
-  
+
   addNewTopic(): void {
-    if (this.searchTerm && this.addTopic=='true') {
-        this.saveTopic(this.searchTerm);
-      
-        
-        this.searchTerm = ''; // Reset the search term after adding
-        this.closeTopics.emit();
+    if (this.searchTerm && this.addTopic == 'true') {
+      this.saveTopic(this.searchTerm);
+
+
+      this.searchTerm = ''; // Reset the search term after adding
+      this.closeTopics.emit();
     }
   }
 
-  removeTopic (data:any):void {
+  removeTopic(data: any): void {
     this.savedTopics.splice(data);
   }
 }

@@ -1,74 +1,88 @@
-
 <div class="d-flex justify-content-center" style="width:100%;height:100%;">
-<div class="topic selection bg-black" style="position:absolute; width:100%; height:100%; display: flex;
+  <div class="topic selection bg-black" style="position:absolute; width:100%; height:100%; display: flex;
 flex-direction: column;
 overflow-y:hidden;">
-<div class="top"style="position:relative;display:flex; flex-direction:column;height:90%; overflow-y: scroll;">
-<div  style="position:absolute; display:flex; flex-direction: column;flex:auto;width:100%; overflow-y:scroll;">
-  <div class="d-flex justify-content-center text-white" style="position:relative;">
-    <h1>Add Topics</h1>
- 
-  <div *ngIf="deviceType" style="position:absolute; left:10px;top:10px">
-    <button class="btn btn-outline-white text-white" (click)="goBack()">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-</div>
-<div class="topics d-flex" style="overflow-x:hidden; flex-grow:1; position:relative;">
-<div *ngFor="let list of savedTopics">
-  <button class="bg-danger" style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;" (click)="removeTopic(list)">{{list}}</button>
-</div>
-</div>
+    <div class="top" style="position:relative;display:flex; flex-direction:column;height:90%; overflow-y: scroll;">
+      <div style="position:absolute; display:flex; flex-direction: column;flex:auto;width:100%; overflow-y:scroll;">
+        <div class="d-flex justify-content-center text-white" style="position:relative;">
+          <h1>Add Topics</h1>
 
-    <!-- Step 1: Add a search bar -->
-    <div style="padding: 10px;position:relative;width:100%; overflow-block:auto;">
-      <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="addNewTopic()"placeholder="Search for topics..." (input)="onSearch()">
-      <button class="btn btn-outine-danger" *ngIf="searchTerm && !matchedTopics.length &&addTopic=='true'"  (click)="addNewTopic()" style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Add</button>
+          <div *ngIf="deviceType" style="position:absolute; left:10px;top:10px">
+            <button class="btn btn-outline-white text-white" (click)="goBack()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="topics d-flex" style="overflow-x:hidden; flex-grow:1; position:relative;">
+          <div *ngFor="let list of savedTopics">
+            <button class="bg-danger"
+              style="margin-left:3px; margin-right:3px; padding-left:3px; padding-right:3px;border-radius:30%;"
+              (click)="removeTopic(list)">{{list}}</button>
+          </div>
+        </div>
+
+        <!-- Step 1: Add a search bar -->
+        <div style="padding: 10px;position:relative;width:100%; overflow-block:auto;">
+          <input [(ngModel)]="searchTerm" class="form-control" (keydown.enter)="addNewTopic()"
+            placeholder="Search for topics..." (input)="onSearch()">
+          <button class="btn btn-outine-danger" *ngIf="searchTerm && !matchedTopics.length &&addTopic=='true'"
+            (click)="addNewTopic()"
+            style="position: absolute; right:10px ; top: 50%; transform: translateY(-50%);">Add</button>
+        </div>
+
+        <!-- Step 2: Show matched topics -->
+        <div *ngIf="searchTerm && matchedTopics.length"
+          style="display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-gap: 10px; background-color: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; overflow-y: hidden; overflow-x: auto; max-height: 150px; white-space: nowrap;">
+
+
+
+          <div *ngFor="let topic of matchedTopics">
+            <button class="btn btn-danger btn-sm"
+              style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;"
+              (click)="saveTopic(topic.name)">{{ topic.name }}</button>
+
+
+          </div>
+        </div>
+
+
+        <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
+
+
+        </div>
+
+
+
+
+
+        <div *ngFor="let category of objectKeys(currentTopics) let i = index"
+          style="position:relative; display:flex; flex-direction:column;">
+          <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
+
+            <button class="topicButton" style="position:absolute; width:100%;height:100%;"
+              (click)="expand(i)">{{category}}</button>
+            <i class="fas fa-chevron-right" [class.rotated]="expandedStates[i]"
+              style="position:absolute; left:5px;"></i>
+          </div>
+          <div *ngIf="expandPane[i]" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;"
+            style="overflow-x:scroll;">
+            <div *ngFor="let topic of currentTopics[category]">
+              <button class="btn btn-danger"
+                style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-left:4px;margin-right: 2px;"
+                (click)="saveTopic(topic.name)">{{topic.name}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-    <!-- Step 2: Show matched topics -->
-    <div *ngIf="searchTerm && matchedTopics.length" style="display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-gap: 10px; background-color: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; overflow-y: hidden; overflow-x: auto; max-height: 150px; white-space: nowrap;">
-
-
-      
-      <div *ngFor="let topic of matchedTopics">
-        <button class="btn btn-danger btn-sm" style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;" (click)="saveTopic(topic.name)">{{ topic.name }}</button>
-
-
+    <div class="bottom justify-content-center mt-5"
+      style="justify-items:center;align-items:vertical; display:flex; position:relative;width:100%;height:10%;bottom:0;left:0;">
+      <div style="position:absolute; bottom:20%;">
+        <button class="btn btn-danger" style="height:60px" (click)="addTopics()">Add Topics</button>
       </div>
     </div>
-
-
-  <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
-   
-  
   </div>
-
- 
-
-
-
-  <div *ngFor="let category of objectKeys(currentTopics) let i = index" style="position:relative; display:flex; flex-direction:column;">
-    <div class="d-flex text-white text-left" style="align-items:center;position:relative;height: 40px;">
-   
-      <button class="topicButton" style="position:absolute; width:100%;height:100%;" (click)="expand(i)">{{category}}</button>
-      <i class="fas fa-chevron-right" [class.rotated]="expandedStates[i]" style="position:absolute; left:5px;"></i>
-    </div>
-    <div *ngIf="expandPane[i]" class="topics scrollTopic d-flex mt-3 mb-3; width:100%;" style="overflow-x:scroll;">
-      <div *ngFor="let topic of currentTopics[category]">
-        <button class="btn btn-danger" style="padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-left:4px;margin-right: 2px;" (click)="saveTopic(topic.name)">{{topic.name}}</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
-  <div class="bottom justify-content-center mt-5" style="justify-items:center;align-items:vertical; display:flex; position:relative;width:100%;height:10%;bottom:0;left:0;">
-     <div style="position:absolute; bottom:20%;">
-      <button class="btn btn-danger" style="height:60px"(click)="addTopics()">Add Topics</button>
-    </div>
-  </div>
-</div>
 
 
 </div>

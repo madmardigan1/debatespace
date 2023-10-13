@@ -4,24 +4,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
-//materials
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import { MatButton } from '@angular/material/button';
-import { SharedserviceService } from './sharedservice.service';
-
-import { CardDataComponent } from './card-data/card-data.component';
-
+import { CardDataComponent } from './card-data/card-data.component'
 import { HomeComponent } from './home/home.component';
 import { SpacecreateComponent } from './spacecreate/spacecreate.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TournamentBulletinComponent } from './tournament-bulletin/tournament-bulletin.component';
 import { BrowsePageComponent } from './browse-page/browse-page.component';
@@ -42,7 +34,6 @@ import { UserCardComponent } from './debate-space-mob/user-summary-mob/user-card
 import { AboutNodesComponent } from './home/about-nodes/about-nodes.component';
 import { ReportFormComponent } from './debate-space-mob/report-form/report-form.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatchMakerComponent } from './home/match-maker/match-maker.component';
 import { SearchComponent } from './search/search.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NodesComponent } from './nodes/nodes.component';
@@ -69,7 +60,6 @@ import { NodesComponent } from './nodes/nodes.component';
     UserCardComponent,
     AboutNodesComponent,
     ReportFormComponent,
-    MatchMakerComponent,
     SearchComponent,
     NodesComponent,
  
@@ -96,7 +86,7 @@ import { NodesComponent } from './nodes/nodes.component';
     NgbModule,
     
   ],
-  providers: [SharedserviceService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,35 +1,37 @@
 .banner-top {
-    height: 8%;
-  
-    position: relative; /* Use 'absolute' if you only want it on top within its parent container. */
-  
-   
-  }
-  
+  height: 8%;
+
+  position: relative;
+  /* Use 'absolute' if you only want it on top within its parent container. */
+
+
+}
+
 
 .routercontainer {
-    
-    position: relative;
 
-   
-    flex:auto;
+  position: relative;
+
+
+  flex: auto;
 }
 
 
 .desktop {
-  width:50%;
+  width: 50%;
 }
+
 .mobile {
-  width:390px;
+  width: 390px;
 }
 
 .banner {
-  width:100%;
-  margin-bottom:30px;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
 .circular-image-container {
-  border:1px solid white;
+  border: 1px solid white;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -37,7 +39,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
 }
 
 .circular-image {
@@ -45,5 +47,3 @@
   max-height: 100%;
   object-fit: cover;
 }
-
-
