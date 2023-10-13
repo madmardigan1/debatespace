@@ -1,19 +1,19 @@
-<div id="myDiv" class="container">
+<div class="container">
   <div *ngIf="shownSlide"  class="swipeR "
-    style="width:100%;height:40%; top:0;  justify-content:center; align-items:center; position:absolute; flex:auto; z-index:3; opacity:.9;">
+    style="width:100%;height:30%; top:0;  justify-content:center; align-items:center; position:absolute; flex:auto; z-index:3; opacity:.8;">
     <div class="swiper-slide text-white" style="display:flex;justify-content:center;align-items:center;">
-      <div class="bg-dark text-white"
-        style="position:relative; display:flex; flex-direction:column; width:90%;height:80%; border:1px solid white; border-radius:10px;">
+      <div class="bg-black text-white"
+        style="position:relative; display:flex; flex-direction:column; margin-top:40px; width:90%;height:100%; border:1px solid rgb(255, 255, 255,.5); border-radius:10px;">
         <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
           <div class="circular-image-container">
             <img [src]="shownSlide.image" class="circular-image">
           </div>
           <p>{{shownSlide.user}}</p>
         </div>
-        <div class="main body d-flex ml-2" style="flex:auto;">
-          <p>{{shownSlide.text}}</p>
+        <div class="main body d-flex" style="padding:0px 10px; flex:auto; overflow-y:scroll">
+          <p>{{shownSlide.fullText}}</p>
         </div>
-        <div class="d-flex" style="position:relative; height:50px; width:100%;">
+        <div class="d-flex mt-1" style="position:relative; height:50px; width:100%;">
           <div class="d-flex flex-wrap align-items-center ml-2"
             style="height:100%; width:70%; overflow:hidden; max-height:50px;">
             <ng-container *ngFor="let slide of negativetagArray">
@@ -51,8 +51,8 @@
     </div>
   </div>
 
-  <div #visNetwork id="mynetwork" class="nodes"
-    style="position:absolute; height:80%; bottom:10%;  width:100%;  z-index:2;"></div>
+  <div #visNetwork id="myDiv" class="nodes"
+    style="position:absolute; height:100%;  width:100%;  z-index:2;"></div>
 
   <i class="fas fa-arrow-up" *ngIf="animationState === 'up'" [@arrowAnimation]="animationState"
     [style.left.px]="thumbsPosition.x" [style.top.px]="thumbsPosition.y">

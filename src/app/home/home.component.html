@@ -39,7 +39,7 @@
     <div class="center bg-black" style="position:relative; overflow-y: scroll;">
       <div class="bg-black mt-3" style=" height:auto;width:100%;">
         <h2 class="text-left mb-2" style="padding:0px 10px;">Trending Topics</h2>
-        <div class="d-flex align-items-center" style=" height:auto;width:100%; overflow-x: scroll;">
+        <div class="scroll-container d-flex align-items-center" style=" height:auto;width:100%; overflow-x: scroll;">
 
           <div *ngFor="let topic of currentTopics" class="d-flex flex-column align-items-center">
             <button class="btn btn-outline-white text-white"
@@ -50,13 +50,13 @@
         </div>
       </div>
 
-      <div class="carot text-white">
+      <div class="carot text-white" style="border-radius:10px;">
         <ngb-carousel [showNavigationIndicators]="false">
           <ng-template ngbSlide *ngFor="let data of dataArray">
-            <div class="card custom-cardss bg-black text-white text-center" style="z-index:1;height: 20rem;">
+            <div class="card custom-cardss bg-black text-white text-center" style="z-index:1;height: 15rem;">
               <div class="card-body" style="z-index: 20;">
-                <h1 class="card-title" style="z-index:500; margin-top:20%;">{{ data.title }}</h1>
-                <p class="card-text" style="z-index:500;">{{ data.description }}</p>
+                <h1 class="card-title" style="z-index:500; margin-top:3rem">{{ data.title }}</h1>
+                <p class="card-text" style="padding: 0px 60px;z-index:500;">{{ data.description }}</p>
                 <button *ngIf="data.link" [routerLink]="[data.link]"
                   style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%;"></button>
                 <button *ngIf="data.button" (click)="togglePanel(data.button)"
@@ -67,17 +67,17 @@
         </ngb-carousel>
       </div>
 
-      <div class="exterior bg-black" style="padding-left:10px;padding-right:10px; padding-bottom:80px;">
+      <div class="exterior bg-black" style="border-top:1px solid grey; padding-left:10px;padding-right:10px; padding-bottom:80px;">
         <div class="container bg-black mt-2 p-0">
           <!-- First Header -->
           <h2 class="text-left mb-2">Live Now</h2>
           <div class="scroll-container mb-1">
-            <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
-              <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900"
+            <div *ngFor="let card of cards" class="porp" style="border:1px solid white; border-radius:10px; width: 250px;"> <!-- Width set to 250px -->
+              <button style="overflow:hidden; color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900"
                 (click)="authorize(card)"></button>
               <!-- Top Colored Box -->
-              <div class="custom-card shadow-lg bg-dark text-white"
-                style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;">
+              <div class="custom-card shadow-lg bg-black text-white"
+                style="position: relative; height: 200px; text-wrap: wrap; overflow-y:hidden; border-radius:10px;">
                 <!-- height set to 100px -->
 
                 <!-- Description styled at the top and spanning the whole card -->
@@ -90,7 +90,7 @@
               </div>
 
               <!-- Black Box Below -->
-              <div class="bg-black text-white" style="border: 1px solid black;">
+              <div class="bg-black text-white" style="border: 1px solid black; border-radius:10px;">
                 <div class="user-info"
                   style="width:250px; display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
 
@@ -120,12 +120,12 @@
           <!-- Second Header -->
           <h2 class="text-left mb-2 mt-3">Top Channels We Think You'll Like</h2>
           <div class="scroll-container mb-1">
-            <div *ngFor="let card of cards" class="porp" style="width: 250px;"> <!-- Width set to 250px -->
+            <div *ngFor="let card of cards" class="porp" style="border:1px solid white; border-radius:10px;width: 250px;"> <!-- Width set to 250px -->
               <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900"
                 (click)="authorize(card)"></button>
               <!-- Top Colored Box -->
-              <div class="custom-card shadow-lg bg-dark text-white"
-                style="border:1px solid white; position: relative; height: 100px; text-wrap: wrap;">
+              <div class="custom-card shadow-lg bg-black text-white"
+                style="border-radius:10px; position: relative; height: 200px; text-wrap: wrap;">
                 <!-- height set to 100px -->
 
                 <!-- Description styled at the top and spanning the whole card -->
@@ -138,7 +138,7 @@
               </div>
 
               <!-- Black Box Below -->
-              <div class="bg-black text-white" style="border: 1px solid black;">
+              <div class="bg-black text-white" style="border-radius:10px;border: 1px solid black;">
                 <div class="user-info"
                   style="width:250px; display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
 

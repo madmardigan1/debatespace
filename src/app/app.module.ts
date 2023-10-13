@@ -10,7 +10,6 @@ import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import { CardDataComponent } from './card-data/card-data.component'
 import { HomeComponent } from './home/home.component';
 import { SpacecreateComponent } from './spacecreate/spacecreate.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -42,7 +41,6 @@ import { NodesComponent } from './nodes/nodes.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CardDataComponent,
     HomeComponent,
     SpacecreateComponent,
     TournamentBulletinComponent,

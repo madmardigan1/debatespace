@@ -5,7 +5,6 @@ import { FormBuilder, } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Carousel } from './carousel';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DeviceTypeService } from '../device-type.service';
 
@@ -45,7 +44,7 @@ export class HomeComponent implements OnInit {
   dataArray: Carousel[] = [
     {
       title: 'Welcome to Sequitur Nodes',
-      description: 'home for live multi-media discussions',
+      description: 'Home for debate.  Its a whole new way to see the conversation',
       button: 5
     },
     {
