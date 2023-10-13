@@ -10,16 +10,58 @@
       style="flex:auto;"></video>
   </div>
 
-  <div *ngIf="lines"
-  style="position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%;">
+  <div *ngIf="lines" style="position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%;">
     <div *ngFor="let line of lines; let i = index">
       <div class="summary-container d-flex"
-        style="flex:auto;position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
+        style="flex:auto; position:relative; align-items: flex-start; padding-bottom:5px; padding-top:5px; height:auto;">
+        <div style="height:100%; display:flex; align-items:baseline; flex-direction: column;">
+          <button class="btn rounded-circle d-flex align-items-center justify-content-center"
+            style="width:30px; height:100%; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;"
+            type="submit" (click)="expandLine(line, i)">
+            <i *ngIf="isLineOverflowing(i) || isLineExpanded(i)  " [class.rotated]="isLineExpanded(i)"
+              class="fas fa-angle-right" style="color: white; margin: 0;"></i>
+          </button>
+        </div>
+        <button #textContent style="flex:auto; text-align: left;height:40px; overflow:hidden;  text-wrap: auto;"
+          class="sumButton" (click)="logNodeId(line.id)">{{ line.fullText }}</button>
+        <div class="d-flex" style="position:relative; right:5;">
+
+          <button *ngIf="line.soundClip" class="btn btn-outline d-flex align-items-center bg-black"
+            style=" border-radius: 9999px; border: 1px solid white;" type="submit"
+            (click)="playRecording(line.soundClip)">
+
+            <p class="text-white m-0 mr-4" style="font-size:10px;">Audio</p>
+            <i class="fa fa-play" style="margin-left:2px; color: white; font-size: 12px;"></i>
+          </button>
+
+          <button *ngIf="line.videoClip" class="btn btn-outline d-flex align-items-center bg-black"
+            style=" border-radius: 9999px; border: 1px solid white;" type="submit"
+            (click)="playRecordedVideo(line.videoClip)">
+
+            <p class="text-white m-0 mr-4" style="font-size:10px;">Video</p>
+            <i class="fa fa-play" style="margin-left:2px; color: white; font-size: 12px;"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="children.length==0"
+    style="position:relative; display:flex;flex-direction:column;overflow-y: auto; text-align:center; justify-content:center; width:100%; margin-top:5px;">
+    <div>...no replies for this comment</div>
+  </div>
+  <div *ngIf="children.length>0"
+    style="position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%; padding-left: 28px;">
+    <div style="position:absolute; left:33px; top:0; bottom:0; opacity:.6; border-left: 1px solid white; z-index:1;">
+    </div>
+    <div *ngFor="let line of children; let j = index">
+      <div class="summary-container d-flex"
+        style="flex:auto; position:relative; align-items: flex-start; padding-bottom:5px; padding-top:5px; height:auto;">
         <div class="justify-content:left">
           <button class="btn rounded-circle d-flex align-items-center justify-content-center"
             style="width:30px; height:30px; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;"
-            type="submit" (click)="expandLine(line, i)">
-            <i [class.rotated]="isLineExpanded(i)" class="fas fa-angle-right" style="color: white; margin: 0;"></i>
+            type="submit" (click)="expandChild(line, j)">
+            <i [class.rotated]="isChildExpanded(j)" class="fas fa-angle-right" style="color: white; margin: 0;"></i>
           </button>
         </div>
 
@@ -49,48 +91,5 @@
       </div>
     </div>
   </div>
-  <div *ngIf="children.length==0"  style="position:relative; display:flex;flex-direction:column;overflow-y: auto; text-align:center; justify-content:center; width:100%; margin-top:5px;">
-      <div>...no replies for this comment</div>
-  </div>
-  <div *ngIf="children.length>0"
-  style="position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%; padding-left: 20px;">
-  <div style="position:absolute; left:15px; top:0; bottom:0; border-left: 2px solid white; z-index:1;"></div>
-  <div *ngFor="let line of children; let j = index">
-    <div class="summary-container d-flex"
-      style="flex:auto;position:relative; align-items: center;border-bottom:1px solid white; padding-bottom:5px; padding-top:5px; height:auto;">
-      <div class="justify-content:left">
-        <button class="btn rounded-circle d-flex align-items-center justify-content-center"
-          style="width:30px; height:30px; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;"
-          type="submit" (click)="expandChild(line, j)">
-          <i [class.rotated]="isChildExpanded(j)" class="fas fa-angle-right" style="color: white; margin: 0;"></i>
-        </button>
-      </div>
-
-      <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)"
-        *ngIf="!line.expand">{{ line.text }}</button>
-      <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)"
-        *ngIf="line.expand">{{ line.fullText }}</button>
-      <div class="d-flex" style="position:relative; right:5;">
-
-        <button *ngIf="line.soundClip" class="btn btn-outline d-flex align-items-center bg-black"
-          style=" border-radius: 9999px; border: 1px solid white;" type="submit"
-          (click)="playRecording(line.soundClip)">
-
-          <p class="text-white m-0 mr-4" style="font-size:10px;">Audio</p>
-          <i class="fa fa-play" style="margin-left:2px; color: white; font-size: 12px;"></i>
-        </button>
-
-        <button *ngIf="line.videoClip" class="btn btn-outline d-flex align-items-center bg-black"
-          style=" border-radius: 9999px; border: 1px solid white;" type="submit"
-          (click)="playRecordedVideo(line.videoClip)">
-
-          <p class="text-white m-0 mr-4" style="font-size:10px;">Video</p>
-          <i class="fa fa-play" style="margin-left:2px; color: white; font-size: 12px;"></i>
-        </button>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 </div>

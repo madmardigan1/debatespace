@@ -23,11 +23,11 @@
           </div>
           <div class="bg-black" style="display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-gap: 10px; background-color: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; overflow-y: hidden; overflow-x: auto; max-height: 150px; white-space: nowrap;">
           <div *ngFor="let list of topic">
-            <div class="d-flex bg-danger text-white" style=" padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-left:3px;margin-right: 2px;">{{list}}</div>
+            <div class="d-flex bg-danger text-white" style=" padding: 3px 8px; border-radius: 9999px; font-size: 11px; margin-left:3px;margin-right: 2px;">{{list}}</div>
           </div>
         </div>
         </div>
-       
+        <h3>Debate Type:</h3>
         <div class="mb-3 d-flex align-items-center text-white">
           <span style="margin-right:5px;">Casual</span>
           <div class="custom-toggle">
@@ -35,7 +35,7 @@
               (change)="ranked()">
             <label for="customToggle" class="custom-toggle-label"></label>
           </div>
-          <span style="margin-left:5px;">Debate</span>
+          <span style="margin-left:5px;">Elimination</span>
         </div>
 
 
@@ -46,17 +46,18 @@
             placeholder={{textplaceholder}} rows="3" style="resize: none;"></textarea>
         </div>
   
+        <h3>Who can Post:</h3>
         <!-- Conversation Type Toggle -->
         <div class="d-flex align-items-center mb-3 text-white"> <!-- More vertical spacing -->
           <div class="d-flex justify-content-between align-items-center w-100">
             <div class="d-flex align-items-center">
-              <span style="margin-right:5px;">Match me</span>
+              <span style="margin-right:5px;">Anyone</span>
               <div class="custom-toggle1" >
                 <input type="checkbox" id="customToggle1" class="custom-toggle-checkbox1" formControlName="isToggled1"
                   (change)="inviteToggle()">
                 <label for="customToggle1" class="custom-toggle-label1"></label>
               </div>
-              <span style="margin-left:5px;">Invite</span>
+              <span style="margin-left:5px;">Invited Only</span>
             </div>
             <div *ngIf="isToggled1">
                 <div *ngIf="!inviteSent">

@@ -1,9 +1,7 @@
-import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NodespaceServiceService } from '../node-space-mob/nodespace-service.service';
 import { ChatspaceService } from '../chat-space-mob/chatspace.service';
-import { SpeechService } from 'src/app/debate-space-mob/node-space-mob/speech-service.service';
-import { GPTsummaryService } from './gptsummary.service';
 
 @Component({
   selector: 'app-gptsummary-mob',
@@ -15,6 +13,8 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   public children: { text: string, fullText: string, id: number, videoClip?: any, soundClip?: any, expand?: boolean }[] = [];
   private subscriptions: Subscription[] = [];
   @ViewChild('playbackVideoElement', { static: false }) playbackVideoElement!: ElementRef;
+  @ViewChildren('textContent') textContents!: QueryList<ElementRef>;
+
   expandedLineIndices: Set<number> = new Set();
   expandedChildIndices: Set<number> = new Set();
 
@@ -22,7 +22,6 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   isPlaying = false;
   traveled = false;
   isRecordingVideo = false;
-  private goBackonemore: any;
 
   constructor(
     private nodeService: NodespaceServiceService, 
@@ -36,7 +35,6 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.nodeService.getNodeText().subscribe(messages => {
         this.lines = messages;
-      
       })
     );
     this.subscriptions.push(
@@ -89,28 +87,66 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
 
   // Utility methods for UI
   expandLine(line: any, index: number): void {
-    line.expand = !line.expand; // Toggle the expansion
-    if (this.expandedLineIndices.has(index)) {
-      this.expandedLineIndices.delete(index);
-    } else {
-      this.expandedLineIndices.add(index);
+    const elements = this.textContents.toArray();
+    // Collapse all other lines
+    for (let i = 0; i < elements.length; i++) {
+        if (i !== index) {
+            elements[i].nativeElement.style.height = '40px';
+            this.expandedLineIndices.delete(i);
+        }
     }
-  }
+    
+    if (elements[index]) {
+        if (elements[index].nativeElement.style.height === 'auto') {
+            elements[index].nativeElement.style.height = '40px';
+        } else {
+            elements[index].nativeElement.style.height = 'auto';
+        }
+    }
+
+    // Handle expanded indices for icon rotation
+    if (this.expandedLineIndices.has(index)) {
+        this.expandedLineIndices.delete(index);
+    } else {
+        this.expandedLineIndices.add(index);
+    }
+}
+
+expandChild(child: any, index: number): void {
+    // Collapse all other children
+    this.children.forEach((c, i) => {
+        if (i !== index) {
+            c.expand = false;
+            this.expandedChildIndices.delete(i);
+        }
+    });
+
+    child.expand = !child.expand;
+
+    if (this.expandedChildIndices.has(index)) {
+        this.expandedChildIndices.delete(index);
+    } else {
+        this.expandedChildIndices.add(index);
+    }
+}
+
+
 
   isLineExpanded(index: number): boolean {
     return this.expandedLineIndices.has(index);
   }
 
-  expandChild(child: any, index: number): void {
-    child.expand = !child.expand; // Toggle the expansion
-    if (this.expandedChildIndices.has(index)) {
-      this.expandedChildIndices.delete(index);
-    } else {
-      this.expandedChildIndices.add(index);
-    }
-  }
-
   isChildExpanded(index: number): boolean {
     return this.expandedChildIndices.has(index);
   }
+
+  isLineOverflowing(index: number): boolean {
+    const elements = this.textContents.toArray();
+    if (elements[index]) {
+      return elements[index].nativeElement.scrollHeight > elements[index].nativeElement.clientHeight;
+    }
+    return false;
+  }
+  
+  
 }
