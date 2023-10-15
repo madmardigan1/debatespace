@@ -66,104 +66,43 @@
           </ng-template>
         </ngb-carousel>
       </div>
-
-      <div class="exterior bg-black" style="border-top:1px solid grey; padding-left:10px;padding-right:10px; padding-bottom:80px;">
-        <div class="container bg-black mt-2 p-0">
-          <!-- First Header -->
-          <h2 class="text-left mb-2">Live Now</h2>
-          <div class="scroll-container mb-1">
-            <div *ngFor="let card of cards" class="porp" style="border:1px solid white; border-radius:10px; width: 250px;"> <!-- Width set to 250px -->
-              <button style="overflow:hidden; color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900"
-                (click)="authorize(card)"></button>
-              <!-- Top Colored Box -->
-              <div class="custom-card shadow-lg bg-black text-white"
-                style="position: relative; height: 200px; text-wrap: wrap; overflow-y:hidden; border-radius:10px;">
-                <!-- height set to 100px -->
-
-                <!-- Description styled at the top and spanning the whole card -->
-                <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
-
-                <!-- Viewers Count in Upper Right -->
-                <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
-                  <i class="fas fa-user"></i> {{card.user.length}}
-                </div>
-              </div>
-
-              <!-- Black Box Below -->
-              <div class="bg-black text-white" style="border: 1px solid black; border-radius:10px;">
-                <div class="user-info"
-                  style="width:250px; display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
-
-                  <!-- User Image and Name -->
-                  <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;">
-                    <!-- added margin-right -->
-                    <img [src]="'/assets/Steve1.jpeg'" alt="Steve"
-                      style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-                    <h5 style="margin-top: 5px; font-size: 12px;">{{card.user[0].name}}</h5>
-                  </div>
-
-                  <!-- Topic Container -->
-                  <div
-                    style="display: flex; flex-wrap: wrap; max-height: 50px; overflow: hidden; align-content: flex-start;">
-                    <div *ngFor="let topic of card.topic"
-                      style="display: inline-block; margin-right: 5px; margin-bottom: 5px;"> <!-- adjusted margins -->
-                      <span
-                        style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;">{{topic}}</span>
-                      <!-- adjusted font-size and padding -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div *ngFor="let card of cards" class="porp" 
+      style="display: flex; flex-direction: column; width: 300px; margin-right: 10px; overflow-wrap: break-word; overflow-x: block; word-wrap: break-word; position: relative; border:1px solid rgba(122, 122, 122, .5); background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)); border-radius: 10px; width: 100%;">
+    
+      <button style="overflow:hidden; color:transparent; position:absolute; left:0; top:0; height:100%; width:100%; z-index:900" 
+              (click)="authorize(card)">
+      </button>
+  
+      <!-- Top Box -->
+      <div class="custom-card shadow-lg bg-black text-white"
+          style="position: relative; height: auto; text-wrap: wrap; overflow-y: hidden; border-radius:10px; padding: 10px; box-sizing: border-box; display: flex; ">
+          
+          <!-- User Image -->
+          <img [src]="'/assets/Steve1.jpeg'" alt="Steve"
+               style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover; margin-right:10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);">
+          
+          <!-- User Name -->
+          <p style="flex-grow: 1; margin: 0; font-size: 12px; color: white;"><b>{{card.user[0].name}}</b></p>
+          
+          <!-- Viewers Count -->
+          <div class="viewers-count" style="font-size: 12px; color: white;">
+              <i class="fas fa-user"></i> {{card.user.length}}
           </div>
-
-          <!-- Second Header -->
-          <h2 class="text-left mb-2 mt-3">Top Channels We Think You'll Like</h2>
-          <div class="scroll-container mb-1">
-            <div *ngFor="let card of cards" class="porp" style="border:1px solid white; border-radius:10px;width: 250px;"> <!-- Width set to 250px -->
-              <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:900"
-                (click)="authorize(card)"></button>
-              <!-- Top Colored Box -->
-              <div class="custom-card shadow-lg bg-black text-white"
-                style="border-radius:10px; position: relative; height: 200px; text-wrap: wrap;">
-                <!-- height set to 100px -->
-
-                <!-- Description styled at the top and spanning the whole card -->
-                <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
-
-                <!-- Viewers Count in Upper Right -->
-                <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
-                  <i class="fas fa-user"></i> {{card.user.length}}
-                </div>
-              </div>
-
-              <!-- Black Box Below -->
-              <div class="bg-black text-white" style="border-radius:10px;border: 1px solid black;">
-                <div class="user-info"
-                  style="width:250px; display: flex; justify-content: space-between; align-items: center; padding: 5px; box-sizing: border-box;">
-
-                  <!-- User Image and Name -->
-                  <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;">
-                    <!-- added margin-right -->
-                    <img [src]="'/assets/Steve1.jpeg'" alt="Steve"
-                      style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-                    <h5 style="margin-top: 5px; font-size: 12px;">{{card.user[0].name}}</h5>
-                  </div>
-
-                  <!-- Topic Container -->
-                  <div
-                    style="display: flex; flex-wrap: wrap; max-height: 50px; overflow: hidden; align-content: flex-start;">
-                    <div *ngFor="let topic of card.topic"
-                      style="display: inline-block; margin-right: 5px; margin-bottom: 5px;"> <!-- adjusted margins -->
-                      <span
-                        style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px; margin-right: 2px;">{{topic}}</span>
-                      <!-- adjusted font-size and padding -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+  
+      <!-- Description -->
+      <p style="margin-left:40px; padding: 5px 10px; background-color: black; color: white; border-radius: 10px;">{{card.description}}</p>
+  
+      <!-- Tags Container -->
+      <div class="bg-black text-white" style="border: 1px solid black; border-radius:10px; padding: 5px; margin-left: 40px;">
+          <div style="display: flex; flex-wrap: wrap; align-content: flex-start;">
+              <div *ngFor="let topic of card.topic" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;">
+                  <span style="background-color: #007BFF; border:1px solid #0056b3; padding: 3px 8px; border-radius: 10px; font-size: 11px; color: white;">{{topic}}</span> <!-- Used a blue color for tags -->
+              </div>
+          </div>
+      </div>
+</div>
+
+     
+          
     </div>
