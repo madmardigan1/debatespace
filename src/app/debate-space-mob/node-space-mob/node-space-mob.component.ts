@@ -32,7 +32,8 @@ import { NodeAuxiliaryService } from './node-auxiliary.service';
       state('down', style({ transform: 'translateY(100px)', opacity: 0 })),
       transition('* => up', [animate('0.5s')]),
       transition('* => down', [animate('0.5s')])
-    ])
+    ]),
+
   ]
 })
 
@@ -68,9 +69,10 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   private startY: number | null = null;
   private startX: number | null = null;
   shownSlide = this.nodes.get(1);
+  childrenSlides: any = [];
   negativetagArray: any = [];
   positivetagArray: any = [];
-
+  swipeExpanded = false;
   constructor(
     private cardService: CardDataService,
     private debateSpace: DebateSpaceService,
@@ -354,9 +356,19 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       this.startX = null;
     }
   }
+
+   toggleSwipeRExpansion() {
+    this.swipeExpanded = !this.swipeExpanded;
+    const swipeRElement = document.querySelector('.swipeR');
+    if (swipeRElement) {
+        swipeRElement.classList.toggle('expanded');
+    }
+}
+
   //this function finds the top 3 positive and negative tags based on moment score and stores them in negative and positive array
   updateSlide() {
     this.shownSlide = this.nodes.get(this.selectedNodeIndex!);
+    this.childrenSlides = this.getChildNodeIds(this.selectedNodeIndex!);
     // Assuming this.shownSlide contains the node data
     if (this.shownSlide && this.shownSlide.CounterStatus) {
       // Sort CounterStatus array by totalMoment in descending order
@@ -635,6 +647,19 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     // Return the ID of the first child node.
     return edgesFromGivenNode[0].to;
   }
+
+  getChildNodeIds(nodeId: number): any[] {
+    // Find the edges where the node is the 'from' (parent) node.
+    const edgesFromGivenNode = this.edges.get({
+      filter: edge => edge.from === nodeId
+    });
+
+    // If no such edges exist, the node doesn't have child nodes.
+    if (edgesFromGivenNode.length === 0) return [];
+
+    // Return the IDs of all child nodes.
+    return edgesFromGivenNode.map(edge => this.nodes.get(edge.to));
+}
 
   deleteNodeAndDescendants(nodeId: number) {
     // First, find all children of the node.

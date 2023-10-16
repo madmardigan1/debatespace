@@ -11,6 +11,7 @@ import { DeviceTypeService } from '../device-type.service';
 import { NodespaceServiceService } from './node-space-mob/nodespace-service.service';
 import { SpeechService } from './node-space-mob/speech-service.service';
 import { Subscription } from 'rxjs';
+import { NodeSpaceMobComponent } from './node-space-mob/node-space-mob.component';
 @Component({
   animations: [
 
@@ -71,6 +72,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   @ViewChild('firstModal') firstModal!: ElementRef;
   @ViewChild('secondModal') secondModal!: ElementRef;
   @ViewChild('secondModalContent') secondModalContent!: ElementRef;
+  @ViewChild(NodeSpaceMobComponent, { static: false }) nodeChild!: NodeSpaceMobComponent;
   //game rules
   isRanked = true;
   reactionType = 'neutral';
@@ -175,15 +177,14 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     if (panelType == 'nodes') {
       this.nodeState = 'expanded';
       this.theRestState = 'shrunk';
+      this.nodeChild.toggleSwipeRExpansion();
     }
     if (panelType =='chat') {
       this.nodeState = 'shrunk';
       this.theRestState = 'expanded';
+     
     }
-    if (panelType =='summary') {
-      this.nodeState = 'shrunk';
-      this.theRestState = 'fully-expanded';
-    }
+ 
   }
 
   //begins recording audio or video and begins speech recognition.  The type variable is used to determine if the recording is audio or video.

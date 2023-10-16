@@ -69,16 +69,13 @@
               class="btn btn-white padding-right-3"
               style="border-radius:99px; border:1px solid white; height:35px; margin:0;padding:4px;margin-right:5px; font-size:15px;"
               (click)="toggleLowerDisplay('nodes')">
-              Nodes
+              Toggle Forum
             </button>
             <button class="btn btn-white  padding-right-3"
               [ngClass]="{'btn btn-light': panelType === 'chat', 'text-black': panelType === 'chat'}"
               style="border-radius:99px; border:1px solid white; height:35px;  margin:0;padding-left:10px; padding-right:10px;padding:4px;margin-right:5px; font-size:15px;"
               (click)="toggleLowerDisplay('chat')">Chat</button>
-            <button class="btn btn-white  padding-right-3"
-              [ngClass]="{'btn btn-light': panelType === 'summary', 'text-black': panelType === 'summary'}"
-              style="border-radius:99px; border:1px solid white; height:35px;  margin:0;padding:4px;margin-right:5px; font-size:15px;"
-              (click)="toggleLowerDisplay('summary')">Summary</button>
+           
 
           </div>
           <div class="d-flex align-items-center" style="position:relative;">
@@ -99,11 +96,7 @@
               <app-chat-submit-mob (submitit)="scrollToBottom()"></app-chat-submit-mob>
             </div>
           </div>
-          <div *ngIf="panelType=='summary'" class="bg-black text-white"
-            style="position:relative; flex:auto; display: flex; flex-direction: column;">
-            <app-gptsummary-mob></app-gptsummary-mob>
-          </div>
-        </div>
+      
         <mat-menu #menu="matMenu" xPosition="before">
           <button mat-menu-item (click)="togglePanel(6)">About</button>
           <button mat-menu-item (click)="copyLinkToClipboard()">Share Node</button>

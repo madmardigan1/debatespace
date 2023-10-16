@@ -24,6 +24,15 @@
   color: red;
   z-index: 10;
 }
+.swipeR {
+  transition: height 0.3s ease-in-out;
+  height: 30%;
+  overflow: hidden;
+}
+
+.swipeR.expanded {
+  height: 100%;
+}
 
 .circular-image-container {
   width: 40px;
