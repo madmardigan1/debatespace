@@ -36,7 +36,7 @@ import { Subscription } from 'rxjs';
         height: '50px',
       })),
       state('fully-expanded', style({
-        height: '100%',
+        height: '70%',
       })),
       transition('expanded <=> shrunk', [
         animate('0.2s')
@@ -176,9 +176,13 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       this.nodeState = 'expanded';
       this.theRestState = 'shrunk';
     }
-    else {
+    if (panelType =='chat') {
       this.nodeState = 'shrunk';
       this.theRestState = 'expanded';
+    }
+    if (panelType =='summary') {
+      this.nodeState = 'shrunk';
+      this.theRestState = 'fully-expanded';
     }
   }
 

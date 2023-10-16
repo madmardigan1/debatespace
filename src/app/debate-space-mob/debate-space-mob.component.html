@@ -184,13 +184,20 @@
 
   <div *ngIf=" !isSecondModalOpen && isRanked"
     style="display:flex; position:absolute; bottom:70px;right:10px; z-index:1;">
-    <button (click)="togglePanelReaction('negative')" class="btn btn-outline-light bg-black mr-2"
-      style="opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
-      <i class="fas fa-minus" style="color: red; font-size:12px; "></i>
-    </button>
-    <button (click)="togglePanelReaction('positive')" class="btn btn-outline-light bg-black"
-      style="position:relative; opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
-      <i class="fas fa-plus" style="color:green;font-size:12px; "></i>
-    </button>
+    <button (click)="togglePanelReaction('negative')" class="btn btn-black bg-black mr-2"
+    style="opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
+  <span class="fa-stack">
+      <i class="fas fa-comment fa-stack-2x" style="color: red; transform: scaleX(-1);"></i>
+      <i class="fas fa-minus fa-stack-1x" style="color: black;"></i>
+  </span>
+</button>
+
+<button (click)="togglePanelReaction('positive')" class="btn btn-black bg-black mr-2"
+style="opacity:.8;border-radius:50%; width:40px;height:40px;z-index:2;">
+<span class="fa-stack">
+  <i class="fas fa-comment fa-stack-2x" style="color: green;"></i>
+  <i class="fas fa-plus fa-stack-1x" style="color: black;"></i>
+</span>
+</button>
   </div>
 </div>

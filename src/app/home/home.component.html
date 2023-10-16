@@ -43,7 +43,7 @@
 
           <div *ngFor="let topic of currentTopics" class="d-flex flex-column align-items-center">
             <button class="btn btn-outline-white text-white"
-              style="border:1px solid white; border-radius:999px;  margin-right:3px;" (click)="browse(topic.name)">
+              style="border:1px solid #0056b3; border-radius:999px;  margin-right:3px;" (click)="browse(topic.name)">
               {{topic.name}}
             </button>
           </div>
@@ -97,7 +97,7 @@
       <div class="bg-black text-white" style="border: 1px solid black; border-radius:10px; padding: 5px; margin-left: 40px;">
           <div style="display: flex; flex-wrap: wrap; align-content: flex-start;">
               <div *ngFor="let topic of card.topic" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;">
-                  <span style="background-color: #007BFF; border:1px solid #0056b3; padding: 3px 8px; border-radius: 10px; font-size: 11px; color: white;">{{topic}}</span> <!-- Used a blue color for tags -->
+                  <span style=" border:1px solid #0056b3; padding: 3px 8px; border-radius: 10px; font-size: 11px; color: white;">{{topic}}</span> <!-- Used a blue color for tags -->
               </div>
           </div>
       </div>
