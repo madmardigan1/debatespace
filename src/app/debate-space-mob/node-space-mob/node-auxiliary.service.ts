@@ -37,6 +37,30 @@ export class NodeAuxiliaryService {
     return [textObj];
   }
 
+  traverseNodes(nodeId: number, nodes: any, edges: any): any[] {
+    let currentNodeId = nodeId;
+    const parentNodes: any[] = [];
+    
+    while (true) {
+        // Get the parent node ID using the getParentNode function
+        const parentNodeId = this.getParentNode(currentNodeId, edges);
+        
+        // If no parent node is found, break the loop
+        if (parentNodeId === null) {
+            break;
+        }
+
+        // Get the parent node object and add it to the array
+        const parentNode = nodes.get(parentNodeId);
+        parentNodes.push(parentNode);
+
+        // Move up to the next parent node for the next iteration
+        currentNodeId = parentNodeId;
+    }
+    
+    return parentNodes;
+}
+
 
   getDirectChildren(nodeId: number, nodes: any, edges: any): { text: string; fullText: string, id: number; videoClip?: any, soundClip?: any }[] {
     const directChildren:any = [];
@@ -61,6 +85,32 @@ export class NodeAuxiliaryService {
   
     return directChildren;
   }
+  getParentNode(nodeId: number, edges: any): number | null {
+    // Find the edge where the node is the 'to' (child) node.
+    const edgeToGivenNode = edges.get({
+      filter: (edge:any) => edge.to === nodeId
+    })[0];
+
+    // If no such edge exists, the node doesn't have a parent.
+    if (!edgeToGivenNode) return null;
+
+    // Return the ID of the parent node.
+    return edgeToGivenNode.from;
+}
+
+
+  getChildNodeIds(nodeId: number, nodes: any, edges: any): any[] {
+    // Find the edges where the node is the 'from' (parent) node.
+    const edgesFromGivenNode = edges.get({
+      filter: (edge:any) => edge.from === nodeId
+    });
+
+    // If no such edges exist, the node doesn't have child nodes.
+    if (edgesFromGivenNode.length === 0) return [];
+
+    // Return the IDs of all child nodes.
+    return edgesFromGivenNode.map((edge:any) => nodes.get(edge.to));
+}
   
 
   wrapText(text: string, maxCharsPerLine: number = 25): string {

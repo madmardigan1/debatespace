@@ -1,6 +1,6 @@
 // Angular Core imports
 import {
-  Component, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter,
+  Component, AfterViewInit, ViewChild, ViewChildren, ElementRef, QueryList, Output, EventEmitter,
   Input, OnInit, NgZone,
 } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -40,6 +40,8 @@ import { NodeAuxiliaryService } from './node-auxiliary.service';
 export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   // View references
   @ViewChild('visNetwork', { static: false }) visNetwork!: ElementRef;
+  @ViewChild('mainSlide') mainSlide!: ElementRef;
+  @ViewChildren('parentSlideList') parentSlideList!: QueryList<ElementRef>;
   private mediaBlobURL?: string;
 
 
@@ -49,7 +51,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   currentNode: any;
   previousNode: any;
   thumbsPosition: { x: number, y: number } = { x: 0, y: 0 };
-
+  parentHeight: number = 0;
   @Input() cardId!: string;
   @Input() isRanked = false;
   network!: Network;
@@ -70,6 +72,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   private startX: number | null = null;
   shownSlide = this.nodes.get(1);
   childrenSlides: any = [];
+  parentSlides: any =[];
   negativetagArray: any = [];
   positivetagArray: any = [];
   swipeExpanded = false;
@@ -225,6 +228,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         this.network.selectNodes([this.selectedNodeIndex!]);
       }
     });
+  
   }
 
   //sets a timer that updates each node moment and health values every 300ms.  If a node's health drops below 0, it and all descendants will be deleted.
@@ -358,17 +362,29 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   }
 
    toggleSwipeRExpansion() {
+    
+    
     this.swipeExpanded = !this.swipeExpanded;
+   
     const swipeRElement = document.querySelector('.swipeR');
     if (swipeRElement) {
         swipeRElement.classList.toggle('expanded');
+        this.visNetwork.nativeElement.classList.toggle('blur');
     }
+  
+   
 }
+
+
+
 
   //this function finds the top 3 positive and negative tags based on moment score and stores them in negative and positive array
   updateSlide() {
     this.shownSlide = this.nodes.get(this.selectedNodeIndex!);
     this.childrenSlides = this.getChildNodeIds(this.selectedNodeIndex!);
+    this.parentSlides = this.nodeAux.traverseNodes(this.selectedNodeIndex!, this.nodes, this.edges);
+    this.parentSlides = this.parentSlides.reverse();
+
     // Assuming this.shownSlide contains the node data
     if (this.shownSlide && this.shownSlide.CounterStatus) {
       // Sort CounterStatus array by totalMoment in descending order
@@ -609,9 +625,9 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   private emitNodeInformation(nodeId: any): void {
     const combinedObjects = this.nodeAux.traverseToOriginal(nodeId, 1, this.nodes, this.edges);
-    const children = this.nodeAux.getDirectChildren(nodeId, this.nodes, this.edges);
-    this.nodeService.changeNodeText(combinedObjects);
-    this.nodeService.SendAllChildren(children);
+    const children = this.nodeAux.getChildNodeIds(nodeId, this.nodes, this.edges);
+    const parents = this.nodeAux.traverseNodes(nodeId, this.nodes, this.edges);
+    this.nodeService.changeNodeText(children, parents);
     this.nodeService.setNodeId(nodeId);
   }
 

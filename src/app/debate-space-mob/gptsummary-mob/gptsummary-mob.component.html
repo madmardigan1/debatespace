@@ -10,8 +10,8 @@
       style="flex:auto;"></video>
   </div>
 
-  <div *ngIf="lines" style="position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%;">
-    <div *ngFor="let line of lines; let i = index">
+  <div *ngIf="parents" style="position:relative; display:flex;flex-direction:column;overflow-y: auto;width:100%;">
+    <div *ngFor="let line of parents; let i = index">
       <div class="summary-container d-flex"
         style="flex:auto; position:relative; align-items: flex-start; padding-bottom:5px; padding-top:5px; height:auto;">
         <div style="height:100%; display:flex; align-items:baseline; flex-direction: column;">
@@ -58,11 +58,7 @@
       <div class="summary-container d-flex"
         style="flex:auto; position:relative; align-items: flex-start; padding-bottom:5px; padding-top:5px; height:auto;">
         <div class="justify-content:left">
-          <button class="btn rounded-circle d-flex align-items-center justify-content-center"
-            style="width:30px; height:30px; background-color: transparent; border: none; padding: 0; margin-left:2px; margin-right:2px;"
-            type="submit" (click)="expandChild(line, j)">
-            <i [class.rotated]="isChildExpanded(j)" class="fas fa-angle-right" style="color: white; margin: 0;"></i>
-          </button>
+       
         </div>
 
         <button style="flex:auto; text-align: left; text-wrap: auto;" class="sumButton" (click)="logNodeId(line.id)"

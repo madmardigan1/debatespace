@@ -10,7 +10,6 @@ import { ChatspaceService } from '../chat-space-mob/chatspace.service';
 })
 export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   public lines: { text: string, fullText: string, id: number, videoClip?: any, soundClip?: any, expand?: boolean }[] = [];
-  public children: { text: string, fullText: string, id: number, videoClip?: any, soundClip?: any, expand?: boolean }[] = [];
   private subscriptions: Subscription[] = [];
   @ViewChild('playbackVideoElement', { static: false }) playbackVideoElement!: ElementRef;
   @ViewChildren('textContent') textContents!: QueryList<ElementRef>;
@@ -22,6 +21,8 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
   isPlaying = false;
   traveled = false;
   isRecordingVideo = false;
+  children: any =[];
+  parents: any=[];
 
   constructor(
     private nodeService: NodespaceServiceService, 
@@ -34,16 +35,11 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
  
     this.subscriptions.push(
       this.nodeService.getNodeText().subscribe(messages => {
-        this.lines = messages;
+        this.children = messages.childnodes;
+        this.parents = messages.parentnodes;
       })
     );
-    this.subscriptions.push(
-      this.nodeService.getAllChildren().subscribe(messages => {
-        this.children = messages;
-  
-      })
-    );
-  }
+    }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
@@ -112,23 +108,7 @@ export class GptsummaryMobComponent implements OnDestroy, AfterViewInit {
     }
 }
 
-expandChild(child: any, index: number): void {
-    // Collapse all other children
-    this.children.forEach((c, i) => {
-        if (i !== index) {
-            c.expand = false;
-            this.expandedChildIndices.delete(i);
-        }
-    });
 
-    child.expand = !child.expand;
-
-    if (this.expandedChildIndices.has(index)) {
-        this.expandedChildIndices.delete(index);
-    } else {
-        this.expandedChildIndices.add(index);
-    }
-}
 
 
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,10 @@ export class NodespaceServiceService {
 
   private nodeId = new BehaviorSubject<number | undefined>(1);
   private SiblingData = new BehaviorSubject<{ previous: string, next: string } | null>({ previous: '1', next: '1' });
-  private nodeTextSource = new BehaviorSubject<{ text: string, fullText: string, id: number, soundClip?: any }[]>([{ text: '', fullText: '', id: 1, soundClip: null }]); // Added initial value as an empty array
+  private nodeTextSource = new Subject<{ childnodes: any[], parentnodes: any[] }>();
+
+
+
   private nodeChildren = new BehaviorSubject<{ text: string, fullText: string, id: number, soundClip?: any }[]>([{ text: '', fullText: '', id: 1, soundClip: null }]);
   constructor() { }
 
@@ -21,13 +24,14 @@ export class NodespaceServiceService {
     return this.nodeId.asObservable();
   }
 
-  changeNodeText(textArray: { text: string, fullText: string, id: number, videoClip?: any, soundClip?: any }[]): void {
-    this.nodeTextSource.next(textArray);
-  }
+  changeNodeText(child: any[], parents: any[]): void {
+    this.nodeTextSource.next({childnodes: child, parentnodes: parents});
+}
 
-  getNodeText(): Observable<{ text: string, fullText: string, id: number, videoClip?: any, soundClip?: any }[]> {  // Fixed return type to match what nodeTextSource emits
-    return this.nodeTextSource.asObservable();
-  }
+getNodeText(): Observable<{ childnodes: any[], parentnodes: any[] }> {
+  return this.nodeTextSource.asObservable();
+}
+
 
   SendAllChildren(textArray: { text: string, fullText: string, id: number, videoClip?: any, soundClip?: any }[]): void {
     this.nodeChildren.next(textArray);
