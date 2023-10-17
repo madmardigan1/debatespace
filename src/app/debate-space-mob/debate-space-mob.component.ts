@@ -87,6 +87,8 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   tagvalue = '';
   panelType = "nodes";
   userType: string = 'host';
+  forumToggle = false;
+  toggleChat=false;
   isRecording = '';
   nodeState: string = 'expanded';
   theRestState: string = 'shrunk';
@@ -175,14 +177,19 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   toggleLowerDisplay(panelType: string): void {
     this.panelType = panelType;
     if (panelType == 'nodes') {
-      this.nodeState = 'expanded';
-      this.theRestState = 'shrunk';
+      this.forumToggle = !this.forumToggle
       this.nodeChild.toggleSwipeRExpansion();
     }
     if (panelType =='chat') {
+      this.toggleChat = !this.toggleChat;
+      if (this.toggleChat) {
       this.nodeState = 'shrunk';
       this.theRestState = 'expanded';
-     
+      }
+      else {
+        this.nodeState = 'expanded';
+        this.theRestState = 'shrunk';
+      }
     }
  
   }

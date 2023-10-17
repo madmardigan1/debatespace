@@ -70,15 +70,21 @@
             </button>
           </div>
           <div class="d-flex align-items-center">
-            <button class="btn btn-white  padding-right-3"
-              [ngClass]="{'btn btn-light': panelType === 'chat', 'text-black': panelType === 'chat'}"
-              style="border-radius:99px; border:1px solid white; height:35px;  margin:0;padding-left:10px; padding-right:10px;padding:4px;margin-right:5px; font-size:15px;"
-              (click)="toggleLowerDisplay('chat')">Chat</button>
+            <button class="btn btn-white padding-right-3"
+    [ngClass]="{'btn btn-light': panelType === 'chat', 'text-black': panelType === 'chat'}"
+    style="border-radius:99px; border:1px solid white; height:35px; margin:0;padding-left:10px; padding-right:10px;padding:4px;margin-right:5px; font-size:15px;"
+    (click)="toggleLowerDisplay('chat')">
+    <i *ngIf="!toggleChat" class="fas fa-caret-up"></i> 
+    <i *ngIf="toggleChat" class="fas fa-caret-down"></i> 
+    Chat
+</button>
+
             <button [ngClass]="{'btn btn-light': panelType === 'nodes', 'text-black': panelType === 'nodes'}"
               class="btn btn-white padding-right-3"
               style="border-radius:99px; border:1px solid white; height:35px; margin:0;padding:4px;margin-right:5px; font-size:15px;"
               (click)="toggleLowerDisplay('nodes')">
-              Toggle Forum
+              <div *ngIf="forumToggle">Forum</div>
+              <div *ngIf="!forumToggle">Nodes</div>
             </button>
 
           </div>
