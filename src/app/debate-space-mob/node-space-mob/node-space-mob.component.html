@@ -6,23 +6,23 @@
 
       <ng-container *ngIf="swipeExpanded">
         <div *ngFor="let slide of parentSlides" #parentSlideList class="swiper-slide text-white" style="position:relative;height:auto;display:flex;justify-content:center;align-items:center;">
-          <button class="bg-dark text-white" (click)="handleNodeClick(slide.id)"
+          <button class="bg-dark text-white" (click)="handleNodeClick(slide.node.id)"
             style="position:relative;  display:flex; flex-direction:column; width:100%;height:100%; ">
-            <div *ngIf="slide.status=='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 2px solid rgb(47, 105, 53); z-index:1;"></div>
-            <div *ngIf="slide.status!='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 2px solid rgb(188, 26, 26); z-index:1;"></div>
+            <div *ngIf="slide.reaction=='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 2px solid rgb(47, 105, 53); z-index:1;"></div>
+            <div *ngIf="slide.reaction!='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 2px solid rgb(188, 26, 26); z-index:1;"></div>
             <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
               <div class="circular-image-container">
-                <img [src]="slide.image" class="circular-image">
+                <img [src]="slide.node.image" class="circular-image">
               </div>
-              <p>{{slide.user}}</p>
+              <p>{{slide.node.user}}</p>
             </div>
-            <div class="main body d-flex" style="margin-left:40px;padding:0px 10px; flex:auto; overflow-y:scroll">
-              <p>{{slide.fullText}}</p>
+            <div class="main body d-flex text-left" style="margin-left:40px;padding:0px 10px; flex:auto; overflow-y:scroll">
+              <p>{{slide.node.fullText}}</p>
             </div>
-            <div class="d-flex mt-1" style="margin-left:40px; position:relative; height:50px; width:100%;">
+            <div class="d-flex mt-1" style="padding-left:40px;  position:relative; height:50px; width:100%;">
               <div class="d-flex flex-wrap align-items-center ml-2"
-                style="height:100%; width:70%; overflow:hidden; max-height:50px;">
-                <ng-container *ngFor="let slidetag of slide.CounterStatus">
+                style="height:100%; width:100%; overflow:hidden; max-height:50px;">
+                <ng-container *ngFor="let slidetag of slide.node.CounterStatus">
                   <button *ngIf="slidetag.status!='positive'" (click)="handleNodeClick(slidetag.id)"
                     class="btn btn-danger text-white mr-2 mb-1"
                     style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slidetag.tag}}
@@ -36,20 +36,22 @@
               </div>
       
              
-              <div class="d-flex justify-content-end align-items-end mr-1 mb-3" style="width:30%; height:100%;">
-                <button class="emoji-button text-green mr-3" (click)="thumbup()">
-                  <i class="fa fa-thumbs-up"></i>
-                </button>
-                <p class="m-0 mr-2"><b>{{slide.Positive}}</b></p>
-                <button class="emoji-button text-green ml-3 mr-3" (click)="thumbdown()">
-                  <i class="fa fa-thumbs-down"></i>
-                </button>
-                <p class="m-0"><b>{{slide.Negative}}</b></p>
-              </div>
+         
             </div>
-      
+            <div style="width:100%; padding-right:4px;">
+            <div class="d-flex justify-content-end align-items-end" style="position:relative;width:100%; height:100%;">
+              <button class="emoji-button text-green mr-3" (click)="thumbup()">
+                <i class="fa fa-thumbs-up"></i>
+              </button>
+              <p class="m-0 mr-2"><b>{{slide.node.Positive}}</b></p>
+              <button class="emoji-button text-green ml-3 mr-3" (click)="thumbdown()">
+                <i class="fa fa-thumbs-down"></i>
+              </button>
+              <p class="m-0"><b>{{slide.node.Negative}}</b></p>
+            </div>
+          </div>
             <div class="icons" style="position:absolute; right:5px;top:5px;">
-              <i class="fas fa-chart-line"></i> {{slide.Health}}
+              <i class="fas fa-chart-line"></i> {{slide.node.Health}}
             </div>
           </button>
       
@@ -61,23 +63,23 @@
         style="background-color:rgb(49, 49, 87);  position:relative;   display:flex; flex-direction:column; width:100%;height:100%; ">
         <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
           <div class="circular-image-container">
-            <img [src]="shownSlide.image" class="circular-image">
+            <img [src]="shownSlide[0].node.image" class="circular-image">
           </div>
-          <p>{{shownSlide.user}}</p>
+          <p>{{shownSlide[0].node.user}}</p>
         </div>
         <div class="main body d-flex" style="padding:0px 10px; flex:auto; overflow-y:scroll">
-          <p>{{shownSlide.fullText}}</p>
+          <p>{{shownSlide[0].node.fullText}}</p>
         </div>
         <div class="d-flex mt-1" style="position:relative; height:50px; width:100%;">
           <div class="d-flex flex-wrap align-items-center ml-2"
             style="height:100%; width:70%; overflow:hidden; max-height:50px;">
-            <ng-container *ngFor="let slide of negativetagArray">
+            <ng-container *ngFor="let slide of shownSlide[0].negativetagArray">
               <button *ngIf="slide.tag!=''" (click)="handleNodeClick(slide.id)"
                 class="btn btn-danger text-white mr-2 mb-1"
                 style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slide.tag}}
                 {{slide.totalMoment}}</button>
             </ng-container>
-            <ng-container *ngFor="let slide of positivetagArray">
+            <ng-container *ngFor="let slide of shownSlide[0].positivetagArray">
               <button *ngIf="slide.tag!=''" (click)="handleNodeClick(slide.id)"
                 class="btn btn-success text-white mr-2 mb-1"
                 style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slide.tag}}
@@ -90,16 +92,16 @@
             <button class="emoji-button text-green mr-3" (click)="thumbup()">
               <i class="fa fa-thumbs-up"></i>
             </button>
-            <p class="m-0 mr-2"><b>{{shownSlide.Positive}}</b></p>
+            <p class="m-0 mr-2"><b>{{shownSlide[0].node.Positive}}</b></p>
             <button class="emoji-button text-green ml-3 mr-3" (click)="thumbdown()">
               <i class="fa fa-thumbs-down"></i>
             </button>
-            <p class="m-0"><b>{{shownSlide.Negative}}</b></p>
+            <p class="m-0"><b>{{shownSlide[0].node.Negative}}</b></p>
           </div>
         </div>
 
         <div class="icons" style="position:absolute; right:5px;top:5px;">
-          <i class="fas fa-chart-line"></i> {{shownSlide.Health}}
+          <i class="fas fa-chart-line"></i> {{shownSlide[0].node.Health}}
         </div>
       </div>
 
@@ -107,52 +109,56 @@
     <ng-container *ngIf="swipeExpanded">
       
     
-    <div *ngFor="let slide of childrenSlides" class="swiper-slide text-white" style="position:relative;height:auto;display:flex;justify-content:center;align-items:center;">
-      <button class="bg-dark text-white" (click)="handleNodeClick(slide.id)"
-        style="position:relative;  display:flex; flex-direction:column; width:100%;height:100%; ">
-        <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
-          <div class="circular-image-container">
-            <img [src]="slide.image" class="circular-image">
+      <div *ngFor="let slide of childrenSlides"  class="swiper-slide text-white" style="position:relative;height:auto;display:flex;justify-content:center;align-items:center;">
+        <button class="bg-dark text-white" (click)="handleNodeClick(slide.node.id)"
+          style="position:relative;  display:flex; flex-direction:column; width:100%;height:100%; ">
+        
+          <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
+            <div class="circular-image-container">
+              <img [src]="slide.node.image" class="circular-image">
+            </div>
+            <p>{{slide.node.user}}</p>
           </div>
-          <p>{{slide.user}}</p>
-        </div>
-        <div class="main body d-flex" style="padding:0px 10px; flex:auto; overflow-y:scroll">
-          <p>{{slide.fullText}}</p>
-        </div>
-        <div class="d-flex mt-1" style=" position:relative; height:50px; width:100%;">
-          <div class="d-flex flex-wrap align-items-center ml-2"
-            style="height:100%; width:70%; overflow:hidden; max-height:50px;">
-            <ng-container *ngFor="let slidetag of slide.CounterStatus">
-              <button *ngIf="slidetag.status!='positive'" (click)="handleNodeClick(slidetag.id)"
-                class="btn btn-danger text-white mr-2 mb-1"
-                style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slidetag.tag}}
-                {{slidetag.totalMoment}}</button>
-                <button *ngIf="slidetag.status=='positive'" (click)="handleNodeClick(slidetag.id)"
-                class="btn btn-success text-white mr-2 mb-1"
-                style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slidetag.tag}}
-                {{slidetag.totalMoment}}</button>
-            </ng-container>
+          <div class="main body d-flex text-left" style="padding:0px 10px; flex:auto; overflow-y:scroll">
+            <p>{{slide.node.fullText}}</p>
           </div>
-
-         
-          <div class="d-flex justify-content-end align-items-end mr-1 mb-3" style="width:30%; height:100%;">
+          <div class="d-flex mt-1" style="  position:relative; height:50px; width:100%;">
+            <div class="d-flex flex-wrap align-items-center ml-2"
+              style="height:100%; width:100%; overflow:hidden; max-height:50px;">
+              <ng-container *ngFor="let slidetag of slide.node.CounterStatus">
+                <button *ngIf="slidetag.status!='positive'" (click)="handleNodeClick(slidetag.id)"
+                  class="btn btn-danger text-white mr-2 mb-1"
+                  style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slidetag.tag}}
+                  {{slidetag.totalMoment}}</button>
+                  <button *ngIf="slidetag.status=='positive'" (click)="handleNodeClick(slidetag.id)"
+                  class="btn btn-success text-white mr-2 mb-1"
+                  style="height:20px; width:auto; padding:1px 3px; border-radius:999px; font-size:12px;">{{slidetag.tag}}
+                  {{slidetag.totalMoment}}</button>
+              </ng-container>
+  
+            </div>
+    
+           
+       
+          </div>
+          <div style="width:100%; padding-right:4px;">
+          <div class="d-flex justify-content-end align-items-end" style="position:relative;width:100%; height:100%;">
             <button class="emoji-button text-green mr-3" (click)="thumbup()">
               <i class="fa fa-thumbs-up"></i>
             </button>
-            <p class="m-0 mr-2"><b>{{shownSlide.Positive}}</b></p>
+            <p class="m-0 mr-2"><b>{{slide.node.Positive}}</b></p>
             <button class="emoji-button text-green ml-3 mr-3" (click)="thumbdown()">
               <i class="fa fa-thumbs-down"></i>
             </button>
-            <p class="m-0"><b>{{shownSlide.Negative}}</b></p>
+            <p class="m-0"><b>{{slide.node.Negative}}</b></p>
           </div>
         </div>
-
-        <div class="icons" style="position:absolute; right:5px;top:5px;">
-          <i class="fas fa-chart-line"></i> {{shownSlide.Health}}
-        </div>
-      </button>
-
-    </div>
+          <div class="icons" style="position:absolute; right:5px;top:5px;">
+            <i class="fas fa-chart-line"></i> {{slide.node.Health}}
+          </div>
+        </button>
+    
+      </div>
   
     <div class="text-center text-white"
     style="position:relative; background-color:rgb(110, 110, 109);  display:flex; flex-direction:column; width:100%;height:100%; ">

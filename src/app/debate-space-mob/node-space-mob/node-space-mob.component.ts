@@ -380,30 +380,35 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
 
   //this function finds the top 3 positive and negative tags based on moment score and stores them in negative and positive array
   updateSlide() {
-    this.shownSlide = this.nodes.get(this.selectedNodeIndex!);
-    this.childrenSlides = this.getChildNodeIds(this.selectedNodeIndex!);
+    this.shownSlide = this.sliceTags([this.nodes.get(this.selectedNodeIndex!)]);
+    this.childrenSlides = this.sliceTags(this.getChildNodeIds(this.selectedNodeIndex!));
     this.parentSlides = this.nodeAux.traverseNodes(this.selectedNodeIndex!, this.nodes, this.edges);
     this.parentSlides = this.parentSlides.reverse();
 
-    // Assuming this.shownSlide contains the node data
-    if (this.shownSlide && this.shownSlide.CounterStatus) {
-      // Sort CounterStatus array by totalMoment in descending order
-      let sortedCounterStatus = [...this.shownSlide.CounterStatus]
-        .filter(item => item.status != 'positive')
-        .sort((a, b) => b.totalMoment - a.totalMoment);
-
-      // Take the first three items from the sorted array
-      this.negativetagArray = sortedCounterStatus.slice(0, 3);
-
-      let positiveCounterStatus = [...this.shownSlide.CounterStatus]
-        .filter(item => item.status === 'positive')
-        .sort((a, b) => b.totalMoment - a.totalMoment);
-
-      this.positivetagArray = positiveCounterStatus.slice(0, 3);
-    }
   }
 
-
+  sliceTags (node:any[]) {
+     // Assuming this.shownSlide contains the node data
+     const sliceTag:any = [];
+    node.forEach(element => {
+         // Sort CounterStatus array by totalMoment in descending order
+         let sortedCounterStatus = [...element.CounterStatus]
+         .filter(item => item.status != 'positive')
+         .sort((a, b) => b.totalMoment - a.totalMoment);
+ 
+       // Take the first three items from the sorted array
+       let negativetagArray = sortedCounterStatus.slice(0, 3);
+ 
+       let positiveCounterStatus = [...element.CounterStatus]
+         .filter(item => item.status === 'positive')
+         .sort((a, b) => b.totalMoment - a.totalMoment);
+ 
+       let positivetagArray = positiveCounterStatus.slice(0, 3);
+       sliceTag.push({node:element, negativetagArray:negativetagArray, positivetagArray:positivetagArray});
+     });
+   return sliceTag;
+    
+  }
   // emote events.  when thumbdown or thumbup are clicked, the node's moment score is updated and the node is updated in the nodes array.
   thumbdown(): void {
 

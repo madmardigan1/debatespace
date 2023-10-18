@@ -4,11 +4,11 @@
     flex-direction: column;
     position:absolute;
     overflow-y:scroll;">
-    <div style="margin-right:10px; margin-left:10px;">
+    <div >
     <h1 class="mb-4 mt-4 text-center">Categories</h1> <!-- Added margin-bottom for vertical spacing -->
     
     <!-- Button Group -->
-    <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
+    <div class="d-flex mb-4" style=" padding:0px 10px;"> <!-- Added margin-bottom for vertical spacing -->
 
         <!-- Left-most buttons -->
         <button class="btn btn-outline-white text-white" [ngClass]="{'btn-danger': searchType === 'all'}" style="border:1px solid white; width: auto; margin-right: 10px" (click)="toggleSearch('all')">All</button>
@@ -35,43 +35,42 @@
     
     <!-- Cards Container -->
     <div *ngIf="matchedCards.length>0" style="display: flex; flex-wrap: wrap;overflow-y:scroll;">
-        <div *ngFor="let card of matchedCards" class="porp mb-4" style="  width:100%; position:relative;"> <!-- Added margin-bottom for vertical spacing between cards -->
-
-            <button style="color:transparent;position:absolute;left:0;top:0;height:100%;width:100%; z-index:1000" (click)="join(card)"></button>
-      <!-- Top Colored Box -->
-      <div class="custom-card shadow-lg bg-dark text-white" style=" position: relative; height: 100px; text-wrap: wrap;"> <!-- height set to 100px -->
-        
-        <!-- Description styled at the top and spanning the whole card -->
-        <p class="card-text mb-3 mt-3" style="margin: 0; padding: 10px;">{{card.description}}</p>
-        
-        <!-- Viewers Count in Upper Right -->
-        <div class="viewers-count" style="position: absolute; top: 10px; right: 10px; font-size: 12px;">
-          <i class="fas fa-user"></i> {{card.user.length}}
-        </div>
-      </div>
+        <div *ngFor="let card of matchedCards" class="porp" 
+        style="display: flex; flex-direction: column; overflow-wrap: break-word; overflow-x: block; word-wrap: break-word; position: relative; border:1px solid rgba(122, 122, 122, .5); background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)); width: 100%;">
+      
+        <button style="overflow:hidden; color:transparent; position:absolute; left:0; top:0; height:100%; width:100%; z-index:900" 
+                (click)="join(card)">
+        </button>
     
-       
-      <!-- Black Box Below -->
-      <div class="bg-black text-white" style="border: 1px solid black; padding: 5px;">
-        <div class="user-info" style="display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+        <!-- Top Box -->
+        <div class="custom-card shadow-lg bg-black text-white"
+            style="position: relative; height: auto; text-wrap: wrap; overflow-y: hidden; border-radius:10px; padding: 10px; box-sizing: border-box; display: flex; ">
             
-            <!-- User Image and Name -->
-            <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;"> 
-                <img [src]="card.user[0].photoUrl" alt="Steve" style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover;">
-                <h5 class="text-center" style="margin: 0px; font-size: 12px;">{{card.user[0].name}}</h5>
+            <!-- User Image -->
+            <img [src]="'/assets/Steve1.jpeg'" alt="Steve"
+                 style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover; margin-right:10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);">
+            
+            <!-- User Name -->
+            <p style="flex-grow: 1; margin: 0; font-size: 12px; color: white;"><b>{{card.user[0].name}}</b></p>
+            
+            <!-- Viewers Count -->
+            <div class="viewers-count" style="font-size: 12px; color: white;">
+                <i class="fas fa-user"></i> {{card.user.length}}
             </div>
+        </div>
     
-            <!-- Topic Container -->
-            <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; align-content: flex-start;">
-                <div *ngFor="let topic of card.topic" style="display: inline-flex; margin-right: 5px; margin-bottom: 5px;">
-                    <span style="background-color: black; border:1px solid white; padding: 3px 8px; border-radius: 10px; font-size: 11px;">{{topic}}</span>
+        <!-- Description -->
+        <p style="margin-left:40px; padding: 5px 10px; background-color: black; color: white; border-radius: 10px;">{{card.description}}</p>
+    
+        <!-- Tags Container -->
+        <div class="bg-black text-white" style="border: 1px solid black; border-radius:10px; padding: 5px; margin-left: 40px;">
+            <div style="display: flex; flex-wrap: wrap; align-content: flex-start;">
+                <div *ngFor="let topic of card.topic" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;">
+                    <span style=" border:1px solid #0056b3; padding: 3px 8px; border-radius: 10px; font-size: 11px; color: white;">{{topic}}</span> <!-- Used a blue color for tags -->
                 </div>
             </div>
-    
         </div>
-    </div>
-    
-        </div>
+  </div>
     </div>
 </div>
 </div>

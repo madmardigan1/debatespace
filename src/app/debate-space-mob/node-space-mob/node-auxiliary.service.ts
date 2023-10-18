@@ -52,7 +52,8 @@ export class NodeAuxiliaryService {
 
         // Get the parent node object and add it to the array
         const parentNode = nodes.get(parentNodeId);
-        parentNodes.push(parentNode);
+
+        parentNodes.push({node:parentNode, reaction: nodes.get(currentNodeId).Reaction});
 
         // Move up to the next parent node for the next iteration
         currentNodeId = parentNodeId;

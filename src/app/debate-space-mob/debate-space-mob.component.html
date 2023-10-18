@@ -58,26 +58,21 @@
 
       <div class="viewsecond bg-black">
         <div class="d-flex bg-black justify-content-between" style="height:auto;">
-          <div class="d-flex align-items-center" style="position:relative;">
-            <button class="btn btn-outline-white text-white" (click)="togglePanel(3)">
-              <i class="fas fa-users" style="font-size:15px;"></i>
-              {{card.user.length}}
+          <div class="ml-3 d-flex align-items-center">
+            <button class="btn btn-white"
+              [ngClass]="{'btn btn-light': panelType === 'chat', 'text-black': panelType === 'chat'}"
+              style="border-radius:10px;display:flex; flex-direction:column; align-items:center;justify-content:center; border:1px solid white;  margin:0; padding:4px 10px;margin-right:5px; font-size:15px;"
+              (click)="toggleLowerDisplay('chat')">
+            <div *ngIf="!toggleChat" style="display:flex; flex-direction:column; align-items:center;justify-content:center; ">
+              <i *ngIf="!toggleChat" class="fas fa-caret-up"></i>Chat
+            </div>
+            <div *ngIf="toggleChat" style="display:flex; flex-direction:column; align-items:center;justify-content:center; ">
+              Chat
+              <i *ngIf="toggleChat" class="fas fa-caret-down"></i>
+            </div>
+             
+            
             </button>
-
-            <button mat-icon-button [matMenuTriggerFor]="menu"
-              class="btn btn-outline-white bg-black text-center mt-0 p-0">
-              <i class="fas fa-ellipsis-h text-white" style="font-size:15px;"></i>
-            </button>
-          </div>
-          <div class="d-flex align-items-center">
-            <button class="btn btn-white padding-right-3"
-    [ngClass]="{'btn btn-light': panelType === 'chat', 'text-black': panelType === 'chat'}"
-    style="border-radius:99px; border:1px solid white; height:35px; margin:0;padding-left:10px; padding-right:10px;padding:4px;margin-right:5px; font-size:15px;"
-    (click)="toggleLowerDisplay('chat')">
-    <i *ngIf="!toggleChat" class="fas fa-caret-up"></i> 
-    <i *ngIf="toggleChat" class="fas fa-caret-down"></i> 
-    Chat
-</button>
 
             <button [ngClass]="{'btn btn-light': panelType === 'nodes', 'text-black': panelType === 'nodes'}"
               class="btn btn-white padding-right-3"
@@ -86,23 +81,35 @@
               <div *ngIf="forumToggle">Forum</div>
               <div *ngIf="!forumToggle">Nodes</div>
             </button>
-
           </div>
+     
+        
           <div *ngIf=" !isSecondModalOpen && isRanked" style="display:flex;  z-index:1;">
+            <button class="btn btn-outline-white text-white" (click)="togglePanel(3)">
+              <i class="fas fa-users" style="font-size:15px;"></i>
+              {{card.user.length}}
+            </button>
             <button (click)="togglePanelReaction('negative')" class="btn btn-black bg-black mr-2"
-              style="opacity:.8;border-radius:50%; padding:0;width:40px;height:40px;z-index:2;">
+              style="opacity:.8;border-radius:50%; padding:0;">
               <span class="fa-stack">
-                <i class="fas fa-comment fa-stack-2x" style="color: red; transform: scaleX(-1);"></i>
-                <i class="fas fa-minus fa-stack-1x" style="color: white;"></i>
+                <i class="fas fa-comment fa-stack-2x" style="color: rgb(180, 62, 62); transform: scaleX(-1);"></i>
+                <i class="fas fa-minus fa-stack-1x" style="color: rgb(255, 255, 255);"></i>
               </span>
             </button>
 
             <button (click)="togglePanelReaction('positive')" class="btn btn-black bg-black mr-2"
-              style="opacity:.8;border-radius:50%;padding:0; width:40px;height:40px;z-index:2;">
+              style="opacity:.8;border-radius:50%;padding:0;">
               <span class="fa-stack">
-                <i class="fas fa-comment fa-stack-2x" style="color: green;"></i>
+                <i class="fas fa-comment fa-stack-2x" style="color: rgb(82, 177, 82);"></i>
                 <i class="fas fa-plus fa-stack-1x" style="color: white;"></i>
               </span>
+            </button>
+
+           
+
+            <button mat-icon-button [matMenuTriggerFor]="menu"
+              class="btn btn-outline-white bg-black text-center mt-0 p-0">
+              <i class="fas fa-ellipsis-v text-white" style="font-size:15px;"></i>
             </button>
           </div>
 
