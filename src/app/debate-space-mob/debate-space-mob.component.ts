@@ -100,6 +100,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   soundClip: any = null;
   videoClip: any = null;
   startY: number | null = null;
+  selectedNode: any = null;
 
   constructor(
     private speechService: SpeechService,
@@ -109,6 +110,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
     private cardService: CardDataService,
     private router: Router,
     private debateAuth: DebateAuthService,
+    private nodeService: NodespaceServiceService,
     private device: DeviceTypeService) {
     this.userType = this.debateAuth.getUser();
     this.device.getDevice().subscribe(data => (this.deviceType = data));
@@ -126,8 +128,12 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
       } else {
         // Handle case when card is not found, e.g., redirect or show a message
       }
+   
     });
-
+    this.nodeService.getNodeText().subscribe(messages => {
+      this.selectedNode = messages.node;
+      
+    })
     //used to rerieve the URL information for local host.  Replace with below function when it goes live.
     this.getLink = this.router.url;
 
@@ -225,6 +231,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
 
   //stops recording and resets all init variables.  It also closes the modal and sends the information to the node component.
   stopRecording(): void {
+    
     this.speechService.stopListening();
     if (this.phrasesSubscription) {
       this.phrasesSubscription.unsubscribe();
@@ -238,13 +245,14 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
         } else if (type === 'video') {
           this.videoClip = blob;
         }
-        this.closeSecondModal();
+        
         this.debateSpace.Toggle(this.transcript, this.soundClip, this.videoClip, this.reactionType, this.tagvalue);
         this.soundClip = null;
         this.videoClip = null;
         this.isRecordingVideo = false;
         this.transcript = '';
         this.isRecording = '';
+        this.closeSecondModal();
       }
     });
   }
@@ -295,11 +303,9 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
   }
 
   openSecondModal() {
-    this.secondModal.nativeElement.classList.add('open');
-    this.secondModalContent.nativeElement.classList.add('open');
-    setTimeout(() => {
+  
       this.inputTag.nativeElement.focus();
-    }, 50);  // Delay of 50 milliseconds
+  
   }
 
   //triggerd when the user clicks on the reaction buttons.  It opens the second modal and sets the reaction type.
@@ -314,8 +320,7 @@ export class DebateSpaceMobComponent implements AfterViewChecked {
 
   closeSecondModal() {
     this.isSecondModalOpen = false;
-    this.secondModalContent.nativeElement.classList.remove('open');
-    this.secondModal.nativeElement.classList.remove('open');
+   
 
   }
 

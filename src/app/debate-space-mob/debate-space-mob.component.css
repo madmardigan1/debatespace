@@ -6,9 +6,7 @@
   z-index: 1;
 }
 
-.btn {
-  transition: background-color 0.3s;
-}
+
 
 .theRest {
   height: 70%;
@@ -141,33 +139,6 @@
   transform: translateY(100%);
 }
 
-.slidecontentmobile {
-  position: absolute;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  bottom: 0;
-  right: 0;
-  transition: width 0.5s;
-  width: 0%;
-  height: auto;
-  overflow: hidden;
-  z-index: 1600;
-}
-
-.slidecontentdesk {
-  position: absolute;
-  ;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  bottom: 0;
-  right: 0;
-  transition: width 0.5s;
-  width: 0%;
-  height: auto;
-  overflow: hidden;
-  z-index: 1600;
-
-}
 
 .modal1.open1 {
   transform: translateY(0);
@@ -177,6 +148,31 @@
   transform: translateY(0);
 }
 
-.modal-content1.open {
-  width: 100%;
+
+.modal-content1 {
+  position: absolute;
+ 
+  padding-bottom:10px;
+  opacity: 1;
+  bottom: 0;
+  right: 0;
+  width: 389px;
+  height: auto;
+  overflow: hidden;
+  z-index: 1600;
+
+}
+
+.model-content1.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+input.form-control::placeholder {
+  color: white;
+}
+
+input.form-control:focus {
+  outline: none;
+  box-shadow: none; /* This is for Bootstrap, which applies a shadow on focus */
 }

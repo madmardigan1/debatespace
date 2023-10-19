@@ -632,7 +632,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     const combinedObjects = this.nodeAux.traverseToOriginal(nodeId, 1, this.nodes, this.edges);
     const children = this.nodeAux.getChildNodeIds(nodeId, this.nodes, this.edges);
     const parents = this.nodeAux.traverseNodes(nodeId, this.nodes, this.edges);
-    this.nodeService.changeNodeText(children, parents);
+    this.nodeService.changeNodeText(this.nodes.get(nodeId));
     this.nodeService.setNodeId(nodeId);
   }
 

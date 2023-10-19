@@ -8,7 +8,7 @@ export class NodespaceServiceService {
 
   private nodeId = new BehaviorSubject<number | undefined>(1);
   private SiblingData = new BehaviorSubject<{ previous: string, next: string } | null>({ previous: '1', next: '1' });
-  private nodeTextSource = new Subject<{ childnodes: any[], parentnodes: any[] }>();
+  private nodeTextSource = new Subject<{ node: any[] }>();
 
 
 
@@ -24,11 +24,11 @@ export class NodespaceServiceService {
     return this.nodeId.asObservable();
   }
 
-  changeNodeText(child: any[], parents: any[]): void {
-    this.nodeTextSource.next({childnodes: child, parentnodes: parents});
+  changeNodeText(node: any[]): void {
+    this.nodeTextSource.next({node: node});
 }
 
-getNodeText(): Observable<{ childnodes: any[], parentnodes: any[] }> {
+getNodeText(): Observable<{ node:any[] }> {
   return this.nodeTextSource.asObservable();
 }
 

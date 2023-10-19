@@ -21,7 +21,6 @@ import { ChatSpaceMobComponent } from './debate-space-mob/chat-space-mob/chat-sp
 import { ChatSubmitMobComponent } from './debate-space-mob/chat-submit-mob/chat-submit-mob.component';
 import { UserSummaryMobComponent } from './debate-space-mob/user-summary-mob/user-summary-mob.component';
 import { NodeSpaceMobComponent } from './debate-space-mob/node-space-mob/node-space-mob.component';
-import { GptsummaryMobComponent } from './debate-space-mob/gptsummary-mob/gptsummary-mob.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AvControlMobComponent } from './debate-space-mob/av-control-mob/av-control-mob.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -50,7 +49,6 @@ import { NodesComponent } from './nodes/nodes.component';
     ChatSubmitMobComponent,
     UserSummaryMobComponent,
     NodeSpaceMobComponent,
-    GptsummaryMobComponent,
     AvControlMobComponent,
     LeaderboardComponent,
     TopicMenuComponent,
