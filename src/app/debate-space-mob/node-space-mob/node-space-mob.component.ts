@@ -1,6 +1,6 @@
 // Angular Core imports
 import {
-  Component, AfterViewInit, ViewChild, ViewChildren, ElementRef, QueryList, Output, EventEmitter,
+  Component, AfterViewInit, ViewChild, ViewChildren, ElementRef, QueryList, Output, EventEmitter, Renderer2,
   Input, OnInit, NgZone,
 } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -370,8 +370,11 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     if (swipeRElement) {
         swipeRElement.classList.toggle('expanded');
         this.visNetwork.nativeElement.classList.toggle('blur');
+        setTimeout(() => {
+          this.scrollToSlide();
+        }, 10);
     }
-  
+    
    
 }
 
@@ -384,8 +387,30 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     this.childrenSlides = this.sliceTags(this.getChildNodeIds(this.selectedNodeIndex!));
     this.parentSlides = this.nodeAux.traverseNodes(this.selectedNodeIndex!, this.nodes, this.edges);
     this.parentSlides = this.parentSlides.reverse();
-
+  
+      this.scrollToSlide();
+  
   }
+
+  scrollToSlide() {
+  // Calculate the total height of all parent slides above the current shown slide
+  let totalHeight = 0;
+  
+  // Iterate over the parentSlideList (QueryList<ElementRef>) 
+  // and accumulate their heights until the shown slide
+  this.parentSlideList.toArray().forEach((slideElementRef, index) => {
+    // Stop accumulating once you reach the shown slide
+    if (this.shownSlide[0] && this.shownSlide[0].node.id !== slideElementRef.nativeElement.id) {
+      totalHeight += slideElementRef.nativeElement.offsetHeight;
+    } else {
+      return; // Stop the forEach loop
+    }
+  });
+  console.log (totalHeight);
+  // Scroll the mainSlide element to the calculated position
+  this.mainSlide.nativeElement.scrollTop = totalHeight;
+}
+
 
   sliceTags (node:any[]) {
      // Assuming this.shownSlide contains the node data

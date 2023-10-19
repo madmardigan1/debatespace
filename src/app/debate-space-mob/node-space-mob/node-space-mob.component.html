@@ -1,15 +1,15 @@
 <div class="container">
  
-  <div *ngIf="shownSlide"  class="swipeR "
+  <div *ngIf="shownSlide"  class="swipeR "#mainSlide 
     style="width:100%; top:0; overflow-y:auto;  justify-content:center; align-items:center; position:absolute; flex:auto; z-index:3; opacity:.8;">
-    <div   #mainSlide  class="bg-black" style="height:auto;width:100%;">
+    <div    class="bg-black" style="height:auto;width:100%;">
 
       <ng-container *ngIf="swipeExpanded">
         <div *ngFor="let slide of parentSlides" #parentSlideList class="swiper-slide text-white" style="position:relative;height:auto;display:flex;justify-content:center;align-items:center;">
           <button class="bg-dark text-white" (click)="handleNodeClick(slide.node.id)"
             style="position:relative;  display:flex; flex-direction:column; width:100%;height:100%; ">
-            <div *ngIf="slide.reaction=='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 2px solid rgb(47, 105, 53); z-index:1;"></div>
-            <div *ngIf="slide.reaction!='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 2px solid rgb(188, 26, 26); z-index:1;"></div>
+            <div *ngIf="slide.reaction=='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 3px solid rgb(47, 105, 53); z-index:1;"></div>
+            <div *ngIf="slide.reaction!='positive'" class="vline" style="position:absolute; left:30px; top:45px; bottom:0; opacity:.6; border-left: 3px solid rgb(188, 26, 26); z-index:1;"></div>
             <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
               <div class="circular-image-container">
                 <img [src]="slide.node.image" class="circular-image">
@@ -61,7 +61,10 @@
     <div  class="swiper-slide bg-black text-white" style=" position:relative;height:auto;display:flex;justify-content:center;align-items:center;">
       <div class=" text-white"
         style="background-color:rgb(49, 49, 87);  position:relative;   display:flex; flex-direction:column; width:100%;height:100%; ">
-        <div class="d-flex ml-2 mt-1 mb-1" style="height:45px; width:100%;">
+        <div *ngIf="swipeExpanded &&parentSlides && parentSlides[0].reaction=='positive'" class="vline" style="position:absolute; left:30px; top:0px; height:10px; opacity:.6; border-left: 3px solid rgb(47, 105, 53); z-index:1;"></div>
+            <div *ngIf="swipeExpanded && parentSlides && parentSlides[0].reaction!='positive'" class="vline" style="position:absolute; left:30px; top:0px;  opacity:.6; height:10px; border-left: 3px solid rgb(188, 26, 26); z-index:1;"></div>
+       
+        <div class="d-flex ml-2 mt-3 mb-1" style="height:45px; width:100%;">
           <div class="circular-image-container">
             <img [src]="shownSlide[0].node.image" class="circular-image">
           </div>
@@ -164,6 +167,9 @@
     style="position:relative; background-color:rgb(110, 110, 109);  display:flex; flex-direction:column; width:100%;height:100%; ">
    
      ... no additional replies
+
+  </div>
+  <div style="height:100vh">
 
   </div>
   

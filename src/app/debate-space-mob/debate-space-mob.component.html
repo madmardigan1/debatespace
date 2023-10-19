@@ -2,78 +2,80 @@
   <button class="btn btn-primary" (click)="simulate('spectator')">Simulate User</button>
 
   <button class="btn btn-primary" (click)="simulate('host')">Simulate Host</button>
-  <button class="btn btn-primary" (click)="simulate('ranked')">Simulate debate</button>
-  <button class="btn btn-primary" (click)="simulate('normal')">Simulate normal mode</button>
 </div>
 <div [ngClass]="{'slidecontentmobile': deviceType, 'slidecontentdesk': !deviceType, 'hidden': !isSecondModalOpen}"
-  class="modal-content1 text-white bg-black" #secondModal (mousedown)="startDrag($event)" (click)="$event.stopPropagation()"
-  style="opacity:.8; border-left:1px solid rgb(255,255,255, .3)">
+  class="modal-content1 text-white bg-black" #secondModal (mousedown)="startDrag($event)"
+  (click)="$event.stopPropagation()" style="opacity:.8; border-left:1px solid rgb(255,255,255, .3)">
 
   <div class="d-flex" style="flex-direction:column;">
-  <div class="mt-2 mb-2 ml-6" *ngIf="selectedNode">Replying to {{selectedNode.user}}</div>
-  <div *ngIf="tagStatus===false"
-    style="overflow-x:hidden;position:relative ;align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; ">
-    <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
-      <form (submit)="addTag($event)">
-        <div style="position: relative;height:auto; width:100%; bottom:0; flex-grow: 1; border-radius:999px;">
-          <input type="text" class="form-control text-white" placeholder='Add Tag' aria-label="value"
-            aria-describedby="button-addon2" [(ngModel)]="tagvalue" name="inputValue" autocomplete="off" maxlength="13" #inputTag
-             style="border-radius:999px;width:350px; background-color:rgb(62, 62, 62); border:none; font-size:14px;">
-        </div>
-      </form>
-      <button *ngIf="value.length > 0" style="position:absolute; right:0;"
-        class="btn btn-black rounded-circle" type="submit" id="button-addon2" style="background-color:transparent;">
-        <i class="fas fa-arrow-right"></i>
-      </button>
+    <div class="mt-2 mb-2 ml-6" *ngIf="selectedNode">Replying to {{selectedNode.user}}</div>
+    <div *ngIf="tagStatus===false"
+      style="overflow-x:hidden;position:relative ;align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; ">
+      <div style="position:relative; bottom:0; display:flex; justify-content: center; flex:auto;">
+        <form (submit)="addTag($event)">
+          <div style="position: relative;height:auto; width:100%; bottom:0; flex-grow: 1; border-radius:999px;">
+            <input type="text" class="form-control text-white" placeholder='Add Tag' aria-label="value"
+              aria-describedby="button-addon2" [(ngModel)]="tagvalue" name="inputValue" autocomplete="off"
+              maxlength="13" #inputTag
+              style="border-radius:999px;width:350px; background-color:rgb(62, 62, 62); border:none; font-size:14px;">
+          </div>
+        </form>
+        <button *ngIf="value.length > 0" style="position:absolute; right:0;" class="btn btn-black rounded-circle"
+          type="submit" id="button-addon2" style="background-color:transparent;">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
     </div>
-  </div>
-  <div *ngIf="tagStatus===true"
-    style="overflow-x:hidden;position:relative;top:0;left:0; flex-direction:column; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; ">
-    <div *ngIf="isRecording"
-      style="height:auto;display:flex; align-items:center; flex-direction:column; flex: auto;position:relative; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:20000;">
-      <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo"
-        style="height:auto;position:relative;flex:auto;width:100%;"></video>
+    <div *ngIf="tagStatus===true"
+      style="overflow-x:hidden;position:relative;top:0;left:0; flex-direction:column; align-items:center; justify-content: space-between; display:flex; flex: auto; width:390px; height:auto; ">
+      <div *ngIf="isRecording"
+        style="height:auto;display:flex; align-items:center; flex-direction:column; flex: auto;position:relative; width:100%; overflow-y: hidden; overflow-wrap: break-word; z-index:20000;">
+        <video #liveVideo autoplay playsinline *ngIf="isRecordingVideo"
+          style="height:auto;position:relative;flex:auto;width:100%;"></video>
+
+      </div>
+      <div *ngIf="isRecording"
+        style="height:60px;position:relative; margin:0px 10px; display:flex; flex-direction:column; justify-content: center; flex:auto;">
+        {{transcript}}</div>
+      <div *ngIf="!isRecording" style="position:relative; display:flex; justify-content: center; flex:auto;">
+        <form (submit)="submitTextResponse($event)">
+          <div style="position: relative; width:100%; bottom:0; height:auto; flex-grow: 1; border-radius:999px;">
+            <input type="text" class="form-control" placeholder='Post your reply' aria-label="value"
+              aria-describedby="button-addon2" [(ngModel)]="value" name="inputValue" autocomplete="off" #inputReply
+              [ngStyle]="{'border': reactionType === 'negative' && tagStatus === true ? '1px solid red' : reactionType === 'positive' && tagStatus === true ? '1px solid green' : 'rgb(95, 95, 95)'}"
+              style="border-radius:999px;width:350px;height:auto; background-color:rgb(62, 62, 62); color:white; font-size:14px;">
+          </div>
+        </form>
+        <button *ngIf="value.length > 0" style="position:absolute; right:00px;"
+          class="btn btn-black bg-transparent rounded-circle" type="submit" id="button-addon2">
+          <i class="fas fa-arrow-right"
+            [ngStyle]="{'color': reactionType === 'negative' && tagStatus === true ? 'red' : reactionType === 'positive' && tagStatus === true ? 'green' : 'rgb(95, 95, 95)'}"></i>
+        </button>
+      </div>
 
     </div>
-    <div *ngIf="isRecording" 
-      style="height:60px;position:relative; margin:0px 10px; display:flex; flex-direction:column; justify-content: center; flex:auto;">
-      {{transcript}}</div>
-    <div *ngIf="!isRecording" style="position:relative; display:flex; justify-content: center; flex:auto;">
-      <form (submit)="submitTextResponse($event)">
-        <div style="position: relative; width:100%; bottom:0; height:auto; flex-grow: 1; border-radius:999px;">
-          <input type="text" class="form-control" placeholder='Post your reply' aria-label="value"
-            aria-describedby="button-addon2" [(ngModel)]="value" name="inputValue" autocomplete="off" #inputReply 
-            [ngStyle]="{'border': reactionType === 'negative' && tagStatus === true ? '1px solid red' : reactionType === 'positive' && tagStatus === true ? '1px solid green' : 'rgb(95, 95, 95)'}" 
-            style="border-radius:999px;width:350px;height:auto; background-color:rgb(62, 62, 62); color:white; font-size:14px;">
-        </div>
-      </form>
-      <button *ngIf="value.length > 0" style="position:absolute; right:00px;"
-        class="btn btn-black bg-transparent rounded-circle" type="submit" id="button-addon2">
-        <i class="fas fa-arrow-right" [ngStyle]="{'color': reactionType === 'negative' && tagStatus === true ? 'red' : reactionType === 'positive' && tagStatus === true ? 'green' : 'rgb(95, 95, 95)'}" ></i>
+    <div class="space-between d-flex ml-3">
+      <button *ngIf="!isRecording" [disabled]="!tagStatus" class="btn "
+        [ngStyle]="{'color': reactionType === 'negative' && tagStatus === true ? 'red' : reactionType === 'positive' && tagStatus === true ? 'green' : 'rgb(95, 95, 95)'}"
+        style="border:0;width:38px;height:38px;align-items: center;justify-content: center;display:flex;"
+        (click)="startRecording(false)">
+        <i class="fa fa-microphone"></i>
       </button>
+      <button *ngIf="!isRecording" [disabled]="!tagStatus" class="btn"
+        [ngStyle]="{'color': reactionType === 'negative' && tagStatus === true ? 'red' : reactionType === 'positive' && tagStatus === true ? 'green' : 'rgb(95, 95, 95)'}"
+        style="border:0; width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"
+        (click)="startRecording(true)">
+        <i class="fas fa-video"></i>
+      </button>
+      <div class="d-flex align-items-center justify-content-center " style="width:100%;height:auto">
+        <button *ngIf="isRecording && transcript!=''" class="btn btn-outline-white"
+          style="color:rgb(255, 255, 255); width:38px;height:38px; margin-right:2px; align-items: center;justify-content: center;display:flex;"
+          (click)="stopRecording()">
+          <i class="fa fa-stop"></i>
+        </button>
+      </div>
     </div>
-  
   </div>
-  <div class="space-between d-flex ml-3">
-    <button *ngIf="!isRecording"[disabled]="!tagStatus" class="btn "
-    [ngStyle]="{'color': reactionType === 'negative' && tagStatus === true ? 'red' : reactionType === 'positive' && tagStatus === true ? 'green' : 'rgb(95, 95, 95)'}" style="border:0;width:38px;height:38px;align-items: center;justify-content: center;display:flex;"
-      (click)="startRecording(false)">
-      <i class="fa fa-microphone"></i>
-    </button>
-    <button *ngIf="!isRecording"[disabled]="!tagStatus" class="btn"
-    [ngStyle]="{'color': reactionType === 'negative' && tagStatus === true ? 'red' : reactionType === 'positive' && tagStatus === true ? 'green' : 'rgb(95, 95, 95)'}" style="border:0; width:38px;height:38px; margin-left:2px;margin-right:2px; align-items: center;justify-content: center;display:flex;"
-      (click)="startRecording(true)">
-      <i class="fas fa-video"></i>
-    </button>
-    <div class="d-flex align-items-center justify-content-center " style="width:100%;height:auto">
-    <button *ngIf="isRecording && transcript!=''" class="btn btn-outline-white"
-      style="color:rgb(255, 255, 255); width:38px;height:38px; margin-right:2px; align-items: center;justify-content: center;display:flex;"
-      (click)="stopRecording()">
-      <i class="fa fa-stop"></i>
-    </button>
-  </div>
-  </div>
-</div>
 </div>
 <div [ngClass]="{'slidemobile':deviceType,'slidedesktop':!deviceType}" class="slide-in-modal" #secondModal
   (click)="closeSecondModal()">

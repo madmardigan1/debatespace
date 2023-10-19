@@ -88,7 +88,7 @@ export class CardDataService {
       ],
       topic: ["Science", "Space", "Mars"],
       description: "Mars rover finds something interesting",
-      ranked: false,
+      ranked: true,
       nodes: [{ id: 1, label: '', text: 'Mars rover finds something interesting', fullText: 'Mars rover finds something interesting', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
@@ -99,7 +99,7 @@ export class CardDataService {
       ],
       topic: ["Science", "Space", "Mars"],
       description: "Mars rover finds something interesting",
-      ranked: false,
+      ranked: true,
       nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     {
@@ -110,7 +110,7 @@ export class CardDataService {
       ],
       topic: ["Science", "Space", "Mars"],
       description: "Mars rover finds something interesting",
-      ranked: false,
+      ranked: true,
       nodes: [{ id: 1, label: '', text: '', fullText: '', shape: 'circularImage', image: "assets/Steve.jpeg", CounterStatus: [], user: "Steve", Health: 100, totalPositive: 0, Moment: 1, Reaction: 'neutral', Positive: 0, Negative: 0, videoClip: null, soundClip: null, commentType: 'good' }]
     },
     // ... Continue in this manner for at least 8 lines.
