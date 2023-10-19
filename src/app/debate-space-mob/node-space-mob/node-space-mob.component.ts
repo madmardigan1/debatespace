@@ -387,7 +387,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     this.childrenSlides = this.sliceTags(this.getChildNodeIds(this.selectedNodeIndex!));
     this.parentSlides = this.nodeAux.traverseNodes(this.selectedNodeIndex!, this.nodes, this.edges);
     this.parentSlides = this.parentSlides.reverse();
-  
+    console.log(this.childrenSlides);
       this.scrollToSlide();
   
   }
@@ -406,7 +406,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
       return; // Stop the forEach loop
     }
   });
-  console.log (totalHeight);
+ 
   // Scroll the mainSlide element to the calculated position
   this.mainSlide.nativeElement.scrollTop = totalHeight;
 }
@@ -651,6 +651,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     const node = this.nodes.get(this.selectedNodeIndex!);
     this.emitNodeInformation(this.selectedNodeIndex);
     this.zoomToNode(this.selectedNodeIndex);
+   
   }
 
   private emitNodeInformation(nodeId: any): void {
@@ -659,6 +660,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
     const parents = this.nodeAux.traverseNodes(nodeId, this.nodes, this.edges);
     this.nodeService.changeNodeText(this.nodes.get(nodeId));
     this.nodeService.setNodeId(nodeId);
+   
   }
 
   private zoomToNode(nodeId: any): void {
