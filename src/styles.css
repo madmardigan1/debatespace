@@ -25,6 +25,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --error-color: #1f1918;
     --tertiary-color: #001116;
     --text-color: #424242;
+    --text-highlight: #B68900;
+    --quad-color: #073642;
    
   }
 

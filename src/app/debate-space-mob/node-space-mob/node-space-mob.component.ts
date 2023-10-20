@@ -54,6 +54,7 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
   parentHeight: number = 0;
   @Input() cardId!: string;
   @Input() isRanked = false;
+  @Output() divClicked = new EventEmitter<void>();
   network!: Network;
   zoomscale = 1.0;
   public selectedPicture = 0;
@@ -484,6 +485,10 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         this.cardService.updateCardMoment(this.cardId, nodeData.id, 'positive', parentId);
       }
     }
+  }
+
+  handleClick() {
+    this.divClicked.emit();
   }
 
   addNode(data: any): void {

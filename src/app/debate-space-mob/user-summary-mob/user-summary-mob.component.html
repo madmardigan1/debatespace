@@ -4,7 +4,7 @@
 
 
     <div *ngIf="toggledPanel==1"
-      style="height:60vh; display:flex; flex-direction:column; position:relative;flex-grow:1">
+      style="height:90vh; display:flex; flex-direction:column; position:relative;flex-grow:1">
       <div class="position:relative; height:auto; d-flex justify-content-center mt-3">
         <div class="drag-handle centered"></div>
       </div>
@@ -63,16 +63,16 @@
       {{ cardUsers.length }}
     </p>
   </div>
-  <div class="d-flex mb-4"> <!-- Added margin-bottom for vertical spacing -->
-    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': userToggle === 'all'}"
+  <div class="d-flex mb-4 ml-5"> <!-- Added margin-bottom for vertical spacing -->
+    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-highlight': userToggle === 'all'}"
       style="border:1px solid white; width: auto; margin-right: 10px" (click)="toggleUsers('all')">All</button>
     <!-- Added margin-right for spacing between buttons -->
 
-    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': userToggle === 'speakers'}"
+    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-highlight': userToggle === 'speakers'}"
       style="border:1px solid white; width: auto; margin-right: 10px"
       (click)="toggleUsers('speakers')">Speakers</button> <!-- Added margin-right for spacing between buttons -->
 
-    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-danger': userToggle === 'spectators'}"
+    <button class="btn btn-outline-white; text-white" [ngClass]="{'btn-highlight': userToggle === 'spectators'}"
       style="border:1px solid white; width: auto; margin-right: 10px"
       (click)="toggleUsers('spectators')">Spectators</button>
   </div>
@@ -107,7 +107,7 @@
         </div>
 
         <div style="margin-right:10px;" *ngIf="speakerCount.length < 8 && userType=='host'">
-          <button (click)="togglePanel(1)" class="text-primary">Invite Speakers</button>
+          <button (click)="togglePanel(1)" class="text-highlight" style="color:var(--text-highlight);">Invite Speakers</button>
         </div>
       </div>
 
@@ -140,7 +140,7 @@
         </div>
 
         <div *ngIf="userType == 'host'" style="margin-right:10px;">
-          <button (click)="togglePanel(1)" class="text-primary">Invite Spectators</button>
+          <button (click)="togglePanel(1)" class="text-highlight" style="color:var(--text-highlight);">Invite Spectators</button>
         </div>
       </div>
 

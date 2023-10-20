@@ -1,6 +1,6 @@
 <div class="text-white"style="background-color:var(--primary-color); position:absolute;flex-grow:1; height:100%; width:100%; display:flex; flex-direction: column;">
     
-    <div class="top" style="height:80%; position:absolute;display:flex;flex-direction:column; width:100%; ">
+    <div class="top" style="height:80%; position:absolute;display:flex;flex-direction:column; bottom:20%; width:100%; ">
         <div style="display:flex;flex-direction:column;position:absolute;height:100%; width:100%;overflow-y: scroll; ">
     <div class="d-flex text-center justify-content-center"style="width:100%; padding-left:10px;">
         <h1>Invite others</h1>
@@ -11,9 +11,9 @@
         </div>
     </div>
     
-    <div class="d-flex align-items-center" style="padding: 10px 0; border-bottom:1px solid white;"> <!-- Padding for this div -->
+    <div class="d-flex align-items-center" style="padding: 10px 0; border-bottom:1px solid rgb(122,122,122,.5);"> <!-- Padding for this div -->
         <h4 class="mb-1" style="padding-right: 10px; padding-left:10px;">To:</h4> <!-- Padding to the right of the text -->
-        <input class="text-white " #inputRef type="text" (input)="onSearch($event)" placeholder="Search for a user...">
+        <input class="text-white " #inputRef type="text" (input)="onSearch($event)" placeholder="Search for a user..." style="background-color: var(--primary-color)">
  <!-- Padding for input field -->
     </div>
     
@@ -29,7 +29,7 @@
     
 </div>
     </div>  
-    <div class="bottom" style="display:flex;flex-direction:column;height:20%; width:100%;position:absolute; bottom:20px; ">
+    <div class="bottom" style="display:flex;flex-direction:column;height:20%; width:100%;position:absolute; bottom:0px; ">
         <div class="d-flex justify-content-center align-items-stretch" style="width: 100%;">
             <!-- Textarea container -->
             <div class=" text-white"style="width: 95%; position: relative;">
@@ -43,7 +43,7 @@
                         [(ngModel)]="value"
                         name="inputValue"
                         rows="3"
-                        style="resize: none; width: 100%; border:1px solid rgba(12, 5, 221, 0.6)">
+                        style="resize: none; width: 100%; border-radius:20px; color:white; background-color:var(--primary-color)">
                     </textarea>
                     <button class="btn btn-black rounded-circle submit-button"style="background-color:transparent; color:white;"type="submit" id="button-addon2">
                         <i class="fas fa-arrow-right"></i>
