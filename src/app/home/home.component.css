@@ -206,11 +206,29 @@
 .scrollTopic::-webkit-scrollbar {
   display: none;
 }
+.center::-webkit-scrollbar {
+  width: 5px;  /* width of the entire scrollbar */
+}
+
+.center::-webkit-scrollbar-thumb {
+  background-color: white; /* visible part of the thumb */
+  border: solid transparent;
+  background-clip: content-box; /* so the background color doesn't spill over the border */
+  border-width: 1px; /* adjust as needed */
+}
+
+.center {
+  scrollbar-width: thin; 
+  scrollbar-color: white; 
+}
+
+
 
 /* For Firefox */
 .scrollTopic {
   scrollbar-width: none;
 }
+
 
 /* For IE & Edge */
 .scrollTopic {

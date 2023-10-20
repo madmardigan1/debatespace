@@ -52,30 +52,30 @@
     </button>
   </div>
   <div class="bottom text-white" style="width:100%; display:flex;height:100%; justify-content: center;">
-    <div class="bg-black text-white" *ngIf="!isMobile" class="menu"
-      style=" height:100%; position:relative;width:25%; display:flex; flex-direction: column;align-items: center; margin: 0 20px;">
+    <div class="text-white" *ngIf="!isMobile" class="menu"
+      style="background-color: var(--primary-color); height:100%; position:relative;width:25%; display:flex; flex-direction: column;align-items: center; margin: 0 20px;">
 
       <div
         style="position:relative;display:flex;flex-direction: column; align-items:baseline; width:100%; padding-left:30px;padding-right:15px; padding-top:50px;">
-        <button *ngIf="!isMobile" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+        <button *ngIf="!isMobile" class="text-white text-decoration-none d-flex align-items-center w-100 py-2" style="background-color: var(--primary-color);">
           <i class="fas fa-pencil-alt fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
           <h1 style="margin:0; padding:0;">New Post</h1>
         </button>
 
-        <button *ngIf="!isMobile" class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+        <button *ngIf="!isMobile" class="text-white text-decoration-none d-flex align-items-center w-100 py-2" style="background-color: var(--primary-color);">
           <i class="fas fa-list fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
           <h1 style="margin:0; padding:0;">Topics</h1>
         </button>
 
         <button *ngIf="!isMobile"
-          class="bg-black text-white text-decoration-none d-flex align-items-center  w-100 py-2">
+          class="text-white text-decoration-none d-flex align-items-center  w-100 py-2" style="background-color: var(--primary-color);">
           <i class="fas fa-comments fa-2x" style="margin-right:20px"></i>
           <!-- Increase icon size and use "Browse" icon -->
           <h1 style="margin:0; padding:0;">Talk</h1>
         </button>
 
         <button *ngIf="!isMobile" [routerLink]="['home']"
-          class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+          class=" text-white text-decoration-none d-flex align-items-center w-100 py-2" style=" background-color: var(--primary-color);">
           <i class="fas fa-share-alt fa-2x" style="margin-right:20px"></i> <!-- Increase icon size -->
           <h1 style="margin:0; padding:0;">Nodes</h1>
         </button>
@@ -95,8 +95,8 @@
 
 
 
-    <div class="bg-black text-white" *ngIf="!isMobile" class="menu"
-      style="position:relative;width:25%; height:100%; display:flex; flex-direction: column;align-items: center;margin: 0 20px;">
+    <div class=" text-white" *ngIf="!isMobile" class="menu"
+      style="background-color: var(--primary-color);position:relative;width:25%; height:100%; display:flex; flex-direction: column;align-items: center;margin: 0 20px;">
 
       <div
         style="position:relative;display:flex;flex-direction: column; align-items:baseline; width:100%; padding-left:15px;padding-right:30px; padding-top:50px; border:1px solid rgb(255,255,255, .3); ">
