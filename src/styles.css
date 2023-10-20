@@ -7,12 +7,26 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-/* src/styles.css */
+/* src/styles.css
 :root {
     --primary-color: #1a1b1c;
     --secondary-color: #3e3e3e;
     --error-color: #1f1918;
     --tertiary-color: #1b1b1b;
     --text-color: #424242;
-    /* Add more global colors as needed */
+   
   }
+
+ */
+  /* Sequitur theme  */
+:root {
+    --primary-color: #011D26;
+    --secondary-color: #3e3e3e;
+    --error-color: #1f1918;
+    --tertiary-color: #001116;
+    --text-color: #424242;
+   
+  }
+
+
+  

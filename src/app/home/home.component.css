@@ -207,15 +207,19 @@
   display: none;
 }
 .center::-webkit-scrollbar {
-  width: 5px;  /* width of the entire scrollbar */
+  width: 6px;  /* width of the entire scrollbar */
 }
 
 .center::-webkit-scrollbar-thumb {
-  background-color: white; /* visible part of the thumb */
+  background-color: rgb(170, 170, 170); /* visible part of the thumb */
   border: solid transparent;
   background-clip: content-box; /* so the background color doesn't spill over the border */
   border-width: 1px; /* adjust as needed */
+  height:10px;
+
 }
+
+
 
 .center {
   scrollbar-width: thin; 
