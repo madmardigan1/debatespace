@@ -1,6 +1,6 @@
 <div class="modal1" #firstModal (click)="closeFirstModal()">
 
-  <div class="bg-black text-white modal-content" (click)="$event.stopPropagation()">
+  <div class="text-white modal-content"  style="background-color:var(--primary-color);" (click)="$event.stopPropagation()">
 
 
     <div *ngIf="toggledPanel==1"
@@ -18,9 +18,9 @@
 
 
 
-    <div *ngIf="toggledPanel==2" class="extendpane bg-danger"
-      style="height:50vh;position:relative; position:flex; flex-direction: column;">
-      <div class="bg-danger">
+    <div *ngIf="toggledPanel==2" class="extendpane bg-danger "
+      style="height:50vh;position:relative; position:flex; flex-direction: column;border-top-left-radius:10px; border-top-right-radius:10px;">
+      <div class="bg-danger" >
         <div class="position:relative; height:auto; d-flex justify-content-center mt-3 mb-10">
           <div class="drag-handle centered"></div>
         </div>
@@ -85,7 +85,7 @@
         <ng-container *ngFor="let user of hostCount">
           <div class="user-card">
 
-            <button style="background-color: black; border-color: black;" (click)="details(user)">
+            <button style="background-color: var(--primary-color);" (click)="details(user)">
               <div class="circular-image-container">
                 <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image">
               </div>
@@ -117,7 +117,7 @@
           <ng-container *ngFor="let user of speakerCount">
             <div class="user-card">
 
-              <button style="background-color: black; border-color: black;" (click)="details(user)">
+              <button style="background-color: var(--primary-color);" (click)="details(user)">
                 <div class="circular-image-container">
                   <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image">
                 </div>
@@ -150,7 +150,7 @@
           <ng-container *ngFor="let user of spectatorCount">
             <div class="user-card">
 
-              <button style="background-color: black; border-color: black;" (click)="details(user)">
+              <button style="background-color: var(--primary-color); " (click)="details(user)">
                 <div class="circular-image-container">
                   <img [src]="user.photoUrl" alt="{{ user.name }}" class="circular-image">
                 </div>

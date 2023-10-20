@@ -95,9 +95,11 @@
   transform: translateY(100%);
   transition: transform .3s ease-in;
 
+
   align-items: center;
   justify-content: center;
   z-index: 2000; /* Ensure this is higher than the first modal's z-index */
+  
 }
 
 .modal1.open1 {

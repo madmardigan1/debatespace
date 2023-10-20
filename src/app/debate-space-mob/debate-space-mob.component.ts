@@ -34,7 +34,7 @@ import { NodeSpaceMobComponent } from './node-space-mob/node-space-mob.component
         height: '60%',
       })),
       state('shrunk', style({
-        height: '50px',
+        height: '48px',
       })),
       state('fully-expanded', style({
         height: '70%',

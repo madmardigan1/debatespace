@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center" style="width:100%; height:100%; position:absolute;">
   
-    <div class="bg-black text-white" style=" width:100%; height:100%; display: flex;
+    <div class=" text-white" style=" background-color:var(--primary-color);width:100%; height:100%; display: flex;
     flex-direction: column;
     position:absolute;
     overflow-y:scroll;">
@@ -20,7 +20,7 @@
         <!-- Right-most Sort button -->
         <div class="d-flex align-items-center">
         <div style="font-size:20px; padding-right:4px;">Sort by</div>
-        <button class="text-white" style="width:130px;border:1px solid white"mat-button [matMenuTriggerFor]="sortMenu">
+        <button class="text-white" style="width:130px;"mat-button [matMenuTriggerFor]="sortMenu">
         <div class="d-flex align-items-center"><p style="margin:0;padding:0;"> {{sortType}}</p><i style="padding-left:3px;"class="fas fa-angle-down"></i></div>  
         </button>
        
@@ -36,22 +36,22 @@
     <!-- Cards Container -->
     <div *ngIf="matchedCards.length>0" style="display: flex; flex-wrap: wrap;overflow-y:scroll;">
         <div *ngFor="let card of matchedCards" class="porp" 
-        style="display: flex; flex-direction: column; overflow-wrap: break-word; overflow-x: block; word-wrap: break-word; position: relative; border:1px solid rgba(122, 122, 122, .5); background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)); width: 100%;">
+        style="display: flex; flex-direction: column; overflow-wrap: break-word; overflow-x: block; word-wrap: break-word; position: relative; border-top:1px solid rgba(122, 122, 122, .5);  width: 100%;">
       
         <button style="overflow:hidden; color:transparent; position:absolute; left:0; top:0; height:100%; width:100%; z-index:900" 
                 (click)="join(card)">
         </button>
     
         <!-- Top Box -->
-        <div class="custom-card shadow-lg bg-black text-white"
-            style="position: relative; height: auto; text-wrap: wrap; overflow-y: hidden; border-radius:10px; padding: 10px; box-sizing: border-box; display: flex; ">
+        <div class="custom-card text-white"
+            style="background-color:var(--primary-color); position: relative; height: auto; text-wrap: wrap; overflow-y: hidden; border-radius:10px; padding:0 10px; padding-top:10px;  display: flex; ">
             
             <!-- User Image -->
             <img [src]="'/assets/Steve1.jpeg'" alt="Steve"
                  style="border-radius: 50%; width: 30px; height: 30px; object-fit: cover; margin-right:10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);">
             
             <!-- User Name -->
-            <p style="flex-grow: 1; margin: 0; font-size: 12px; color: white;"><b>{{card.user[0].name}}</b></p>
+            <p style="flex-grow: 1; margin: 0; padding:0; font-size: 12px; color: white;"><b>{{card.user[0].name}}</b></p>
             
             <!-- Viewers Count -->
             <div class="viewers-count" style="font-size: 12px; color: white;">
@@ -60,13 +60,13 @@
         </div>
     
         <!-- Description -->
-        <p style="margin-left:40px; padding: 5px 10px; background-color: black; color: white; border-radius: 10px;">{{card.description}}</p>
+        <p style="margin-left:40px; margin-bottom:5px;padding: 0px 10px; background-color:var(--primary-color); color: white; border-radius: 10px;">{{card.description}}</p>
     
         <!-- Tags Container -->
-        <div class="bg-black text-white" style="border: 1px solid black; border-radius:10px; padding: 5px; margin-left: 40px;">
+        <div class="text-white" style="background-color:var(--primary-color); border-radius:10px; padding:0px 5px; margin-left: 40px;">
             <div style="display: flex; flex-wrap: wrap; align-content: flex-start;">
                 <div *ngFor="let topic of card.topic" style="display: inline-block; margin-right: 5px; margin-bottom: 5px;">
-                    <span style=" border:1px solid #0056b3; padding: 3px 8px; border-radius: 10px; font-size: 11px; color: white;">{{topic}}</span> <!-- Used a blue color for tags -->
+                    <span style=" border:1px solid var(--text-color); padding: 3px 8px; border-radius: 10px; font-size: 11px; color: rgb(181, 181, 181);">{{topic}}</span> <!-- Used a blue color for tags -->
                 </div>
             </div>
         </div>

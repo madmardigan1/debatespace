@@ -1,20 +1,20 @@
 <div
-  style="width:100%;height:100%;position:relative;display:flex; flex-direction: column;align-items:baseline;justify-content:baseline;">
+  style="background-color:var(--primary-color); width:100%;height:100%;position:relative;display:flex; flex-direction: column;align-items:baseline;justify-content:baseline;">
  
   <button *ngIf="!isMobile" [routerLink]="'/home/create'"
-    class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+    class=" text-white text-decoration-none d-flex align-items-center w-100 py-2">
     <i class="fas fa-plus fa-2x" style="margin-right:20px"></i>
     <h1 style="margin:0; padding:0;">Create</h1>
   </button>
 
   <button *ngIf="!isMobile" [routerLink]="['search']"
-    class="bg-black text-white text-decoration-none d-flex align-items-center  w-100 py-2">
+    class=" text-white text-decoration-none d-flex align-items-center  w-100 py-2">
     <i class="fas fa-globe fa-2x" style="margin-right:20px"></i>
     <h1 style="margin:0; padding:0;">Browse</h1>
   </button>
 
   <button *ngIf="!isMobile" (click)="toggleState(1)"
-    class="bg-black text-white text-decoration-none d-flex align-items-center w-100 py-2">
+    class=" text-white text-decoration-none d-flex align-items-center w-100 py-2">
     <i class="fas fa-search fa-2x" style="margin-right:20px"></i>
     <h1 style="margin:0; padding:0;">Search</h1>
   </button>
@@ -22,7 +22,7 @@
 
 <div class="d-flex justify-content-center" style="width:100%; height:100%; position:relative;">
   <div class="modal1" #firstModal (click)="closeFirstModal()">
-    <div class="bg-black text-white modal-content" (click)="$event.stopPropagation()">
+    <div class=" text-white modal-content" (click)="$event.stopPropagation()">
 
       <div style="position:absolute; left:10px;top:10px; z-index:1002;">
         <button class="btn btn-outline-white text-white" (click)="closeFirstModal()">

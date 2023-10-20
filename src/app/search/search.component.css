@@ -8,7 +8,7 @@
     overflow-x:block;
     word-wrap: break-word;
     position: relative; 
-    border:1px solid white;
+  
   }
 
   /* Targeting the mat-icon-button to override styles */

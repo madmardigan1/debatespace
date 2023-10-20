@@ -6,3 +6,12 @@
 @import "~font-awesome/css/font-awesome.css";
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* src/styles.css */
+:root {
+    --primary-color: #171717;
+    --secondary-color: #3e3e3e;
+    --error-color: #1f1918;
+    --text-color: #3c3c3c;
+    /* Add more global colors as needed */
+  }

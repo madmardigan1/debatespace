@@ -4,8 +4,8 @@
   <button class="btn btn-primary" (click)="simulate('host')">Simulate Host</button>
 </div>
 <div [ngClass]="{'slidecontentmobile': deviceType, 'slidecontentdesk': !deviceType, 'hidden': !isSecondModalOpen}"
-  class="modal-content1 text-white bg-black" #secondModal (mousedown)="startDrag($event)"
-  (click)="$event.stopPropagation()" style="opacity:.8; border-left:1px solid rgb(255,255,255, .3)">
+  class="modal-content1 text-white" #secondModal (mousedown)="startDrag($event)"
+  (click)="$event.stopPropagation()" style="background-color:var(--primary-color);opacity:.8; ">
 
   <div class="d-flex" style="flex-direction:column;">
     <div class="mt-2 mb-2 ml-6" *ngIf="selectedNode">Replying to {{selectedNode.user}}</div>
@@ -37,7 +37,7 @@
       <div *ngIf="isRecording"
         style="height:60px;position:relative; margin:0px 10px; display:flex; flex-direction:column; justify-content: center; flex:auto;">
         {{transcript}}</div>
-      <div *ngIf="!isRecording" style="position:relative; display:flex; justify-content: center; flex:auto;">
+      <div *ngIf="!isRecording" style="height:auto;position:relative; display:flex; justify-content: center; flex:auto;">
         <form (submit)="submitTextResponse($event)">
           <div style="position: relative; width:100%; bottom:0; height:auto; flex-grow: 1; border-radius:999px;">
             <input type="text" class="form-control" placeholder='Post your reply' aria-label="value"
@@ -85,10 +85,10 @@
   (click)="closeFirstModal()">
 
   <div [ngClass]="{'modal1mobilecontent':deviceType,'modal1desktopcontent':!deviceType}"
-    class="bg-black text-white modal-content" #firstModal (mousedown)="startDrag($event)"
-    (click)="$event.stopPropagation()">
+    class="text-white modal-content" #firstModal (mousedown)="startDrag($event)"
+    (click)="$event.stopPropagation()" style="background-color:var(--primary-color);">
 
-    <div class="d-flex justify-content-center mt-3">
+    <div class="d-flex justify-content-center mt-3" style="background-color:var(--primary-color);">
 
       <button class="btn btn-outline-white text-white" style="position:absolute; top:10px; left:10px; z-index: 500;"
         (click)="togglePanel(-1)">
@@ -99,18 +99,18 @@
     </div>
 
 
-    <div *ngIf="selectedButton===3" class="bg-black text-white" style="height:60vh;">
+    <div *ngIf="selectedButton===3" class=" text-white" style="background-color:var(--primary-color);height:60vh;">
       <app-user-summary-mob (closeClicked)="closeSecondModal()" [userType]="this.userType"
         [card]="this.card.id"></app-user-summary-mob>
 
     </div>
-    <div *ngIf="selectedButton===6" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;">
+    <div *ngIf="selectedButton===6" class=" text-white" style="background-color:var(--primary-color);overflow-y:scroll;flex:auto; height:50vh;">
       <app-about-nodes></app-about-nodes>
     </div>
-    <div *ngIf="selectedButton===7" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;">
+    <div *ngIf="selectedButton===7" class="text-white" style="background-color:var(--primary-color);overflow-y:scroll;flex:auto; height:50vh;">
       <app-report-form [getLink]="this.getLink" (formSubmitted)="togglePanel(-1)"></app-report-form>
     </div>
-    <div *ngIf="selectedButton===8" class="bg-black text-white" style="overflow-y:scroll;flex:auto; height:50vh;">
+    <div *ngIf="selectedButton===8" class=" text-white" style="background-color:var(--primary-color);overflow-y:scroll;flex:auto; height:50vh;">
 
     </div>
 
@@ -118,21 +118,21 @@
 </div>
 
 
-<div class="bg-black d-flex justify-content-center" style="width:100%;height:100%;">
+<div class=" d-flex justify-content-center" style="width:100%;height:100%;">
 
-  <div class="topic selection bg-black" style="position:relative; width:100%; height:100%; display: flex;
+  <div class="topic selection" style="background-color:var(--primary-color);position:relative; width:100%; height:100%; display: flex;
     flex-direction: column;
     overflow-y:hidden;">
 
 
-    <div class="nodeArea">
+    <div class="bg-black nodeArea">
       <app-node-space-mob #nodeSpace [isRanked]="isRanked" [cardId]="card.id"></app-node-space-mob>
     </div>
 
     <div *ngIf="!isSecondModalOpen" class="theRest" [@expandShrinkrest]="theRestState" style="opacity:.8;">
 
-      <div class="viewsecond bg-black">
-        <div class="d-flex bg-black justify-content-between" style="height:auto;">
+      <div class="viewsecond">
+        <div class="d-flex  justify-content-between" style="padding:0; margin:0;background-color:var(--primary-color);height:auto;">
           <div class="ml-3 d-flex align-items-center">
             <button class="btn btn-white"
               [ngClass]="{'btn btn-light': panelType === 'chat', 'text-black': panelType === 'chat'}"
@@ -171,7 +171,7 @@
 
           <div *ngIf=" !isSecondModalOpen && isRanked" style="display:flex;  z-index:1;">
 
-            <button (click)="togglePanelReaction('negative')" class="btn btn-black bg-black mr-2"
+            <button (click)="togglePanelReaction('negative')" class="btn btn-black mr-2"
               style="opacity:.8;border-radius:50%; padding:0;">
               <span class="fa-stack">
                 <i class="fas fa-comment fa-stack-2x" style="color: rgb(180, 62, 62); transform: scaleX(-1);"></i>
@@ -179,7 +179,7 @@
               </span>
             </button>
 
-            <button (click)="togglePanelReaction('positive')" class="btn btn-black bg-black mr-2"
+            <button (click)="togglePanelReaction('positive')" class="btn btn-black mr-2"
               style="opacity:.8;border-radius:50%;padding:0;">
               <span class="fa-stack">
                 <i class="fas fa-comment fa-stack-2x" style="color: rgb(82, 177, 82);"></i>
@@ -190,7 +190,7 @@
 
 
             <button mat-icon-button [matMenuTriggerFor]="menu"
-              class="btn btn-outline-white bg-black text-center mt-0 p-0">
+              class="btn btn-outline-white text-center mt-0 p-0">
               <i class="fas fa-ellipsis-v text-white" style="font-size:15px;"></i>
             </button>
           </div>
@@ -201,7 +201,7 @@
         <div style="position:relative; flex:auto; display: flex; overflow-y:hidden; flex-direction: column;">
           <div *ngIf="panelType=='chat'" class="chat-output-area text-white" style="position: relative; display:flex; flex: auto; flex-direction: column;  overflow:auto;
           overflow-wrap: break-word; /* Modern browsers */">
-            <div #chatView class="chat-read-area m-0 p-2"
+            <div #chatView class="chat-read-area m-0 p-0"
               style="flex: auto;position:relative; top:0; width:100%; overflow-y: auto; overflow-wrap: break-word;">
               <app-chat-space-mob></app-chat-space-mob>
             </div>

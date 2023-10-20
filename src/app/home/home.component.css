@@ -26,7 +26,7 @@
 
 
   .slide-panel {
-    border: 1px solid white;
+    
     position: absolute;
     bottom: 0;
     left: 0;
@@ -262,7 +262,7 @@
 
 
 .modal-content {
-  border:1px solid white;
+
   justify-content: center;
 
 }
@@ -348,7 +348,7 @@
 }
 
 .modal-content2 {
-  border:1px solid white;
+
   border-top-left-radius:10px;
   border-top-right-radius:10px;
   

@@ -143,14 +143,15 @@ export class NodeSpaceMobComponent implements AfterViewInit, OnInit {
         physics: false,
         shadow: true,
         shape: this.nodeShape,
-        borderWidth: 2,
+        borderWidth: 1,
         labelHighlightBold: true,
         font: { color: 'white' },
         color: {
-          border: 'white',
-          background: 'black',
+          border: 'blue',
+          background: 'blue',
           highlight: {
             background: 'black',
+            border:'white'
           },
           hover: {
             background: 'black',
